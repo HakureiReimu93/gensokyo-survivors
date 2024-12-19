@@ -1,8 +1,12 @@
 using Godot;
 using System;
+using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 public partial class Player : CharacterBody2D
 {
+
+public const int MAXSPEED = 200;
 
     //https://live.codetogether.io/#/10bceec1-c85e-4fbd-a744-e55c7a46bac9/8uDIKyDD7X7MBnFfUnTOer
     public override void _Ready()
@@ -13,9 +17,10 @@ public partial class Player : CharacterBody2D
     {
         var movementVector = GetMovementVector();
         var direction = movementVector.Normalized();
+        Velocity = direction * MAXSPEED;
     }
 //hey bub
-    public Vector2 GetMovementVector()
+public Vector2 GetMovementVector()
     {
         var movementVector = Vector2.Zero;
         var xMovement = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
@@ -24,5 +29,7 @@ public partial class Player : CharacterBody2D
         Vector2 vector = new Vector2(xMovement, yMovement);
         return vector;
     }
+
+
 
 }
