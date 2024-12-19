@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ds1v252n24hk5"]
+[gd_scene load_steps=6 format=3 uid="uid://ds1v252n24hk5"]
 
 [ext_resource type="Script" path="res://owners/Unitmodel.cs" id="1_aw3aa"]
+[ext_resource type="Script" path="res://traits/HealthTrait.cs" id="2_bxn2a"]
 [ext_resource type="Texture2D" uid="uid://ldsvcjw154ec" path="res://assets/kenney_tiny-dungeon/Individual Tiles/tile_0121.png" id="2_quc3b"]
+[ext_resource type="Script" path="res://traits/brain/GostBrain.cs" id="3_dtkv1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_snvfp"]
 radius = 5.09902
@@ -10,6 +12,10 @@ radius = 5.09902
 script = ExtResource("1_aw3aa")
 
 [node name="HealthTrait" type="Node" parent="."]
+script = ExtResource("2_bxn2a")
+
+[node name="Brain" type="Node" parent="."]
+script = ExtResource("3_dtkv1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)
