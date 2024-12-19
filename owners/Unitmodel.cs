@@ -17,10 +17,10 @@ public partial class Unitmodel : CharacterBody2D
 	
 	public override void _Ready()
     {
-		var maybeHealth = GetNodeOrNull<HealthTrait>("Health");
+		var maybeHealth = GetNodeOrNull<HealthTrait>("HealthTrait");
 		if (maybeHealth is null)
 		{
-			GD.Print("[ERROR], no 'Health' trait found!");
+			GD.Print("[ERROR], no 'HealthTrait' trait found!");
 			QueueFree();
 		}
 		var maybeBrain = GetNodeOrNull<IBrain>("Brain");
