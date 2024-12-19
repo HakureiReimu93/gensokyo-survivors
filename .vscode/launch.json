@@ -8,7 +8,7 @@
         "request": "launch",
         "preLaunchTask": "build",
         
-        "program": "C:\\Program Files\\Godot\\Godot_v4.3-stable_mono_win64.exe",
+        "program": "${env:GODOT4}",
         "args": [],
         "cwd": "${workspaceFolder}",
         "stopAtEntry": false,
