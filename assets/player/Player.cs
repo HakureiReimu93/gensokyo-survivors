@@ -5,7 +5,7 @@ public partial class Player : CharacterBody2D
 {
     public override void _Ready()
     {
-        int a = 4;
+        int a = 1;
         GD.Print(a);
 
     }
