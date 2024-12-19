@@ -9,7 +9,7 @@ public partial class Player : CharacterBody2D
 public const int MAXSPEED = 200;
 
     //https://live.codetogether.io/#/10bceec1-c85e-4fbd-a744-e55c7a46bac9/8uDIKyDD7X7MBnFfUnTOer
-    public override void _Ready()
+    public override void _Ready()+
     {
     }
 
@@ -29,6 +29,7 @@ public Vector2 GetMovementVector()
         Vector2 vector = new Vector2(xMovement, yMovement);
         return vector;
     }
+
 
 
 }
