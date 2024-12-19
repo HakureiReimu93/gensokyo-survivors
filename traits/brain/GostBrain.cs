@@ -9,14 +9,10 @@ public partial class GostBrain : Node, IBrain
 	{
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
     public Vector2 GetIntendedMovement()
     {
-        throw new NotImplementedException();
+        // for now, behave like player.
+		return Input.GetVector("move_left", "move_right", "move_up", "move_down").Normalized();
     }
 
 }
