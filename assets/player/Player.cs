@@ -15,7 +15,7 @@ public partial class Player : CharacterBody2D
         base._Process(delta);
     }
 
-    public override void get_movement_vector()
+    public void get_movement_vector()
     {
         
     }
