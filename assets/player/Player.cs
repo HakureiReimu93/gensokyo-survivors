@@ -14,7 +14,7 @@ public partial class Player : CharacterBody2D
         var movementVector = GetMovementVector();
         var direction = movementVector.Normalized();
     }
-
+//hey bub
     public Vector2 GetMovementVector()
     {
         var movementVector = Vector2.Zero;
