@@ -23,10 +23,18 @@ public partial class Unitmodel : CharacterBody2D
 			GD.Print("[ERROR], no 'HealthTrait' trait found!");
 			QueueFree();
 		}
+		else
+		{
+			mHealth = maybeHealth;
+		}
 		var maybeBrain = GetNodeOrNull<IBrain>("Brain");
 		if (maybeBrain is null)
 		{
 			GD.Print("[ERROR], no 'Brain' trait found! (IBrain)");
+		}
+		else
+		{
+			mBrain = maybeBrain;
 		}
     }
 
