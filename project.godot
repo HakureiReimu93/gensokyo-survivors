@@ -13,6 +13,7 @@ config_version=5
 config/name="Gensokyo Survivors"
 run/main_scene="res://assets/world/world.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+config/icon="res://icon.svg"
 
 [display]
 
@@ -22,19 +23,6 @@ window/size/window_height_override=1080
 [dotnet]
 
 project/assembly_name="Gensokyo Survivors"
-
-[file_customization]
-
-folder_colors={
-"res://assets/camera/": "blue",
-"res://assets/player/": "red",
-"res://assets/tilemap/": "yellow",
-"res://assets/world/": "green"
-}
-
-[global_group]
-
-player=""
 
 [input]
 
