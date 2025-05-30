@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cbi0ywk18wpos"]
+[gd_scene load_steps=6 format=3 uid="uid://cbi0ywk18wpos"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vcaia"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_harae"]
+[ext_resource type="Script" path="res://Core/Character/Controller/PlayerControl.cs" id="3_j5r06"]
+[ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/smooth_velocity_middleware.tscn" id="4_kccbf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]
 radius = 6.0
@@ -16,3 +18,14 @@ texture = ExtResource("2_harae")
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_cgh1n")
 debug_color = Color(0.0235294, 0.423529, 0.611765, 0.278431)
+
+[node name="PlayerUnitInput" type="Node" parent="." index="2"]
+script = ExtResource("3_j5r06")
+
+[node name="SmoothVelocityMiddleware" parent="." index="3" instance=ExtResource("4_kccbf")]
+MyMaximum = 200.0
+MyAccelFactor = 0.4
+MyDecelFactor = 0.3
+
+[node name="Camera2D" type="Camera2D" parent="." index="4"]
+zoom = Vector2(1.88, 1.88)
