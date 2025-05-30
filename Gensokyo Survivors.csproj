@@ -6,4 +6,19 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>GensokyoSurvivors</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\godot-strict\GodotStrict.csproj" />
+    <ProjectReference Include="..\Libraries\GodotUtilities\SourceGenerators\SourceGenerators.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.9.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="NullGuard.Fody" Version="3.1.3" />
+    <!-- <PackageReference Include="NullGuard.Fody" Version="3.1.1" /> -->
+  </ItemGroup>
+  <!-- <AssemblyAttribute Include="NullGuard.NullGuardAttribute">
+    <_Parameter1>NullGuard.ValidationFlags.All</_Parameter1>
+  </AssemblyAttribute> -->
 </Project>

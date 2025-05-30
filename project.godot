@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Gensokyo Survivors"
-run/main_scene="res://global/world.tscn"
+run/main_scene="res://Core/Scenarios/world.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,6 +23,10 @@ window/size/window_height_override=1080
 [dotnet]
 
 project/assembly_name="Gensokyo Survivors"
+
+[global_group]
+
+single-player=""
 
 [input]
 
