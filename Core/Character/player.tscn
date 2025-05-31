@@ -8,7 +8,9 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]
 radius = 6.0
 
-[node name="MobUnit" groups=["single-player"] instance=ExtResource("1_vcaia")]
+[node name="MobUnit" groups=["id-player"] instance=ExtResource("1_vcaia")]
+collision_layer = 2
+collision_mask = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 position = Vector2(0, -8)
@@ -26,6 +28,3 @@ script = ExtResource("3_j5r06")
 MyMaximum = 200.0
 MyAccelFactor = 0.4
 MyDecelFactor = 0.3
-
-[node name="Camera2D" type="Camera2D" parent="." index="4"]
-zoom = Vector2(1.88, 1.88)

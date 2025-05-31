@@ -27,7 +27,7 @@ project/assembly_name="Gensokyo Survivors"
 
 [global_group]
 
-single-player=""
+id-player=""
 
 [input]
 

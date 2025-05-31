@@ -2,11 +2,14 @@ using Godot;
 using GodotStrict.Helpers.Dependency;
 using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
+using GodotStrict.Traits;
+using GodotStrict.Traits.EmptyImpl;
 
 [GlobalClass]
 [Icon("res://Assets/Icons/unit.png")]
-public partial class MobUnit : CharacterBody2D
+public partial class MobUnit : CharacterBody2D, ILensProvider<MobUnit.Impl>
 {
+
 	const float cFallbackSpeed = 200;
 
 	IMobUnitInput mMovementController;
@@ -35,4 +38,17 @@ public partial class MobUnit : CharacterBody2D
 		}
 		MoveAndSlide();
 	}
+
+	#region lens
+	protected Impl impl;
+	Impl ILensProvider<Impl>.Lens => impl;
+	public class Impl : BaseImplInfo2D
+	{
+		public Impl(MobUnit _en) : base (_en) {}
+	}
+	public MobUnit()
+	{
+		impl = new(this);
+	}
+	#endregion
 }

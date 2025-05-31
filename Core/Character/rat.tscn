@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dp8m18k023b00"]
+
+[ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
+[ext_resource type="Texture2D" uid="uid://dxkk8cc7lkv44" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0124.png" id="2_ng83w"]
+[ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/smooth_velocity_middleware.tscn" id="3_rw55v"]
+[ext_resource type="Script" path="res://Core/Character/Controller/DumbMeleeControl.cs" id="4_yxvfj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
+radius = 7.28011
+
+[node name="MobUnit" instance=ExtResource("1_vrk1u")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="0"]
+position = Vector2(0, -8)
+texture = ExtResource("2_ng83w")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_ss4gt")
+
+[node name="SmoothVelocityMiddleware" parent="." index="2" instance=ExtResource("3_rw55v")]
+MyMaximum = 153.192
+MyAccelFactor = 0.426
+MyDecelFactor = 0.319
+
+[node name="DumbMeleeControl" type="Node" parent="." index="3"]
+script = ExtResource("4_yxvfj")

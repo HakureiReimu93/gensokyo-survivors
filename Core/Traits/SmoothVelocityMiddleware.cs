@@ -47,8 +47,8 @@ public partial class SmoothVelocityMiddleware : Node, IVelocityMiddleware
 
 	public override void _Ready()
 	{
-		EnsureNotEqual(MyMaximum, 0, "Middleware user will not be able to move.");
-		EnsureNotEqual(MyAccelFactor, 0, "Middleware user will not be able to move.");
+		EnsureFloatsNotEqual(MyMaximum, 0, "Middleware user will not be able to move.");
+		EnsureFloatsNotEqual(MyAccelFactor, 0, "Middleware user will not be able to move.");
 		
 		data = new FlyweightVector2
 		{
