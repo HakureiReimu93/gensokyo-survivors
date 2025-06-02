@@ -1,12 +1,17 @@
 using Godot;
 using System;
+using static Godot.Mathf;
+using static GodotStrict.Helpers.Logging.StrictLog;
+using static GodotStrict.Helpers.Dependency.DependencyHelper;
+using GodotStrict.Helpers;
+using GodotStrict.Helpers.Guard;
 
+[GlobalClass]
+[Icon("res://Assets/Icons/GodotEditor/Icons/script.png")]
 public partial class HealthTrait : Node
 {
-	[Signal]
-	public delegate void LostAllHPEventHandler();
-
-	[Export(PropertyHint.Range,"1,50")]
+	#region exports
+	[Export(PropertyHint.Range,"1,200")]
 	int @MyHealth
 	{
 		get
@@ -23,26 +28,57 @@ public partial class HealthTrait : Node
 
 	float mHealth;
 	float mMaxHealth;
-    private bool mDead;
+	#endregion
+	#region signals
+	[Signal]
+	public delegate void MyHpDepletedEventHandler(float pRawOverflow);
+	[Signal]
+	public delegate void MyHpChangedEventHandler(float pOldHp, float pNewHp);
+	#endregion
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+	bool mDead;
+	bool mOwnerBufsDamage;
+
+	public override void _Ready()
 	{
 		mHealth = mMaxHealth;
 	}
 
-	public void DoLoseHP(float loseHowMuchHP)
+	public void TriggerDamage(float pDamage)
 	{
-		if (mDead)
-		{
-			return;
-		}
+		SafeGuard.Ensure(pDamage > 0);
+		SafeGuard.Ensure(mDead == false);
 
-		mHealth -= loseHowMuchHP;
+		var prevHp = mHealth;
+		mHealth -= pDamage;
 		if (mHealth < 0)
 		{
 			mDead = true;
-			EmitSignal(SignalName.LostAllHP);
+			EmitSignal(SignalName.MyHpDepleted, 0 - mHealth);
 		}
+		EmitSignal(SignalName.MyHpChanged, prevHp, mHealth);
+	}
+
+	public void TriggerHeal(float pHealAmount)
+	{
+		SafeGuard.Ensure(pHealAmount > 0);
+		SafeGuard.Ensure(mDead == false);
+	}
+
+	public void TriggerHealAll()
+	{
+		SafeGuard.Ensure(mDead == false);
+
+		EmitSignal(SignalName.MyHpChanged, mHealth, mMaxHealth);
+		mHealth = mMaxHealth;
+	}
+
+	public void TriggerDamageAll()
+	{
+		SafeGuard.Ensure(mDead == false);
+
+		EmitSignal(SignalName.MyHpChanged, mHealth, 0);
+		EmitSignal(SignalName.MyHpDepleted, 0);
+		mHealth = 0;
 	}
 }
