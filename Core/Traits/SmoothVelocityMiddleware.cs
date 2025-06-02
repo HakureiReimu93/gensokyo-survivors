@@ -4,7 +4,7 @@ using GodotStrict.Types.Lite;
 using GensokyoSurvivors.Core.Interface;
 
 [GlobalClass]
-[Icon("res://Assets/Icons/equation.png")]
+[Icon("res://Assets/GodotEditor/Icons/equation.png")]
 public partial class SmoothVelocityMiddleware : Node, IVelocityMiddleware
 {
 	[Export(PropertyHint.Range, "0, 900")]

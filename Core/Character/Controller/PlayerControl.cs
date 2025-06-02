@@ -3,7 +3,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-[Icon("res://Assets/Icons/brain.png")]
+[Icon("res://Assets/GodotEditor/Icons/brain.png")]
 public partial class PlayerControl : Node, IMobUnitInput
 {
 	public Vector2 GetNormalMovement() =>

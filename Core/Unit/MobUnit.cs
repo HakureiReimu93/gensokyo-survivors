@@ -6,10 +6,9 @@ using GodotStrict.Traits;
 using GodotStrict.Traits.EmptyImpl;
 
 [GlobalClass]
-[Icon("res://Assets/Icons/unit.png")]
-public partial class MobUnit : CharacterBody2D, ILensProvider<MobUnit.Impl>
+[Icon("res://Assets/GodotEditor/Icons/unit.png")]
+public partial class MobUnit : CharacterBody2D, ILensProvider<BaseImplInfo2D>
 {
-
 	const float cFallbackSpeed = 200;
 
 	IMobUnitInput mMovementController;
@@ -40,15 +39,9 @@ public partial class MobUnit : CharacterBody2D, ILensProvider<MobUnit.Impl>
 	}
 
 	#region lens
-	protected Impl impl;
-	Impl ILensProvider<Impl>.Lens => impl;
-	public class Impl : BaseImplInfo2D
-	{
-		public Impl(MobUnit _en) : base (_en) {}
-	}
-	public MobUnit()
-	{
-		impl = new(this);
-	}
+	protected BaseImplInfo2D lens;
+	public BaseImplInfo2D Lens => lens;
+	public MobUnit() { lens = new(this); }
 	#endregion
+
 }

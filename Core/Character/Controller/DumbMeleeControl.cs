@@ -7,7 +7,7 @@ using System;
 using static GodotStrict.Helpers.Dependency.DependencyHelper;
 
 [GlobalClass]
-[Icon("res://Assets/Icons/brain.png")]
+[Icon("res://Assets/GodotEditor/Icons/brain.png")]
 public partial class DumbMeleeControl : Node, IMobUnitInput
 {
 	[Export]
