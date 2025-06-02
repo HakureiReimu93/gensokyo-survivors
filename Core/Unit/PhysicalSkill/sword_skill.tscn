@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxuefb8rlvopg"]
+
+[ext_resource type="Script" path="res://Core/Unit/PhysicalSkill/SwordSkill.cs" id="1_umt0y"]
+[ext_resource type="Texture2D" uid="uid://duo3fw2xpx676" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0104.png" id="1_viegv"]
+[ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://Core/Traits/hit_box.tscn" id="3_kwa6g"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5uv5v"]
+radius = 9.0
+
+[node name="SwordSkillUnit" type="Node2D"]
+script = ExtResource("1_umt0y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_viegv")
+offset = Vector2(0, -4)
+
+[node name="HitBox" parent="." instance=ExtResource("3_kwa6g")]
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2(3, -4)
+shape = SubResource("CircleShape2D_5uv5v")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[editable path="HitBox"]
