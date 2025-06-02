@@ -8,7 +8,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
 radius = 7.28011
 
-[node name="MobUnit" instance=ExtResource("1_vrk1u")]
+[node name="MobUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 position = Vector2(0, -8)

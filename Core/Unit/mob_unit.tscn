@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Core/Unit/MobUnit.cs" id="1_afq5s"]
 
 [node name="MobUnit" type="CharacterBody2D"]
+editor_description = "OPTIONAL: HealthTrait"
 script = ExtResource("1_afq5s")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
