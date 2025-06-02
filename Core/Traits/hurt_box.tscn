@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh576cylacoox"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_4nt8j"]
+script/source = "using Godot;
+using System;
+using static Godot.Mathf;
+using static GodotStrict.Helpers.Logging.StrictLog;
+using static GodotStrict.Helpers.Dependency.DependencyHelper;
+using GodotStrict.Helpers;
+using GodotStrict.Helpers.Guard;
+
+[GlobalClass]
+[Icon(\"res://Assets/Icons/GodotEditor/Icons/script.png\")]
+public partial class HurtBox : Area2D
+{
+	/* 
+		#region exports
+		[Export(PropertyHint.Range,\"0,1\"]
+		public float MyCustomStat
+		{ 
+			get 
+			{ 
+				return mStatProp.CustomValue;
+			}
+			set
+			{
+				mStatProp.CustomValue = value;
+			}
+		}
+	   
+		StatBundle mStatProp;
+		#endregion
+		
+		#region signals	   
+		[Signal]
+		delegate void SomethingHappenedEventHandler();
+		#endregion
+	*/
+	
+	public override void _Ready()
+	{
+		SafeGuard.EnsureIsConstType<CharacterBody2D>(Owner);
+	}
+}
+"
+
+[node name="HurtBox" type="Area2D"]
+script = SubResource("CSharpScript_4nt8j")
