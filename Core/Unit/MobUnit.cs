@@ -53,7 +53,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 		if (mAccel.Available(out var accel))
 		{
-			finalVelocity *= accel.GetVelocityBuf(moveDirection, MyMaxSpeed, delta);
+			finalVelocity = MyMaxSpeed * accel.GetVelocityBuf(moveDirection, MyMaxSpeed, delta);
 		}
 
 		Velocity = finalVelocity;
