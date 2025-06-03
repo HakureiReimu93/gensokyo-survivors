@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
 [ext_resource type="Texture2D" uid="uid://dxkk8cc7lkv44" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0124.png" id="2_ng83w"]
-[ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/smooth_velocity_middleware.tscn" id="3_rw55v"]
+[ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="3_rw55v"]
 [ext_resource type="Script" path="res://Core/Character/Controller/DumbMeleeControl.cs" id="4_yxvfj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
@@ -18,10 +18,7 @@ texture = ExtResource("2_ng83w")
 position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_ss4gt")
 
-[node name="SmoothVelocityMiddleware" parent="." index="2" instance=ExtResource("3_rw55v")]
-MyMaximum = 153.192
-MyAccelFactor = 0.426
-MyDecelFactor = 0.319
+[node name="AccelDecelMiddleware" parent="." index="2" instance=ExtResource("3_rw55v")]
 
 [node name="DumbMeleeControl" type="Node" parent="." index="3"]
 script = ExtResource("4_yxvfj")

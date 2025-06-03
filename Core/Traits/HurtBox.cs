@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using GensokyoSurvivors.Core.Interface;
 
 [GlobalClass]
-[Icon("res://Assets/Icons/GodotEditor/Icons/script.png")]
+[Icon("res://Assets//GodotEditor/Icons/script.png")]
 public partial class HurtBox : Area2D, IKillable
 {
     #region exports

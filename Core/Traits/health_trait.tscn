@@ -1,48 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dwhakn44fn28m"]
 
-[sub_resource type="CSharpScript" id="CSharpScript_bj5dl"]
-script/source = "using Godot;
-using System;
-using static Godot.Mathf;
-using static GodotStrict.Helpers.Logging.StrictLog;
-using static GodotStrict.Helpers.Dependency.DependencyHelper;
-using GodotStrict.Helpers;
-using GodotStrict.Helpers.Guard;
-
-[GlobalClass]
-[Icon(\"res://Assets/Icons/GodotEditor/Icons/script.png\")]
-public partial class HealthTrait : Node
-{
-	/* 
-		#region exports
-		[Export(PropertyHint.Range,\"0,1\"]
-		public float MyCustomStat
-		{ 
-			get 
-			{ 
-				return mStatProp.CustomValue;
-			}
-			set
-			{
-				mStatProp.CustomValue = value;
-			}
-		}
-	   
-		StatBundle mStatProp;
-		#endregion
-		
-		#region signals	   
-		[Signal]
-		delegate void SomethingHappenedEventHandler();
-		#endregion
-	*/
-	
-	public override void _Ready()
-	{
-		SafeGuard.EnsureIsConstType<CharacterBody2D>(Owner);
-	}
-}
-"
+[ext_resource type="Script" path="res://Core/Traits/HealthTrait.cs" id="1_1yxwb"]
 
 [node name="HealthTrait" type="Node"]
-script = SubResource("CSharpScript_bj5dl")
+script = ExtResource("1_1yxwb")

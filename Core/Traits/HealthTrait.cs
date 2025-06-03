@@ -7,7 +7,7 @@ using GodotStrict.Helpers;
 using GodotStrict.Helpers.Guard;
 
 [GlobalClass]
-[Icon("res://Assets/Icons/GodotEditor/Icons/script.png")]
+[Icon("res://Assets//GodotEditor/Icons/script.png")]
 public partial class HealthTrait : Node
 {
 	#region exports
