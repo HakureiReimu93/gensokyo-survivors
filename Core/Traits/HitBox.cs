@@ -8,6 +8,7 @@ using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
 
 [GlobalClass]
+[Icon("res://Assets//GodotEditor/Icons/hitbox.png")]
 public partial class HitBox : Area2D
 {
 	#region exports
@@ -16,15 +17,15 @@ public partial class HitBox : Area2D
 	{
 		get
 		{
-			return mFactionProp;
+			return mFaction;
 		}
 		set
 		{
-			mFactionProp = value;
-			CollisionMask = FactionUtil.LayerFromFaction(mFactionProp);
+			mFaction = value;
+			CollisionMask = FactionUtil.MaskFromFaction(mFaction);
 		}
 	}
-	FactionEnum mFactionProp;
+	FactionEnum mFaction;
 
 	[Export]
 	public float MyDamageOnHit { get; set; }
@@ -33,8 +34,9 @@ public partial class HitBox : Area2D
 
 	public override void _Ready()
 	{
-		SafeGuard.EnsureIsConstType<CharacterBody2D>(Owner);
-		SafeGuard.Ensure(CollisionMask == 0, "Do not set the collision mask!");
+		SafeGuard.EnsureIsConstType<Node2D>(Owner);
+		SafeGuard.Ensure(CollisionLayer == 0, "Do not set the collision mask!");
+		SafeGuard.Ensure(mFaction != FactionEnum.NONE, "Set the faction");
 	}
 
 	/// <summary>
