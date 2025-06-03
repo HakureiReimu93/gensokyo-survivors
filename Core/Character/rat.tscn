@@ -1,24 +1,39 @@
-[gd_scene load_steps=6 format=3 uid="uid://dp8m18k023b00"]
+[gd_scene load_steps=8 format=3 uid="uid://dp8m18k023b00"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
 [ext_resource type="Texture2D" uid="uid://dxkk8cc7lkv44" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0124.png" id="2_ng83w"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="3_rw55v"]
 [ext_resource type="Script" path="res://Core/Character/Controller/DumbMeleeControl.cs" id="4_yxvfj"]
+[ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://Core/Traits/hurt_box.tscn" id="5_d4tq7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
-radius = 7.28011
+radius = 4.0
 
-[node name="MobUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_22joa"]
+radius = 9.0
+
+[node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
+MyMaxSpeed = 150.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 position = Vector2(0, -8)
 texture = ExtResource("2_ng83w")
 
 [node name="CollisionShape2D" parent="." index="1"]
-position = Vector2(0, -7)
+position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_ss4gt")
 
 [node name="AccelDecelMiddleware" parent="." index="2" instance=ExtResource("3_rw55v")]
+MyAccelFactor = 0.415
+MyDecelFactor = 0.33
 
 [node name="DumbMeleeControl" type="Node" parent="." index="3"]
 script = ExtResource("4_yxvfj")
+
+[node name="HurtBox" parent="." index="4" instance=ExtResource("5_d4tq7")]
+MyFaction = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_22joa")
+debug_color = Color(0.917419, 0.227041, 0.44687, 0.42)
