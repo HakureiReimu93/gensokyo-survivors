@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://di7s4px2ovlv0"]
+
+[ext_resource type="Script" path="res://Core/Traits/Middleware/AccelDecelMiddleware.cs" id="1_yjbsd"]
+
+[node name="AccelDecelMiddleware" type="Node"]
+script = ExtResource("1_yjbsd")

@@ -4,37 +4,42 @@ using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
 using GodotStrict.Traits;
 using GodotStrict.Traits.EmptyImpl;
+using static GodotStrict.Helpers.Logging.StrictLog;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
 public partial class MobUnit : CharacterBody2D, ILensProvider<BaseImplInfo2D>
 {
-	const float cFallbackSpeed = 200;
+	[Export]
+	public float MyMaxSpeed { get; private set; } = 200;
 
 	IMobUnitInput mMovementController;
-	Option<IVelocityMiddleware> mMoveMiddleware;
+
+	// Principal velocity buf (which is acceleration in this case.)
+	Option<IVelocityBuf> mAccel;
 
 	public override void _Ready()
 	{
 		mMovementController = this.Require<IMobUnitInput>();
-		mMoveMiddleware = this.Optional<IVelocityMiddleware>();
-		if (!mMoveMiddleware)
+		mAccel = this.Optional<IVelocityBuf>();
+		if (!mAccel)
 		{
-			GodotStrict.Helpers.Logging.StrictLog.LogWarn("Not using middleware; using fallback movement.");
+			LogWarn("Expected acceleration component, none found.");
 		}
 	}
 
 	public override void _Process(double delta)
 	{
 		var moveDirection = mMovementController.GetNormalMovement();
-		if (mMoveMiddleware.Available(out var moveMiddleware))
+		var finalVelocity = moveDirection * MyMaxSpeed;
+
+		if (mAccel.Available(out var accel))
 		{
-			Velocity = moveMiddleware.GetNextVelocity(moveDirection, delta);
+			finalVelocity *= accel.GetVelocityBuf(moveDirection, MyMaxSpeed, delta);
 		}
-		else
-		{
-			Velocity = moveDirection * cFallbackSpeed;
-		}
+
+		Velocity = finalVelocity;
+
 		MoveAndSlide();
 	}
 
