@@ -7,10 +7,15 @@ using GodotUtilities;
 using static GodotStrict.Helpers.Logging.StrictLog;
 
 [GlobalClass]
-[Icon("res://Assets/GodotEditor/Icons/skill.png")]
-public partial class SwordSkill : Node2D
+[Icon("res://Assets/GodotEditor/Icons/skill-blue.png")]
+public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 {
 	AnimationPlayer mAnim;
+
+	public void OnHitEnemy()
+	{
+		LogAny("I hit an enemy with a sword");
+	}
 
 	public override void _Ready()
 	{
