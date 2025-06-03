@@ -8,10 +8,11 @@ using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
 using System.Diagnostics.CodeAnalysis;
 using GensokyoSurvivors.Core.Interface;
+using GodotStrict.Types;
 
 [GlobalClass]
 [Icon("res://Assets//GodotEditor/Icons/script.png")]
-public partial class HurtBox : Area2D, IKillable
+public partial class HurtBox : Area2D
 {
     #region exports
     [Export]
@@ -34,7 +35,7 @@ public partial class HurtBox : Area2D, IKillable
     #region signals
 
     [Signal]
-    public delegate void STakeRawDamageEventHandler(float pRawDamage);
+    public delegate void MyTakeRawDamageEventHandler(float pRawDamage);
 
     #endregion
 
@@ -43,11 +44,6 @@ public partial class HurtBox : Area2D, IKillable
         SafeGuard.Ensure(CollisionLayer == 0, "Do not set the collision layer!");
 
         AreaEntered += HandleAreaEntered;
-    }
-
-    public void TriggerDie()
-    {
-        AreaEntered -= HandleAreaEntered;
     }
 
     private void HandleAreaEntered(Area2D other)
@@ -60,7 +56,7 @@ public partial class HurtBox : Area2D, IKillable
 
         if (damage > 0)
         {
-            EmitSignal(SignalName.STakeRawDamage, hitBox.MyDamageOnHit);
+            EmitSignal(SignalName.MyTakeRawDamage, hitBox.MyDamageOnHit);
         }
     }
 }
