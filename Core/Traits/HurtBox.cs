@@ -11,7 +11,7 @@ using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
 
 [GlobalClass]
-[Icon("res://Assets//GodotEditor/Icons/script.png")]
+[Icon("res://Assets//GodotEditor/Icons/hurtbox.png")]
 public partial class HurtBox : Area2D
 {
     #region exports
@@ -25,7 +25,7 @@ public partial class HurtBox : Area2D
         set
         {
             mFaction = value;
-            CollisionMask = FactionUtil.LayerFromFaction(mFaction);
+            CollisionLayer = FactionUtil.LayerFromFaction(mFaction);
         }
     }
     FactionEnum mFaction;
@@ -41,8 +41,8 @@ public partial class HurtBox : Area2D
 
     public override void _Ready()
     {
-        SafeGuard.Ensure(CollisionLayer == 0, "Do not set the collision layer!");
-
+        SafeGuard.EnsureIsConstType<Node2D>(Owner);
+        SafeGuard.Ensure(CollisionMask == 0, "Do not set the collision layer!");
         AreaEntered += HandleAreaEntered;
     }
 
