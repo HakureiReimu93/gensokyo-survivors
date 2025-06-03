@@ -20,15 +20,15 @@ public partial class HurtBox : Area2D
     {
         get
         {
-            return mFactionProp;
+            return mFaction;
         }
         set
         {
-            mFactionProp = value;
-            CollisionMask = FactionUtil.LayerFromFaction(mFactionProp);
+            mFaction = value;
+            CollisionMask = FactionUtil.LayerFromFaction(mFaction);
         }
     }
-    FactionEnum mFactionProp;
+    FactionEnum mFaction;
 
     #endregion
 
