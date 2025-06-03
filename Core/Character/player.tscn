@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbi0ywk18wpos"]
+[gd_scene load_steps=11 format=3 uid="uid://cbi0ywk18wpos"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vcaia"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_harae"]
 [ext_resource type="Script" path="res://Core/Character/Controller/PlayerControl.cs" id="3_j5r06"]
+[ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="4_kccbf"]
 [ext_resource type="PackedScene" uid="uid://mjpm7pn6vfe3" path="res://Core/Traits/cooldown_ability_spawner.tscn" id="4_y0w10"]
 [ext_resource type="PackedScene" uid="uid://dtyiv3f8hu3rq" path="res://Core/Unit/sword_ability_unit.tscn" id="5_or6g6"]
 [ext_resource type="Script" path="res://Core/Traits/Strategy/NearestEnemySpawnStrategy.cs" id="6_infic"]
@@ -46,3 +47,7 @@ MyMaxRange = 200.0
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_j8tic")
 debug_color = Color(0.666667, 0.0941176, 0.172549, 0.188235)
+
+[node name="AccelDecelMiddleware" parent="." index="4" instance=ExtResource("4_kccbf")]
+MyAccelFactor = 0.404
+MyDecelFactor = 0.305

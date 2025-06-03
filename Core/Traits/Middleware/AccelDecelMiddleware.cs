@@ -66,7 +66,7 @@ public partial class AccelDecelMiddleware : Node, IVelocityBuf
 	public void DoSetSpeedForcely(float pSpeed)
 	{
 		data.MaxSpeed = pSpeed;
-	}
+	}	
 
 	public Vector2 GetVelocityBuf(Vector2 pDirection, float baseSpeed, double delta)
 	{
