@@ -41,6 +41,7 @@ public partial class HealthTrait : Node
 
 	public override void _Ready()
 	{
+		SafeGuard.Ensure(MyHealth > 0, "Set max health");
 		mHealth = mMaxHealth;
 	}
 
