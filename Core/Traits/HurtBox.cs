@@ -9,7 +9,7 @@ public partial class HurtBox : Area2D
     public override void _Ready()
     {
         SafeGuard.EnsureIsConstType<Node2D>(Owner);
-        SafeGuard.Ensure(CollisionMask == 0, "Do not set the collision layer!");
+        SafeGuard.Ensure(CollisionLayer == 0, "Do not set the collision layer!");
         AreaEntered += HandleAreaEntered;
     }
 
@@ -37,7 +37,7 @@ public partial class HurtBox : Area2D
         set
         {
             mFaction = value;
-            CollisionLayer = FactionUtil.LayerFromFaction(mFaction);
+            CollisionMask = FactionUtil.LayerFromFaction(mFaction);
         }
     }
 

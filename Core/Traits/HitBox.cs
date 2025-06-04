@@ -9,7 +9,7 @@ public partial class HitBox : Area2D
 	public override void _Ready()
 	{
 		SafeGuard.EnsureIsConstType<Node2D>(Owner);
-		SafeGuard.Ensure(CollisionLayer == 0, "Do not set the collision mask!");
+		SafeGuard.Ensure(CollisionMask == 0, "Do not set the collision mask!");
 		SafeGuard.Ensure(mFaction != FactionEnum.NONE, "Set the faction");
 	}
 
@@ -27,7 +27,7 @@ public partial class HitBox : Area2D
 		set
 		{
 			mFaction = value;
-			CollisionMask = FactionUtil.MaskFromFaction(mFaction);
+			CollisionLayer = FactionUtil.MaskFromFaction(mFaction);
 		}
 	}
 

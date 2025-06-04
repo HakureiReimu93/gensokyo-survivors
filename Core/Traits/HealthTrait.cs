@@ -31,6 +31,8 @@ public partial class HealthTrait : Node
 	{
 		SafeGuard.Ensure(pHealAmount > 0);
 		SafeGuard.Ensure(mDead == false);
+
+		mHealth = Mathf.Min(mHealth + pHealAmount, mMaxHealth);
 	}
 
 	public void TriggerHealAll()
