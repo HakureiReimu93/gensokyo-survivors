@@ -1,39 +1,35 @@
 using Godot;
-using GodotStrict.Helpers.Dependency;
 using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
 using GodotStrict.Traits;
 using GodotStrict.Traits.EmptyImpl;
-using static GodotStrict.Helpers.Logging.StrictLog;
+using GodotUtilities;
+using System.Collections.Generic;
+using GodotStrict.AliasTypes;
+using System;
+using System.Linq;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
+[UseAutowiring]
 public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImplInfo2D>
 {
-	[Export]
-	public float MyMaxSpeed { get; private set; } = 200;
-
 	// Required movement controller
+	[Autowired]
 	IMobUnitInput mMovementController;
 
 	// Principal velocity buf (which is acceleration in this case.)
-	Option<IVelocityBuf> mAccel;
+	[Autowired]
+	Option<IScalarMiddleware<Vector2>> mAccel;
 
+	[Autowired]
 	Option<HealthTrait> mHealth;
-	Option<HurtBox> mHurtBox;
 
-	bool mDead = false;
-	public bool IsDead => mDead;
+	[Autowired]
+	Option<HurtBox> mHurtBox;
 
 	public override void _Ready()
 	{
-		mMovementController = this.Require<IMobUnitInput>();
-
-		mAccel = this.Optional<IVelocityBuf>();
-
-		mHealth = this.Optional<HealthTrait>();
-		mHurtBox = this.Optional<HurtBox>();
-
 		if (mHurtBox.Available(out var hurtBox))
 		{
 			hurtBox.MyTakeRawDamage += HandleHurtByDamageSource;
@@ -53,12 +49,29 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 		if (mAccel.Available(out var accel))
 		{
-			finalVelocity = MyMaxSpeed * accel.GetVelocityBuf(moveDirection, MyMaxSpeed, delta);
+			finalVelocity *= accel.NextValue(moveDirection, delta);
 		}
+
+		// apply movement buf.
+		finalVelocity *= GetTotalMovementBuf();
 
 		Velocity = finalVelocity;
 
 		MoveAndSlide();
+	}
+
+	public void AddUnitBuf(UnitBuf buf)
+	{
+		mBufs.Add(buf);
+	}
+
+	private float GetTotalMovementBuf()
+	{
+		return mBufs.Aggregate(
+			1f,
+			(currentMultiplier, currentBuf) => 
+				currentMultiplier * currentBuf.MySpeedScale
+		);
 	}
 
 	private void HandleHurtByDamageSource(float pRawDamage)
@@ -84,12 +97,17 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	}
 
 
-	#region lens
+	[Export]
+	public float MyMaxSpeed { get; private set; } = 200;
+
+	List<UnitBuf> mBufs = [];
+	bool mDead = false;
+	public bool IsDead => mDead;
+
 	protected BaseImplInfo2D lens;
 	public BaseImplInfo2D Lens => lens;
-
-
 	public MobUnit() { lens = new(this); }
-	#endregion
 
+	// Run dependency injection before _Ready() is called.
+	public override void _Notification(int what) { if (what == NotificationSceneInstantiated) __PerformDependencyInjection(); }
 }

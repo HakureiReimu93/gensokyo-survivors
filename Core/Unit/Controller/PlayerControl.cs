@@ -1,6 +1,5 @@
 using GensokyoSurvivors.Core.Interface;
 using Godot;
-using System;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/brain.png")]

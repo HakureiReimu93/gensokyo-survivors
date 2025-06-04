@@ -4,16 +4,11 @@ using GodotStrict.Traits;
 
 using GodotStrict.Types;
 using GodotStrict.Helpers.Guard;
-using GodotStrict.Helpers;
+using GodotUtilities;
 
 [GlobalClass]
 public partial class GameCamera : Camera2D
 {
-	[Export]
-	string MyFocusID { get; set; } = "id-player";
-
-	Scanner<LInfo2D> mTarget;
-
 	public override void _Ready()
 	{
 		SafeGuard.Ensure(IsCurrent());
@@ -37,4 +32,9 @@ public partial class GameCamera : Camera2D
 			);
 		}
 	}
+
+	[Export]
+	string MyFocusID { get; set; } = "id-player";
+
+	Scanner<LInfo2D> mTarget;
 }

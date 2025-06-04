@@ -1,44 +1,11 @@
 using Godot;
-using System;
-using static Godot.Mathf;
-using static GodotStrict.Helpers.Logging.StrictLog;
-using static GodotStrict.Helpers.Dependency.DependencyHelper;
-using GodotStrict.Helpers;
 using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
-using System.Diagnostics.CodeAnalysis;
-using GensokyoSurvivors.Core.Interface;
-using GodotStrict.Types;
 
 [GlobalClass]
 [Icon("res://Assets//GodotEditor/Icons/hurtbox.png")]
 public partial class HurtBox : Area2D
 {
-    #region exports
-    [Export]
-    public FactionEnum MyFaction
-    {
-        get
-        {
-            return mFaction;
-        }
-        set
-        {
-            mFaction = value;
-            CollisionLayer = FactionUtil.LayerFromFaction(mFaction);
-        }
-    }
-    FactionEnum mFaction;
-
-    #endregion
-
-    #region signals
-
-    [Signal]
-    public delegate void MyTakeRawDamageEventHandler(float pRawDamage);
-
-    #endregion
-
     public override void _Ready()
     {
         SafeGuard.EnsureIsConstType<Node2D>(Owner);
@@ -59,4 +26,23 @@ public partial class HurtBox : Area2D
             EmitSignal(SignalName.MyTakeRawDamage, hitBox.MyDamageOnHit);
         }
     }
+
+    [Export]
+    public FactionEnum MyFaction
+    {
+        get
+        {
+            return mFaction;
+        }
+        set
+        {
+            mFaction = value;
+            CollisionLayer = FactionUtil.LayerFromFaction(mFaction);
+        }
+    }
+
+    [Signal]
+    public delegate void MyTakeRawDamageEventHandler(float pRawDamage);
+
+    FactionEnum mFaction;
 }

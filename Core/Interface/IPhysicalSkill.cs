@@ -4,5 +4,6 @@ namespace GensokyoSurvivors.Core.Interface;
 
 public interface IPhysicalSkill
 {
-    public void OnHitEnemy();
+    public void OnEnemyHit(MobUnit enemy);
+    public void OnEnemyChosen(MobUnit enemy);
 }

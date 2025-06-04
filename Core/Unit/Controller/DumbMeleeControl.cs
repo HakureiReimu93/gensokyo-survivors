@@ -3,20 +3,12 @@ using Godot;
 using GodotStrict.Helpers.Guard;
 using GodotStrict.Traits;
 using GodotStrict.Types;
-using System;
 using static GodotStrict.Helpers.Dependency.DependencyHelper;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/brain.png")]
 public partial class DumbMeleeControl : Node, IMobUnitInput
 {
-	[Export]
-	string MyFocusID { get; set; } = "id-player";
-
-	Scanner<LInfo2D> mTarget;
-
-	Node2D mOwner;
-
 	public override void _Ready()
 	{
 		SafeGuard.EnsureNotEqual(MyFocusID, "", "Cannot focus on nothing");
@@ -37,4 +29,11 @@ public partial class DumbMeleeControl : Node, IMobUnitInput
 			return Vector2.Zero;
 		}
 	}
+
+	[Export]
+	string MyFocusID { get; set; } = "id-player";
+
+	Scanner<LInfo2D> mTarget;
+
+	Node2D mOwner;
 }

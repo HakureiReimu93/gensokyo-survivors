@@ -5,9 +5,9 @@ using GodotStrict.Types;
 
 namespace GensokyoSurvivors.Core.Interface;
 
-public interface IAbilitySpawnStrategy
+public interface IAdversarialUnitPicker
 {
-    Option<Vector2> ComputeSpawnOrigin();
-    IAbilitySpawnStrategy WithProtagonistPosition(Vector2 origin);
-    IAbilitySpawnStrategy WithAntagonistPositions(IEnumerable<Vector2> origins);
+    Option<MobUnit> ComputeUnitVictim();
+    IAdversarialUnitPicker WithProtagonist(MobUnit protagonist);
+    IAdversarialUnitPicker WithAntagonists(IEnumerable<MobUnit> antagonists);
 }

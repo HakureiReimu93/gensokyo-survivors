@@ -1,44 +1,11 @@
 using Godot;
 using System;
-using static Godot.Mathf;
-using static GodotStrict.Helpers.Logging.StrictLog;
-using static GodotStrict.Helpers.Dependency.DependencyHelper;
-using GodotStrict.Helpers;
 using GodotStrict.Helpers.Guard;
 
 [GlobalClass]
 [Icon("res://Assets//GodotEditor/Icons/script.png")]
 public partial class HealthTrait : Node
 {
-	#region exports
-	[Export(PropertyHint.Range,"1,200")]
-	int @MyHealth
-	{
-		get
-		{
-			return Convert.ToInt32(mMaxHealth);
-		}
-		set
-		{
-			mMaxHealth = value;
-			mHealth = Mathf.Min(mMaxHealth,	mHealth);
-		}
-	}
-
-
-	float mHealth;
-	float mMaxHealth;
-	#endregion
-	#region signals
-	[Signal]
-	public delegate void MyHpDepletedEventHandler(float pRawOverflow);
-	[Signal]
-	public delegate void MyHpChangedEventHandler(float pOldHp, float pNewHp);
-	#endregion
-
-	bool mDead;
-	bool mOwnerBufsDamage;
-
 	public override void _Ready()
 	{
 		SafeGuard.Ensure(MyHealth > 0, "Set max health");
@@ -82,4 +49,29 @@ public partial class HealthTrait : Node
 		EmitSignal(SignalName.MyHpDepleted, 0);
 		mHealth = 0;
 	}
+
+	[Export(PropertyHint.Range, "1,200")]
+	int @MyHealth
+	{
+		get
+		{
+			return Convert.ToInt32(mMaxHealth);
+		}
+		set
+		{
+			mMaxHealth = value;
+			mHealth = Mathf.Min(mMaxHealth, mHealth);
+		}
+	}
+
+	[Signal]
+	public delegate void MyHpDepletedEventHandler(float pRawOverflow);
+	[Signal]
+	public delegate void MyHpChangedEventHandler(float pOldHp, float pNewHp);
+
+	float mHealth;
+	float mMaxHealth;
+	bool mDead;
+	bool mOwnerBufsDamage;
+
 }

@@ -6,36 +6,8 @@ using GodotStrict.AliasTypes;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/equation.png")]
-public partial class AccelDecelMiddleware : Node, IVelocityBuf
+public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 {
-	private float _myMaximum;
-
-	[Export(PropertyHint.Range, "0, 1")]
-	float MyAccelFactor
-	{
-		get => _myAccelFactor;
-		set
-		{
-			_myAccelFactor = value;
-			data.Acceleration = value;
-		}
-	}
-	private float _myAccelFactor;
-
-	[Export(PropertyHint.Range, "0, 1")]
-	float MyDecelFactor
-	{
-		get => _myDecelFactor;
-		set
-		{
-			_myDecelFactor = value;
-			data.Deceleration = value;
-		}
-	}
-	private float _myDecelFactor;
-
-	FlyweightVector2 data;
-
 	public override void _Ready()
 	{
 		SafeGuard.EnsureFloatsNotEqual(MyAccelFactor, 0, "Middleware user will not be able to move.");
@@ -48,40 +20,48 @@ public partial class AccelDecelMiddleware : Node, IVelocityBuf
 		};
 	}
 
-	public Vector2 GetNextVelocity(Vector2 pDirection, double delta)
+	public normal NextValue(Vector2 pValue, double delta)
 	{
-		if (pDirection == Vector2.Zero)
+		SafeGuard.EnsureWithin(pValue.LengthSquared(), 0f, 1f, "Must normalize direction");
+
+		if (pValue == Vector2.Zero)
 		{
 			data.ToZeroSpeed(delta);
 		}
 		else
 		{
-			data.Direction = pDirection;
+			data.Direction = pValue;
 			data.ToTopSpeed(delta);
 		}
 
-		return data.Velocity;
+		return data.Velocity.Length();
 	}
 
-	public void DoSetSpeedForcely(float pSpeed)
+	[Export(PropertyHint.Range, "0, 1")]
+	float MyAccelFactor
 	{
-		data.MaxSpeed = pSpeed;
-	}	
-
-	public Vector2 GetVelocityBuf(Vector2 pDirection, float baseSpeed, double delta)
-	{
-		SafeGuard.EnsureWithin(pDirection.LengthSquared(), 0f, 1f, "Must normalize direction");
-
-		if (pDirection == Vector2.Zero)
+		get => myAccelFactor;
+		set
 		{
-			data.ToZeroSpeed(delta);
+			myAccelFactor = value;
+			data.Acceleration = value;
 		}
-		else
-		{
-			data.Direction = pDirection;
-			data.ToTopSpeed(delta);
-		}
-
-		return data.Velocity;
 	}
-  }
+
+	[Export(PropertyHint.Range, "0, 1")]
+	float MyDecelFactor
+	{
+		get => myDecelFactor;
+		set
+		{
+			myDecelFactor = value;
+			data.Deceleration = value;
+		}
+	}
+
+	private float myDecelFactor;
+	private float myMaximum;
+	private float myAccelFactor;
+
+	FlyweightVector2 data;
+}

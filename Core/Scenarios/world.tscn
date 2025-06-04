@@ -2,9 +2,9 @@
 
 [ext_resource type="TileSet" uid="uid://6se6r8y0ieqy" path="res://Assets/Resources/tilemap/kenney-dungeon.tres" id="1_5nx0d"]
 [ext_resource type="Script" path="res://Core/Scenarios/World.cs" id="1_nufap"]
-[ext_resource type="PackedScene" uid="uid://cbi0ywk18wpos" path="res://Core/Character/player.tscn" id="3_lup6e"]
+[ext_resource type="PackedScene" path="res://Core/Character/player.tscn" id="3_lup6e"]
 [ext_resource type="PackedScene" uid="uid://ccn1ocsgum2gx" path="res://Core/Unit/game_camera.tscn" id="4_amet7"]
-[ext_resource type="PackedScene" uid="uid://dp8m18k023b00" path="res://Core/Character/rat.tscn" id="5_d4mar"]
+[ext_resource type="PackedScene" uid="uid://dp8m18k023b00" path="res://Core/Unit/rat.tscn" id="5_d4mar"]
 [ext_resource type="Script" path="res://Core/Level/SkillLayer.cs" id="6_wwqe1"]
 
 [node name="World" type="Node2D"]
