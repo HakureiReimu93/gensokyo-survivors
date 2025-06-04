@@ -9,7 +9,9 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\godot-strict\GodotStrict.csproj" />
-    <ProjectReference Include="..\Libraries\GodotUtilities\SourceGenerators\SourceGenerators.csproj" />
+    <ProjectReference 
+      Include="..\Libraries\GodotUtilities\SourceGenerators\SourceGenerators.csproj" 
+      OutputItemType="Analyzer" />
   </ItemGroup>
   <!-- <AssemblyAttribute Include="NullGuard.NullGuardAttribute">
     <_Parameter1>NullGuard.ValidationFlags.All</_Parameter1>
