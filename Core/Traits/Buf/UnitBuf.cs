@@ -1,3 +1,4 @@
+using GensokyoSurvivors.Core.Model;
 using Godot;
 using GodotStrict.Helpers.Guard;
 
@@ -52,6 +53,11 @@ public partial class UnitBuf : Node
 	public virtual void OnUnitRemovesMe()
 	{
 		// run when the unit removes this buf 
+	}
+
+	public virtual bool IsExpired()
+	{
+		return false;
 	}
 
 	[Export(PropertyHint.Range, "0,2")]
