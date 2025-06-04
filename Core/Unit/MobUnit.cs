@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using GodotStrict.AliasTypes;
 using System;
 using System.Linq;
+using GensokyoSurvivors.Core.Model;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -30,13 +31,15 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 	public override void _Ready()
 	{
+		__PerformDependencyInjection();
+
 		if (mHurtBox.Available(out var hurtBox))
 		{
 			hurtBox.MyTakeRawDamage += HandleHurtByDamageSource;
 		}
 		if (mHealth.Available(out var hp))
 		{
-			hp.MyHpDepleted += HandleHpDepleted;
+			hp.MyHpDepleted += HandleHpDropToZero;
 		}
 	}
 
@@ -53,25 +56,11 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		}
 
 		// apply movement buf.
-		finalVelocity *= GetTotalMovementBuf();
+		finalVelocity *= MyBufs.ProductAll(buf => buf.MySpeedScale);
 
 		Velocity = finalVelocity;
 
 		MoveAndSlide();
-	}
-
-	public void AddUnitBuf(UnitBuf buf)
-	{
-		mBufs.Add(buf);
-	}
-
-	private float GetTotalMovementBuf()
-	{
-		return mBufs.Aggregate(
-			1f,
-			(currentMultiplier, currentBuf) => 
-				currentMultiplier * currentBuf.MySpeedScale
-		);
 	}
 
 	private void HandleHurtByDamageSource(float pRawDamage)
@@ -79,6 +68,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		if (mHealth.Available(out var hp))
 		{
 			hp.TriggerDamage(pRawDamage);
+			// Add a hurt unit buff that lasts for a short period of time.
 		}
 		else
 		{
@@ -86,7 +76,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		}
 	}
 
-	private void HandleHpDepleted(float pUnderflowRawDamage)
+	private void HandleHpDropToZero(float pUnderflowRawDamage)
 	{
 		TriggerDie();
 	}
@@ -100,7 +90,6 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	[Export]
 	public float MyMaxSpeed { get; private set; } = 200;
 
-	List<UnitBuf> mBufs = [];
 	bool mDead = false;
 	public bool IsDead => mDead;
 
@@ -108,6 +97,6 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	public BaseImplInfo2D Lens => lens;
 	public MobUnit() { lens = new(this); }
 
-	// Run dependency injection before _Ready() is called.
-	public override void _Notification(int what) { if (what == NotificationSceneInstantiated) __PerformDependencyInjection(); }
+	public BufCollection MyBufs { get; protected set; } = new();
+
 }

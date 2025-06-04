@@ -39,6 +39,7 @@ MySpawnDelay = 1.596
 
 [node name="SelectVictimStrategy" type="Node" parent="PlayerUnitInput/SkillRoster/SwordSkillSpawner" index="0"]
 script = ExtResource("6_apv4w")
+MyMaxRange = 281.915
 
 [node name="HurtBox" parent="." index="3" instance=ExtResource("7_bjeo8")]
 

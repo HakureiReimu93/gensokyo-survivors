@@ -2,6 +2,7 @@ using Godot;
 using GodotStrict.Helpers.Guard;
 using GodotStrict.Types;
 using GodotStrict.Types.Traits;
+using static GodotStrict.Helpers.Dependency.DependencyHelper;
 using GensokyoSurvivors.Core.Interface;
 using System.Linq;
 using GodotUtilities;
@@ -11,7 +12,7 @@ using GodotUtilities;
 [UseAutowiring]
 public partial class CooldownAbilitySpawner : Node, IAbilitySpawner
 {
-	[Autowired]
+	[Autowired("id-skill-layer")]
 	Scanner<LMother> mSkillLayerRef;
 
 	[Autowired]
@@ -20,6 +21,8 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		__PerformDependencyInjection();
+
 		SafeGuard.EnsureNotNull(MySkillToSpawn);
 		SafeGuard.EnsureFloatsNotEqual(MySpawnDelay, 0f, "delay cannot be 0");
 		SafeGuard.Ensure(Owner is Node2D, "Cannot take advantage of certain spawn strategies without Position reference");
@@ -91,6 +94,6 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner
 	Node2D mOwner;
 	LiteTimer mTimer;
 
-	// Run dependency injection before _Ready() is called.
-	public override void _Notification(int what) { if (what == NotificationSceneInstantiated) __PerformDependencyInjection(); }	
+	
+
 }

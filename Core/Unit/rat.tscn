@@ -13,7 +13,7 @@ radius = 4.0
 radius = 9.0
 
 [node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
-MyMaxSpeed = 150.0
+MyMaxSpeed = 50.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 position = Vector2(0, -8)
