@@ -14,8 +14,8 @@ public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 
 		data = new FlyweightVector2
 		{
-			Acceleration = MyAccelFactor,
-			Deceleration = MyDecelFactor,
+			Acceleration = new normal(MyAccelFactor),
+			Deceleration = new normal(MyDecelFactor),
 			MaxSpeed = 1
 		};
 	}
@@ -34,7 +34,7 @@ public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 			data.ToTopSpeed(delta);
 		}
 
-		return data.Velocity.Length();
+		return (normal)data.Velocity.Length();
 	}
 
 	[Export(PropertyHint.Range, "0, 1")]
@@ -44,7 +44,7 @@ public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 		set
 		{
 			myAccelFactor = value;
-			data.Acceleration = value;
+			data.Acceleration = (normal)value;
 		}
 	}
 
@@ -55,7 +55,7 @@ public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 		set
 		{
 			myDecelFactor = value;
-			data.Deceleration = value;
+			data.Deceleration = (normal)value;
 		}
 	}
 

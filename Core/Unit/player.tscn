@@ -31,16 +31,6 @@ debug_color = Color(0.0235294, 0.423529, 0.611765, 0.278431)
 [node name="PlayerUnitInput" type="Node" parent="." index="2"]
 script = ExtResource("3_5tf3c")
 
-[node name="SkillRoster" type="Node" parent="PlayerUnitInput" index="0"]
-
-[node name="SwordSkillSpawner" parent="PlayerUnitInput/SkillRoster" index="0" instance=ExtResource("4_p0cps")]
-MySkillToSpawn = ExtResource("5_emj28")
-MySpawnDelay = 1.596
-
-[node name="SelectVictimStrategy" type="Node" parent="PlayerUnitInput/SkillRoster/SwordSkillSpawner" index="0"]
-script = ExtResource("6_apv4w")
-MyMaxRange = 281.915
-
 [node name="HurtBox" parent="." index="3" instance=ExtResource("7_bjeo8")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0"]
@@ -51,3 +41,13 @@ debug_color = Color(0.666667, 0.0941176, 0.172549, 0.188235)
 [node name="AccelDecelMiddleware" parent="." index="4" instance=ExtResource("8_kburr")]
 MyAccelFactor = 0.404
 MyDecelFactor = 0.305
+
+[node name="SkillRoster" type="Node" parent="." index="5"]
+
+[node name="SwordSkillSpawner" parent="SkillRoster" index="0" instance=ExtResource("4_p0cps")]
+MySkillToSpawn = ExtResource("5_emj28")
+MySpawnDelay = 1.596
+
+[node name="SelectVictimStrategy" type="Node" parent="SkillRoster/SwordSkillSpawner" index="0"]
+script = ExtResource("6_apv4w")
+MyMaxRange = 281.915

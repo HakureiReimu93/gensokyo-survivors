@@ -47,5 +47,5 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 		mAnticipateBufInstance.IfSome(then: (buf) => enemy.MyBufs.RemoveSpecificUnitBuf(buf));
 	}
 
-	Option<UnitBuf> mAnticipateBufInstance;
+	Option<UnitBuf> mAnticipateBufInstance = Option<UnitBuf>.None;
 }

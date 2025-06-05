@@ -30,6 +30,8 @@ project/assembly_name="Gensokyo Survivors"
 id-player=""
 id-skill-layer=""
 id-enemy=""
+id-unit-layer=""
+id-game-camera=""
 
 [input]
 
