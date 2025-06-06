@@ -13,7 +13,7 @@ public partial class HitBox : Area2D
 		SafeGuard.Ensure(mFaction != FactionEnum.NONE, "Set the faction");
 	}
 
-	public void OnCollidedWith(HurtBox pHurtBox)
+	public virtual void OnCollidedWith(HurtBox pHurtBox)
 	{
 	}
 

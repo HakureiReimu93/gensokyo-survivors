@@ -3,7 +3,7 @@ using System;
 using GodotStrict.Helpers.Guard;
 
 [GlobalClass]
-[Icon("res://Assets//GodotEditor/Icons/script.png")]
+[Icon("res://Assets//GodotEditor/Icons/health.png")]
 public partial class HealthTrait : Node
 {
 	public override void _Ready()

@@ -4,11 +4,8 @@ using GodotStrict.Types;
 using GodotStrict.Traits;
 using GodotStrict.Traits.EmptyImpl;
 using GodotUtilities;
-using System.Collections.Generic;
-using GodotStrict.AliasTypes;
-using System;
-using System.Linq;
 using GensokyoSurvivors.Core.Model;
+using GodotStrict.Helpers.Guard;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -33,6 +30,8 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	{
 		__PerformDependencyInjection();
 
+		SafeGuard.EnsureNotNull(MyTakeDamageBufScene);
+
 		if (mHurtBox.Available(out var hurtBox))
 		{
 			hurtBox.MyTakeRawDamage += HandleHurtByDamageSource;
@@ -41,6 +40,16 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		{
 			hp.MyHpDepleted += HandleHpDropToZero;
 		}
+	}
+
+	public void AddUnitBuf(UnitBuf ub)
+	{
+		MyBufs.Add(ub);
+	}
+
+	public void RemoveUnitBuf(UnitBuf ub)
+	{
+		MyBufs.RemoveSpecificUnitBuf(ub);
 	}
 
 	public override void _Process(double delta)
@@ -56,7 +65,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		}
 
 		// apply movement buf.
-		finalVelocity *= MyBufs.ProductAll(buf => buf.MySpeedScale);
+		finalVelocity *= MyBufs.ProductAll(buf => buf.MyBaseMovementSpeedScale);
 
 		Velocity = finalVelocity;
 
@@ -68,6 +77,12 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		if (mHealth.Available(out var hp))
 		{
 			hp.TriggerDamage(pRawDamage);
+
+			var takeDamageBuf = MyTakeDamageBufScene.InstantiateOrNull<TakeDamageBuf>();
+			SafeGuard.EnsureNotNull(takeDamageBuf);
+
+			AddUnitBuf(takeDamageBuf);
+
 			// Add a hurt unit buff that lasts for a short period of time.
 		}
 		else
@@ -97,6 +112,9 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	public BaseImplInfo2D Lens => lens;
 	public MobUnit() { lens = new(this); }
 
-	public BufCollection MyBufs { get; protected set; } = new();
+	protected BufCollection MyBufs { get; set; } = new();
+
+	[Export]
+	PackedScene MyTakeDamageBufScene;
 
 }
