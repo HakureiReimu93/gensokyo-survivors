@@ -2,7 +2,6 @@ using GensokyoSurvivors.Core.Model;
 using Godot;
 using GodotStrict.Helpers.Guard;
 
-
 // 'Buf' is not a mispelling
 // It represents a buff, debuff, status effect, marked for death, curse, blessing, etc.
 // It is all-encompassing, short, snippy, and easy to read.
@@ -55,13 +54,24 @@ public partial class UnitBuf : Node
 		// run when the unit removes this buf 
 	}
 
+	public virtual Color GetModulateColor()
+	{
+		// The tint that this buf gives.
+		return Colors.White;
+	}
+
 	public virtual bool IsExpired()
 	{
 		return false;
 	}
 
+	public virtual float GetMovementSpeedScale()
+	{
+		return MyBaseMovementSpeedScale;
+	}
+
 	[Export(PropertyHint.Range, "0,2")]
-	public float MySpeedScale { get; set; } = 1f;
+	public float MyBaseMovementSpeedScale { get; set; } = 1f;
 
 	[ExportCategory("Design")]
 	[Export]
