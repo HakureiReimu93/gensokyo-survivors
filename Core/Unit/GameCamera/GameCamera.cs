@@ -30,7 +30,7 @@ public partial class GameCamera : Camera2D, ILensProvider<LBoundsInfo2D>
 		{
 			GlobalPosition = GlobalPosition.Lerp(
 				targetData.GlobalPosition,
-				1f - Mathf.Exp(-1f * (float)delta * 10f)
+				1f - Mathf.Exp(-1f * (float)delta * 20f)
 			);
 		}
 	}
