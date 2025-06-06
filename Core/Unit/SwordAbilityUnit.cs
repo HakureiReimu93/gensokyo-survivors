@@ -36,7 +36,13 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 	{
 		if (mAnticipateBufTemplate.Unavailable(out var template)) return;
 		mAnticipateBufTemplate = template.DoCloneMe();
-		enemy.MyBufs.Add(template);
+		enemy.AddUnitBuf(template);
+
+		// remember unit buf
+		mAnticipateBufInstance = template;
+
+		// Rotate the blade
+		LookAt(enemy.GlobalPosition);
 	}
 
 	public void OnEnemyHit(MobUnit enemy)
@@ -44,7 +50,7 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 		LogAny("I hit an enemy with a sword. His name was: " + enemy.Name);
 
 		// remove buf that was slapped on top of enemy.
-		mAnticipateBufInstance.IfSome(then: (buf) => enemy.MyBufs.RemoveSpecificUnitBuf(buf));
+		mAnticipateBufInstance.IfSome(then: (buf) => enemy.RemoveUnitBuf(buf));
 	}
 
 	Option<UnitBuf> mAnticipateBufInstance = Option<UnitBuf>.None;
