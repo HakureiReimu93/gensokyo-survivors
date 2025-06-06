@@ -45,16 +45,21 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	public void AddUnitBuf(UnitBuf ub)
 	{
 		MyBufs.Add(ub);
+		ub.OnUnitAddsMe(this);
 	}
 
 	public void RemoveUnitBuf(UnitBuf ub)
 	{
 		MyBufs.RemoveSpecificUnitBuf(ub);
+		ub.OnUnitRemovesMe();
 	}
 
 	public override void _Process(double delta)
 	{
 		if (mDead) return;
+
+		// apply buf processing
+		MyBufs.ProcessAll(delta);
 
 		var moveDirection = mMovementController.GetNormalMovement();
 		var finalVelocity = moveDirection * MyMaxSpeed;
@@ -68,6 +73,9 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		finalVelocity *= MyBufs.ProductAll(buf => buf.MyBaseMovementSpeedScale);
 
 		Velocity = finalVelocity;
+
+		// apply color buf
+		Modulate = MyBufs.ColorMultiplyAll();
 
 		MoveAndSlide();
 	}
@@ -99,6 +107,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	public void TriggerDie()
 	{
 		QueueFree();
+		
 	}
 
 

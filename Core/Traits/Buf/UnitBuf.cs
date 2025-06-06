@@ -32,11 +32,11 @@ public partial class UnitBuf : Node
 		return result;
 	}
 
-	public virtual void MyParamInit(MobUnit pWhat)
+	public virtual void OnUnitAddsMe(MobUnit pParent)
 	{
 		SafeGuard.Ensure(IsDesignToken is false);
 		SafeGuard.Ensure(mHostUnit is null, "Cannot re-attach");
-		mHostUnit = pWhat;
+		mHostUnit = pParent;
 	}
 
 	public virtual void OnUnitProcess(double deltaTime)
