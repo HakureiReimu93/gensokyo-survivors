@@ -47,3 +47,5 @@ MySpawnDelay = 2.0
 MySubjectScene = ExtResource("5_d4mar")
 
 [node name="GameCamera" parent="." instance=ExtResource("4_amet7")]
+
+[editable path="UnitLayer/PlayerUnit"]
