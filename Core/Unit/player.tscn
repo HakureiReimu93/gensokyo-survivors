@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cp5n01r4txacw"]
+[gd_scene load_steps=12 format=3 uid="uid://cp5n01r4txacw"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Core/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://Core/Traits/hurt_box.tscn" id="7_bjeo8"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
+[ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="9_ichf6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]
 radius = 5.0
@@ -32,6 +33,7 @@ debug_color = Color(0.0235294, 0.423529, 0.611765, 0.278431)
 script = ExtResource("3_5tf3c")
 
 [node name="HurtBox" parent="." index="3" instance=ExtResource("7_bjeo8")]
+MyFaction = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2(0, -6)
@@ -51,3 +53,6 @@ MySpawnDelay = 1.596
 [node name="SelectVictimStrategy" type="Node" parent="SkillRoster/SwordSkillSpawner" index="0"]
 script = ExtResource("6_apv4w")
 MyMaxRange = 281.915
+
+[node name="HealthTrait" parent="." index="6" instance=ExtResource("9_ichf6")]
+MyHealth = 200

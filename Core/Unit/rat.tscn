@@ -1,16 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://dp8m18k023b00"]
+[gd_scene load_steps=11 format=3 uid="uid://dp8m18k023b00"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
 [ext_resource type="Texture2D" uid="uid://dxkk8cc7lkv44" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0124.png" id="2_ng83w"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="3_rw55v"]
 [ext_resource type="Script" path="res://Core/Unit/Controller/DumbMeleeControl.cs" id="4_cntq3"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://Core/Traits/hurt_box.tscn" id="5_d4tq7"]
+[ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://Core/Traits/hit_box.tscn" id="6_pvhtr"]
+[ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="7_nnyfb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
 radius = 4.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_22joa"]
 radius = 9.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h4det"]
 
 [node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
 MyMaxSpeed = 50.0
@@ -37,3 +41,18 @@ MyFaction = 2
 position = Vector2(0, -9)
 shape = SubResource("CircleShape2D_22joa")
 debug_color = Color(0.917419, 0.227041, 0.44687, 0.42)
+
+[node name="HitBox" parent="." index="5" instance=ExtResource("6_pvhtr")]
+MyFaction = 2
+MyDamageOnHit = 10.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_h4det")
+debug_color = Color(0.796324, 0.422556, 0.0801115, 0.42)
+
+[node name="HealthTrait" parent="." index="6" instance=ExtResource("7_nnyfb")]
+MyHealth = 20
+
+[node name="OnTakeDamage" parent="." index="7"]
+MyBaseMovementSpeedScale = 0.8

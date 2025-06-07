@@ -26,11 +26,12 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	[Autowired]
 	Option<HurtBox> mHurtBox;
 
+	[Autowired]
+	TakeDamageBuf mOnTakeDamageBufTemplate;
+
 	public override void _Ready()
 	{
 		__PerformDependencyInjection();
-
-		SafeGuard.EnsureNotNull(MyTakeDamageBufScene);
 
 		if (mHurtBox.Available(out var hurtBox))
 		{
@@ -75,7 +76,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		Velocity = finalVelocity;
 
 		// apply color buf
-		Modulate = MyBufs.ColorMultiplyAll();
+		Modulate = Colors.White * MyBufs.ColorMultiplyAll();
 
 		MoveAndSlide();
 	}
@@ -86,11 +87,11 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		{
 			hp.TriggerDamage(pRawDamage);
 
-			var takeDamageBuf = MyTakeDamageBufScene.InstantiateOrNull<TakeDamageBuf>();
-			SafeGuard.EnsureNotNull(takeDamageBuf);
+			Node duplicated = mOnTakeDamageBufTemplate.Duplicate();
+			SafeGuard.Ensure(duplicated is TakeDamageBuf);
+			TakeDamageBuf buf = duplicated as TakeDamageBuf;
 
-			AddUnitBuf(takeDamageBuf);
-
+			AddUnitBuf(buf);
 			// Add a hurt unit buff that lasts for a short period of time.
 		}
 		else
@@ -122,8 +123,5 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	public MobUnit() { lens = new(this); }
 
 	protected BufCollection MyBufs { get; set; } = new();
-
-	[Export]
-	PackedScene MyTakeDamageBufScene;
 
 }
