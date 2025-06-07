@@ -30,6 +30,13 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 	private void OnAnimationEnd(StringName animName)
 	{
 		QueueFree();
+
+		// remove buf that was slapped on top of enemy.
+		if (mAnticipateBufInstance.Available(out var buf) &&
+			mTarget.Available(out var target))
+		{
+			target.RemoveUnitBuf(buf);
+		}
 	}
 
 	public void OnEnemyChosen(MobUnit enemy)
@@ -41,6 +48,9 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 		// remember unit buf
 		mAnticipateBufInstance = template;
 
+		// remember target
+		mTarget = enemy; 
+
 		// Rotate the blade
 		LookAt(enemy.GlobalPosition);
 	}
@@ -48,10 +58,8 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 	public void OnEnemyHit(MobUnit enemy)
 	{
 		LogAny("I hit an enemy with a sword. His name was: " + enemy.Name);
-
-		// remove buf that was slapped on top of enemy.
-		mAnticipateBufInstance.IfSome(then: (buf) => enemy.RemoveUnitBuf(buf));
 	}
 
 	Option<UnitBuf> mAnticipateBufInstance = Option<UnitBuf>.None;
+	Option<MobUnit> mTarget = Option<MobUnit>.None;
 }
