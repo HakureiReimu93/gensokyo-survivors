@@ -32,15 +32,15 @@ public partial class TakeDamageBuf : UnitBuf
 
 	public override Color GetModulateColor()
 	{
-		var timeElapsedPercentage = 1 - mTimer.TimeLeft / mTimer.WaitTime;
+		var timeElapsedPercentage = mTimer.TimeLeft / mTimer.WaitTime;
 
 		var modColor = mOptDamageExtremeness.MatchValue(
-			some: (extremeness) => MyBaseModulateColor.Lerp(Colors.White, extremeness),
+			some: (extremeness) => Colors.White.Lerp(MyBaseModulateColor, extremeness),
 			none: () => MyBaseModulateColor
 		);
 
 		// power must be even to work properly
-		// Ease-in slope U
+		// Ease-in slope U (x-1)^2
 		return modColor.Lerp(Colors.White, Mathf.Pow(timeElapsedPercentage - 1, 2f));
 	}
 
