@@ -1,10 +1,9 @@
-using System;
+using GensokyoSurvivors.Core.Model;
 using Godot;
 using GodotStrict.Traits;
 using GodotStrict.Types;
-using Microsoft.CodeAnalysis;
 
-namespace GensokyoSurvivors.Core.Presentation.UI.TimeDisplay;
+namespace GensokyoSurvivors.Core.Interface.Lens;
 
 public interface LTimeLeftInfo: ILens<Node>
 {

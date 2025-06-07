@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://djynvt8b1bih5" path="res://Assets/UI/clock-icon.png" id="1_86y2l"]
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://Assets/Resources/theme/ui_default.tres" id="2_mjehc"]
 
-[node name="TimeDisplay" type="CanvasLayer"]
+[node name="TimeDisplay" type="CanvasLayer" groups=["chan-session-time"]]
 script = ExtResource("1_8pv8k")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

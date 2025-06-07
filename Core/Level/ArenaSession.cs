@@ -5,15 +5,19 @@ using GodotStrict.Traits;
 using GensokyoSurvivors.Core.Presentation.UI.TimeDisplay;
 using GodotStrict.Types;
 using GodotStrict.Traits.EmptyImpl;
+using GensokyoSurvivors.Core.Interface.Lens;
 
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://Assets/GodotEditor/Icons/manager.png")]
-public partial class ArenaSession : Node, ILensProvider<LTimeLeftInfo>
+public partial class ArenaSession : Node
 {
+	//TODO: implement channel scanner; change to channel scanner
+	[Autowired("chan-session-time")]
+	Scanner<LTimeLeftChannel> mTimeChannel;
+
 	[Autowired("SessionDuration")]
 	Timer mTimer;
-
 
 	public override void _Ready()
 	{
@@ -28,27 +32,25 @@ public partial class ArenaSession : Node, ILensProvider<LTimeLeftInfo>
 
 	private void OnSessionTimeExpire()
 	{
+		if (SessionSignalBus.SingletonInstance.Unavailable(out var ssb)) return;
 
+		ssb.BroadcastSessionTimeExpired();
 	}
 
-	class TimeLens(ArenaSession _en) : LTimeLeftInfo
+	public override void _Process(double delta)
 	{
-		Node ILens<Node>.Entity => _en;
+		base._Process(delta);
 
-		public Option<TimeBundle> GetTime()
+		// may change later.
+		var secondRoundedDown = Mathf.FloorToInt(mTimer.TimeLeft);
+		if (secondRoundedDown < mPreviousSecondRoundedDown &&
+			mTimeChannel.Available(out var chan))
 		{
-			return new TimeBundle(
-				_en.mTimer.TimeLeft,
-				_en.mTimer.WaitTime
-			);
+			// update those that are listening to changes to time.
+			chan.ReceiveTime(new(mTimer.TimeLeft, mTimer.WaitTime));
 		}
-
+		mPreviousSecondRoundedDown = secondRoundedDown;
 	}
-	public ArenaSession()
-	{
-		mLens = new(this);
-	}
-	private readonly TimeLens mLens;
-	public LTimeLeftInfo Lens => mLens;
 
+	private int mPreviousSecondRoundedDown;
 }

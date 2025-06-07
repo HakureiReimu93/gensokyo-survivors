@@ -36,7 +36,7 @@ id-skill-layer=""
 id-enemy=""
 id-unit-layer=""
 id-game-camera=""
-chan-time=""
+chan-session-time=""
 
 [input]
 
