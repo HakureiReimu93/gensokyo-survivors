@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyq2268oa8ytu"]
+
+[ext_resource type="Texture2D" uid="uid://jc27o477oqyo" path="res://Assets/UI/ui-flourish-back.png" id="1_7kk0a"]
+[ext_resource type="Script" path="res://Core/Presentation/UI/TimeDisplay/TimeDisplay.cs" id="1_8pv8k"]
+[ext_resource type="Texture2D" uid="uid://djynvt8b1bih5" path="res://Assets/UI/clock-icon.png" id="1_86y2l"]
+[ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://Assets/Resources/theme/ui_default.tres" id="2_mjehc"]
+
+[node name="TimeDisplay" type="CanvasLayer"]
+script = ExtResource("1_8pv8k")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 19
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/CenterContainer"]
+modulate = Color(0.105, 0.1275, 0.15, 1)
+custom_minimum_size = Vector2(256, 64)
+layout_mode = 2
+texture = ExtResource("1_7kk0a")
+expand_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/CenterContainer/HBoxContainer/HBoxContainer"]
+modulate = Color(1, 0.851167, 0.53, 1)
+layout_mode = 2
+texture = ExtResource("1_86y2l")
+expand_mode = 3
+
+[node name="TimeLabel" type="Label" parent="MarginContainer/CenterContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_mjehc")
+text = "Time Left:"
+
+[node name="TimeValue" type="Label" parent="MarginContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_mjehc")
+text = "0s"
