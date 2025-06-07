@@ -1,4 +1,5 @@
 using GensokyoSurvivors.Core.Model;
+using GensokyoSurvivors.Core.Utility;
 using Godot;
 using GodotStrict.Helpers.Guard;
 
@@ -9,16 +10,17 @@ using GodotStrict.Helpers.Guard;
 // Inspired by Lobotomy Corporation's codebase
 // Where they mispell 'Buff' by accident
 // Yet not only use it for buffs, but also all the above.
+
+// Is a node, so that it can be treated as a design token
+// TODO: Eventually fully treat Buf objects as nodes, syncing lifetime to presence in tree.
+// Eventually making the BufCollection read its children.
+ 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/buf.png")]
 public partial class UnitBuf : Node
 {
 	public override void _Ready()
 	{
-		if (IsDesignToken is false)
-		{
-			SafeGuard.EnsureIsConstType<MobUnit>(Owner, "UnitBufs must go on top of a Unit. ()");
-		}
 	}
 
 	public virtual UnitBuf DoCloneMe()
@@ -27,14 +29,12 @@ public partial class UnitBuf : Node
 		SafeGuard.EnsureIsConstType<UnitBuf>(duplicated, "cloned UnitBuf does not have a script attached!");
 
 		UnitBuf result = duplicated as UnitBuf;
-		result.IsDesignToken = false;
 
 		return result;
 	}
 
 	public virtual void OnUnitAddsMe(MobUnit pParent)
 	{
-		SafeGuard.Ensure(IsDesignToken is false);
 		SafeGuard.Ensure(mHostUnit is null, "Cannot re-attach");
 		mHostUnit = pParent;
 	}
@@ -73,9 +73,7 @@ public partial class UnitBuf : Node
 	[Export(PropertyHint.Range, "0,2")]
 	public float MyBaseMovementSpeedScale { get; set; } = 1f;
 
-	[ExportCategory("Design")]
-	[Export]
-	public bool IsDesignToken { get; set; }
+	protected virtual BufStackType MyBufStackType => BufStackType.OnlyOne;
 
 	MobUnit mHostUnit;
 }
