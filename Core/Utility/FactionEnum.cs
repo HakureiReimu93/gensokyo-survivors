@@ -2,8 +2,8 @@ namespace GensokyoSurvivors.Core.Utility;
 
 public enum FactionEnum
 {
-    NONE,
-    FRIEND,
-    ENEMY,
-    BOTH
+    Undefined,
+    Friend,
+    Enemy,
+    Both
 }

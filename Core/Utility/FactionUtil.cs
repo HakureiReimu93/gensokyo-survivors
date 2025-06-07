@@ -11,10 +11,10 @@ public static class FactionUtil
   {
     return factionValue switch
     {
-      FactionEnum.NONE => 0b0000_0000,
-      FactionEnum.ENEMY => EnemyLayerID,
-      FactionEnum.FRIEND => AllyLayerID,
-      FactionEnum.BOTH => EnemyLayerID | AllyLayerID,
+      FactionEnum.Undefined => 0b0000_0000,
+      FactionEnum.Enemy => EnemyLayerID,
+      FactionEnum.Friend => AllyLayerID,
+      FactionEnum.Both => EnemyLayerID | AllyLayerID,
       _ => throw new NotImplementedException(),
     };
   }
@@ -23,10 +23,10 @@ public static class FactionUtil
     {
         return factionValue switch
         {
-          FactionEnum.NONE => 0b0000_0000,
-          FactionEnum.ENEMY => AllyLayerID,
-          FactionEnum.FRIEND => EnemyLayerID,
-          FactionEnum.BOTH => EnemyLayerID | AllyLayerID,
+          FactionEnum.Undefined => 0b0000_0000,
+          FactionEnum.Enemy => AllyLayerID,
+          FactionEnum.Friend => EnemyLayerID,
+          FactionEnum.Both => EnemyLayerID | AllyLayerID,
           _ => throw new NotImplementedException(),
         };
     }
