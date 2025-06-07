@@ -10,6 +10,7 @@ using GodotStrict.Types.Traits;
 using GodotStrict.Types;
 using GensokyoSurvivors.Core.Interface.Lens;
 using System.Linq;
+using GodotStrict.Traits;
 
 [GlobalClass]
 [UseAutowiring]
@@ -17,6 +18,10 @@ using System.Linq;
 public partial class EnemySpawner : Node
 {
 	private const float C_SPAWN_MARGIN = 10f;
+
+	// check if player is alive (i.e. not freed)
+	[Autowired("id-player")]
+	Scanner<LInfo2D> mPlayerRef;
 
 	[Autowired("id-unit-layer")]
 	Scanner<LMother> mUnitLayerRef;
@@ -54,11 +59,13 @@ public partial class EnemySpawner : Node
 	{
 		if (mCameraBoundsRef.Unavailable(out var cameraInfo)) return;
 		if (mUnitLayerRef.Unavailable(out var unitLayer)) return;
+		if (mPlayerRef.Unavailable(out _)) return;
 
 		var bounds = cameraInfo.GetBounds();
+		bounds.Position = cameraInfo.GlobalPosition - (bounds.Size / 2);
 		
 		// make sure to offset the position by the camera's position in the world, because the bounds are screen coords.
-		var randomOrigin = Chance.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN) + cameraInfo.GlobalPosition;
+		var randomOrigin = Chance.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN);
 
 		var randomEnemy = Chance.RandomCollectionItem(mSpawnList);
 		MobUnit unit = randomEnemy.DoInstantiateNew();
