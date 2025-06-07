@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ccn1ocsgum2gx" path="res://Core/Unit/game_camera.tscn" id="4_amet7"]
 [ext_resource type="PackedScene" uid="uid://dp8m18k023b00" path="res://Core/Unit/rat.tscn" id="5_d4mar"]
 [ext_resource type="PackedScene" uid="uid://cp5n01r4txacw" path="res://Core/Unit/player.tscn" id="6_cp0xy"]
-[ext_resource type="Script" path="res://Core/Scenarios/EnemySpawner.cs" id="6_nti6e"]
+[ext_resource type="Script" path="res://Core/Traits/EnemySpawner.cs" id="6_nti6e"]
 [ext_resource type="Script" path="res://Core/Level/SkillLayer.cs" id="6_wwqe1"]
 [ext_resource type="PackedScene" uid="uid://bowi67qqy5r5b" path="res://Core/Traits/Design/unit_design_token.tscn" id="7_lb07p"]
 
@@ -47,5 +47,3 @@ MySpawnDelay = 2.0
 MySubjectScene = ExtResource("5_d4mar")
 
 [node name="GameCamera" parent="." instance=ExtResource("4_amet7")]
-
-[editable path="UnitLayer/PlayerUnit"]

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://by6jslyghfr11"]
+
+[ext_resource type="Script" path="res://Core/Level/ArenaSession.cs" id="1_euc5d"]
+
+[node name="ArenaSession" type="Node" groups=["chan-time"]]
+script = ExtResource("1_euc5d")
+
+[node name="SessionDuration" type="Timer" parent="."]

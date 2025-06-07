@@ -15,6 +15,10 @@ run/main_scene="res://Core/Scenarios/world.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SessionSignalBus="*res://Core/Services/SessionSignalBus.cs"
+
 [display]
 
 window/size/window_width_override=1920
@@ -32,6 +36,7 @@ id-skill-layer=""
 id-enemy=""
 id-unit-layer=""
 id-game-camera=""
+chan-time=""
 
 [input]
 
