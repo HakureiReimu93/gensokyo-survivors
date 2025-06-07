@@ -72,7 +72,7 @@ public class BufCollection
         );
     }
 
-    public void PostmortemAll()
+    public void OnDieAll()
     {
         SafeGuard.EnsureFalse(mDead);
         
