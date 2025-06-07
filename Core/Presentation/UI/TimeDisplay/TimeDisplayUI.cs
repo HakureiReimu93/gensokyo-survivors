@@ -4,6 +4,7 @@ using GensokyoSurvivors.Core.Presentation.UI.TimeDisplay;
 using Godot;
 using GodotStrict.Helpers.Guard;
 using GodotStrict.Traits;
+using GodotStrict.Types.PrevCurrent;
 using System;
 
 namespace GensokyoSurvivors.Core.Presentation;
@@ -47,21 +48,22 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 		int minutes = Convert.ToInt32(pInput.TimeLeft / 60);
 		int seconds = Convert.ToInt32(pInput.TimeLeft % 60);
 
+		mSeconds.UpdateValue(seconds);
+
 		var urgency = CalculateUrgency(pInput);
 
-		if (seconds < mPreviousSeconds && urgency is not TimeDisplayUrgency.Normal)
+		if (mSeconds.CurrentNotEqualsPrevious() && urgency is not TimeDisplayUrgency.Normal)
 		{
 			// animate time down.
 			MyTimeValueLabel.SelfModulate = urgency switch
-            {
-              TimeDisplayUrgency.Normal => Colors.White,
-              TimeDisplayUrgency.Mild => Colors.Yellow,
-              TimeDisplayUrgency.Critical => Colors.Red,
-              _ => throw new NotImplementedException(),
-            };
+			{
+				TimeDisplayUrgency.Normal => Colors.White,
+				TimeDisplayUrgency.Mild => Colors.Yellow,
+				TimeDisplayUrgency.Critical => Colors.Red,
+				_ => throw new NotImplementedException(),
+			};
 
-        }
-		mPreviousSeconds = seconds;
+		}
 
 		MyTimeValueLabel.Text = $"{minutes:D1}:{seconds:D2}";
 	}
@@ -69,7 +71,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 	[Export]
 	Label MyTimeValueLabel;
 
-	int mPreviousSeconds;
+	PrevCurrentValue<int> mSeconds;
 
 	#region lens
 	private class TimeLeftChannel(TimeDisplayUI en) : LTimeLeftChannel

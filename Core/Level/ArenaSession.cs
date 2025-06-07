@@ -1,11 +1,9 @@
 using Godot;
 using GodotStrict.Helpers.Guard;
 using GodotUtilities;
-using GodotStrict.Traits;
-using GensokyoSurvivors.Core.Presentation.UI.TimeDisplay;
 using GodotStrict.Types;
-using GodotStrict.Traits.EmptyImpl;
 using GensokyoSurvivors.Core.Interface.Lens;
+using GodotStrict.Types.PrevCurrent;
 
 [GlobalClass]
 [UseAutowiring]
@@ -42,15 +40,14 @@ public partial class ArenaSession : Node
 		base._Process(delta);
 
 		// may change later.
-		var secondRoundedDown = Mathf.FloorToInt(mTimer.TimeLeft);
-		if (secondRoundedDown < mPreviousSecondRoundedDown &&
+		mSeconds.UpdateValue(Mathf.FloorToInt(mTimer.TimeLeft));
+		if (mSeconds.CurrentLessThanPrevious() &&
 			mTimeChannel.Available(out var chan))
 		{
 			// update those that are listening to changes to time.
 			chan.ReceiveTime(new(mTimer.TimeLeft, mTimer.WaitTime));
 		}
-		mPreviousSecondRoundedDown = secondRoundedDown;
 	}
 
-	private int mPreviousSecondRoundedDown;
+	PrevCurrentValue<int> mSeconds;
 }
