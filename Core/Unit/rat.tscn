@@ -8,21 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://Core/Traits/hit_box.tscn" id="6_pvhtr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="7_nnyfb"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
-radius = 4.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_22joa"]
-radius = 9.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_h4det"]
-
 [sub_resource type="Animation" id="Animation_odf2t"]
 resource_name = "die"
 length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("VisualComposition/Sprite2D:rotation")
+tracks/0/path = NodePath("UnitMonoVisual/Sprite2D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -34,7 +26,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("VisualComposition/Sprite2D:modulate")
+tracks/1/path = NodePath("UnitMonoVisual/Sprite2D:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -49,7 +41,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("VisualComposition/Sprite2D:rotation")
+tracks/0/path = NodePath("UnitMonoVisual/Sprite2D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -61,7 +53,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("VisualComposition/Sprite2D:modulate")
+tracks/1/path = NodePath("UnitMonoVisual/Sprite2D:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -77,12 +69,26 @@ _data = {
 "die": SubResource("Animation_odf2t")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_22joa"]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h4det"]
+
 [node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
 MyMaxSpeed = 50.0
 
-[node name="VisualComposition" type="Node2D" parent="." index="0"]
+[node name="UnitMonoVisual" type="Node2D" parent="." index="0"]
 
-[node name="Sprite2D" type="Sprite2D" parent="VisualComposition" index="0"]
+[node name="UnitMonoVisualAnim" type="AnimationPlayer" parent="UnitMonoVisual" index="0"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_v3l1p")
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="UnitMonoVisual" index="1"]
 texture = ExtResource("2_ng83w")
 offset = Vector2(0, -8)
 
@@ -119,8 +125,3 @@ MyHealth = 20
 
 [node name="OnTakeDamage" parent="." index="7"]
 MyBaseMovementSpeedScale = 0.8
-
-[node name="UnitAnim" type="AnimationPlayer" parent="." index="8"]
-libraries = {
-"": SubResource("AnimationLibrary_v3l1p")
-}

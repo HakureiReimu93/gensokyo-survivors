@@ -128,11 +128,20 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 	public void TriggerDie()
 	{
-		QueueFree();
+		SafeGuard.EnsureFalse(mDead);
+		mDead = true;
 		if (mEffectLayer.Available(out var el))
 		{
 			RemoveChild(mDeathParticles);
 			el.TryHost(mDeathParticles);
+		}
+	}
+
+	private void OnUnitAnimationComplete(StringName pAnim)
+	{
+		if (pAnim == "die")
+		{
+			QueueFree();
 		}
 	}
 
