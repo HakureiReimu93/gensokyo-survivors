@@ -171,7 +171,6 @@ offset = Vector2(0, -4)
 visible = false
 material = SubResource("ShaderMaterial_aexu3")
 rotation = -0.763538
-scale = Vector2(1, 1)
 texture = ExtResource("3_8nh70")
 offset = Vector2(0, -4)
 
