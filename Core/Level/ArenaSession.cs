@@ -23,7 +23,8 @@ public partial class ArenaSession : Node
 
 		SafeGuard.Ensure(mTimer.WaitTime > 1f);
 		SafeGuard.Ensure(mTimer.OneShot);
-		SafeGuard.Ensure(mTimer.Autostart);
+		// Automatically set to false when entering the tree
+		// SafeGuard.Ensure(mTimer.Autostart);
 
 		mTimer.Timeout += OnSessionTimeExpire;
 	}
@@ -40,8 +41,7 @@ public partial class ArenaSession : Node
 		base._Process(delta);
 
 		// may change later.
-		mSeconds.UpdateValue(Mathf.FloorToInt(mTimer.TimeLeft));
-		if (mSeconds.CurrentLessThanPrevious() &&
+		if ( mTimer.IsStopped() is false &&
 			mTimeChannel.Available(out var chan))
 		{
 			// update those that are listening to changes to time.
@@ -49,5 +49,4 @@ public partial class ArenaSession : Node
 		}
 	}
 
-	PrevCurrentValue<int> mSeconds;
 }
