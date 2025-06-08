@@ -44,7 +44,7 @@ public partial class UnitMonoVisual : Node2D
 
 	public void DoPlayDie()
 	{
-		SafeGuard.Ensure(mHasPlayedDeathAnim.Never());
+		SafeGuard.Ensure(mPlayedDeathAnim.Never());
 		mAnim.Play("die");
 	}
 
@@ -56,7 +56,7 @@ public partial class UnitMonoVisual : Node2D
 		}
 	}
 
-	private EverFlag mHasPlayedDeathAnim;
+	private EverFlag mPlayedDeathAnim;
 
 	public bool IsFacingLeft
 	{
