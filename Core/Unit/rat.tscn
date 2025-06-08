@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dp8m18k023b00"]
+[gd_scene load_steps=14 format=3 uid="uid://dp8m18k023b00"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
 [ext_resource type="Texture2D" uid="uid://dxkk8cc7lkv44" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0124.png" id="2_ng83w"]
@@ -16,12 +16,75 @@ radius = 9.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h4det"]
 
+[sub_resource type="Animation" id="Animation_odf2t"]
+resource_name = "die"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VisualComposition/Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6),
+"transitions": PackedFloat32Array(0.554784, 1, 1),
+"update": 0,
+"values": [0.163606, 0.998389, 0.998389]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VisualComposition/Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0.0166664, 0.666667)]
+}
+
+[sub_resource type="Animation" id="Animation_sw8y1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VisualComposition/Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VisualComposition/Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v3l1p"]
+_data = {
+"RESET": SubResource("Animation_sw8y1"),
+"die": SubResource("Animation_odf2t")
+}
+
 [node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
 MyMaxSpeed = 50.0
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="0"]
-position = Vector2(0, -8)
+[node name="VisualComposition" type="Node2D" parent="." index="0"]
+
+[node name="Sprite2D" type="Sprite2D" parent="VisualComposition" index="0"]
 texture = ExtResource("2_ng83w")
+offset = Vector2(0, -8)
 
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2(0, -4)
@@ -56,3 +119,8 @@ MyHealth = 20
 
 [node name="OnTakeDamage" parent="." index="7"]
 MyBaseMovementSpeedScale = 0.8
+
+[node name="UnitAnim" type="AnimationPlayer" parent="." index="8"]
+libraries = {
+"": SubResource("AnimationLibrary_v3l1p")
+}
