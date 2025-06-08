@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://c8sn3jjv4ccri"]
+[gd_scene load_steps=13 format=4 uid="uid://c8sn3jjv4ccri"]
 
 [ext_resource type="TileSet" uid="uid://6se6r8y0ieqy" path="res://Assets/Resources/tilemap/kenney-dungeon.tres" id="1_5nx0d"]
 [ext_resource type="Script" path="res://Core/Scenarios/World.cs" id="1_nufap"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://Core/Level/SkillLayer.cs" id="6_wwqe1"]
 [ext_resource type="PackedScene" uid="uid://bowi67qqy5r5b" path="res://Core/Traits/Design/unit_design_token.tscn" id="7_lb07p"]
 [ext_resource type="PackedScene" uid="uid://cyq2268oa8ytu" path="res://Core/Presentation/UI/time_display.tscn" id="10_t5m4d"]
+[ext_resource type="PackedScene" uid="uid://by6jslyghfr11" path="res://Core/Level/arena_session.tscn" id="11_7gofa"]
+[ext_resource type="Script" path="res://Core/Level/EffectLayer.cs" id="12_hmx8h"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_nufap")
@@ -48,5 +50,10 @@ MySpawnDelay = 2.0
 MySubjectScene = ExtResource("5_d4mar")
 
 [node name="GameCamera" parent="." instance=ExtResource("4_amet7")]
+
+[node name="ArenaSession" parent="." instance=ExtResource("11_7gofa")]
+
+[node name="EffectLayer" type="Node2D" parent="."]
+script = ExtResource("12_hmx8h")
 
 [node name="TimeDisplay" parent="." instance=ExtResource("10_t5m4d")]
