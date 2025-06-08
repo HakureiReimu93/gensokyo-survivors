@@ -6,6 +6,8 @@ using GodotStrict.Traits.EmptyImpl;
 using GodotUtilities;
 using GensokyoSurvivors.Core.Model;
 using GodotStrict.Helpers.Guard;
+using GensokyoSurvivors.Core.Utility;
+using GodotStrict.Types.Traits;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -14,7 +16,7 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 {
 	// Required movement controller
 	[Autowired]
-	IMobUnitInput mMovementController;
+	IMobUnitController mMovementController;
 
 	// Principal velocity buf (which is acceleration in this case.)
 	[Autowired]
@@ -29,6 +31,12 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	[Autowired]
 	TakeDamageBuf mOnTakeDamageBufTemplate;
 
+	[Autowired("DeathParticles")]
+	CpuParticles2D mDeathParticles;
+
+	[Autowired("id-effect-layer")]
+	Scanner<LMother> mEffectLayer;
+
 	public override void _Ready()
 	{
 		__PerformDependencyInjection();
@@ -40,6 +48,19 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		if (mHealth.Available(out var hp))
 		{
 			hp.MyHpDepleted += HandleHpDropToZero;
+		}
+
+		mMovementController.OnControllerRequestDie(TriggerDie);
+	}
+
+
+	private void SwitchToSessionOver(double delta)
+	{
+		// check faction. if enemy, just die.
+		if (!mHurtBox.Available(out var hb) &&
+			hb.MyFaction == FactionEnum.Enemy)
+		{
+			TriggerDie();
 		}
 	}
 
@@ -108,7 +129,11 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 	public void TriggerDie()
 	{
 		QueueFree();
-		
+		if (mEffectLayer.Available(out var el))
+		{
+			RemoveChild(mDeathParticles);
+			el.TryHost(mDeathParticles);
+		}
 	}
 
 

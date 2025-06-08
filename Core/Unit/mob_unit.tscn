@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgb5tdw2ptkus"]
+[gd_scene load_steps=4 format=3 uid="uid://bgb5tdw2ptkus"]
 
 [ext_resource type="Script" path="res://Core/Unit/MobUnit.cs" id="1_afq5s"]
 [ext_resource type="PackedScene" uid="uid://dii8rew8pag6q" path="res://Core/Traits/Buf/on_take_damage.tscn" id="2_jmnk7"]
+[ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://Assets/ParticleSystem/death-particles.tscn" id="3_xvoyg"]
 
 [node name="MobUnit" type="CharacterBody2D"]
 editor_description = "OPTIONAL: HealthTrait"
@@ -13,3 +14,5 @@ script = ExtResource("1_afq5s")
 [node name="OnTakeDamage" parent="." instance=ExtResource("2_jmnk7")]
 MyBaseModulateColor = Color(0.899131, 0.32658, 0.368033, 1)
 MyDuration = 1.0
+
+[node name="DeathParticles" parent="." instance=ExtResource("3_xvoyg")]
