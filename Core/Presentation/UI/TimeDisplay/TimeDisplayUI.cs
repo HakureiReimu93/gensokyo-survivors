@@ -44,7 +44,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 
 	protected void HandleSessionTimeExpired()
 	{
-		if (!mEverUpdatedBefore && mAnimation.Available(out var anim))
+		if (mAnimation.Available(out var anim))
 		{
 			anim.Play("pop-out");
 		}
@@ -67,10 +67,9 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 
 	protected void UpdateTime(TimeBundle pInput)
 	{
-		if (!mEverUpdatedBefore && mAnimation)
+		if (mAnimation && mEverUpdatedTime.Never())
 		{
 			mAnimation.Value.Play("pop-in");
-			mEverUpdatedBefore = true;
 		}
 
 		int minutes = Convert.ToInt32(pInput.TimeLeft / 60);
@@ -78,9 +77,8 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 		int millis  = Convert.ToInt32((pInput.TimeLeft - seconds) * Math.Pow(10, 3));
 		var secondsFraction = Calculate.Fract(pInput.TimeLeft);
 
-
-		mSeconds.UpdateValue(seconds);
-		if (mSeconds.CurrentNotEqualsPrevious())
+		mCurrentSeconds.UpdateValue(seconds);
+		if (mCurrentSeconds.CurrentNotEqualsPrevious())
 		{
 			var urgency = CalculateUrgency(pInput);
 			mTextColorBase = urgency switch
@@ -98,7 +96,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 			}
 		}
 
-		// Ease in curve, .
+		// Ease in curve
 		MyTimeLabel.Modulate = mTextColorBase.Lerp(
 			Colors.White,
 			Calculate.PhiEasing((normal)0.8f, secondsFraction));
@@ -120,9 +118,9 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 	[Export]
 	Color MyCriticalColor { get; set; } = Colors.Red;
 
-	PrevCurrentValue<int> mSeconds;
+	PrevCurrentValue<int> mCurrentSeconds;
+	EverFlag mEverUpdatedTime;
 	Color mTextColorBase = Colors.White;
-	bool mEverUpdatedBefore = false;
 
 	#region lens
 	private class TimeLeftChannel(TimeDisplayUI en) : LTimeLeftChannel
