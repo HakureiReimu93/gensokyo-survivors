@@ -13,23 +13,29 @@ public partial class EffectLayer : Node2D, ILensProvider<LMother>
 		ChildEnteredTree += OnChildEnteredTree;
 	}
 
-	private void OnChildEnteredTree(Node pWhat)
+	private void OnChildEnteredTree([NotNull]Node pWhat)
 	{
+		// sometimes effects are hidden until needed.
+		if (pWhat is CanvasItem pWhatAsCanvasItem)
+		{
+			pWhatAsCanvasItem.Show();
+		}
+
 		if (pWhat is CpuParticles2D)
 		{
-			OnAdoptNewEffect(pWhat as CpuParticles2D);
+			OnAdoptNewParticleEffect(pWhat as CpuParticles2D);
 		}
 	}
 
-	private void OnAdoptNewEffect([NotNull] CpuParticles2D particles)
+	private void OnAdoptNewParticleEffect([NotNull] CpuParticles2D particles)
 	{
-		particles.Emitting = true;
+		particles.SetEmitting(true);
 	}
-	
+
 	#region lens
 	protected BaseImplMother<Node2D> lens;
 	public LMother Lens => lens;
 	public EffectLayer() { lens = new(this); }
 	#endregion
-	
+
 }
