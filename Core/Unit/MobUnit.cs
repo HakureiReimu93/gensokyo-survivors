@@ -7,17 +7,22 @@ using GodotUtilities;
 using GensokyoSurvivors.Core.Model;
 using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
-using GodotStrict.Types.Traits;
+using GodotStrict.Types.Locked;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
 [UseAutowiring]
 public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImplInfo2D>
 {
+	[Autowired]
+	UnitMonoVisual mVisuals;
+
+	[Autowired]
+	TakeDamageBuf mOnTakeDamageBufTemplate;
+
 	// Required movement controller
 	[Autowired]
 	IMobUnitController mMovementController;
-
 	// Principal velocity buf (which is acceleration in this case.)
 	[Autowired]
 	Option<IScalarMiddleware<Vector2>> mAccel;
@@ -27,15 +32,6 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 	[Autowired]
 	Option<HurtBox> mHurtBox;
-
-	[Autowired]
-	TakeDamageBuf mOnTakeDamageBufTemplate;
-
-	[Autowired("DeathParticles")]
-	CpuParticles2D mDeathParticles;
-
-	[Autowired("id-effect-layer")]
-	Scanner<LMother> mEffectLayer;
 
 	public override void _Ready()
 	{
@@ -51,8 +47,12 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		}
 
 		mMovementController.OnControllerRequestDie(TriggerDie);
-	}
 
+		mVisuals.DoRegisterFallbackAnim("idle")
+				.DoRegisterLoopingAnim("walk")
+				.DoRegisterFinalAnim("die");
+
+	}
 
 	private void SwitchToSessionOver(double delta)
 	{
@@ -96,6 +96,14 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 		Velocity = finalVelocity;
 
+		// Talk to unit anim
+		if (moveDirection.IsZeroApprox() || finalVelocity.IsZeroApprox())
+		{
+		}
+		else
+		{
+		}
+
 		// apply color buf
 		Modulate = Colors.White * MyBufs.ColorMultiplyAll();
 
@@ -113,7 +121,6 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 			TakeDamageBuf buf = duplicated as TakeDamageBuf;
 
 			AddUnitBuf(buf);
-			// Add a hurt unit buff that lasts for a short period of time.
 		}
 		else
 		{
@@ -128,28 +135,28 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 
 	public void TriggerDie()
 	{
-		SafeGuard.EnsureFalse(mDead);
-		mDead = true;
-		if (mEffectLayer.Available(out var el))
+		SafeGuard.Ensure(mDead.Never());
+		SafeGuard.Ensure(mDeathAnimCompetionStatus.IsLocked is false);
+
+		if (mVisuals.TryPlayAnimationAndAwaitCompletion("die", out var soon) is Outcome.Succeed)
 		{
-			RemoveChild(mDeathParticles);
-			el.TryHost(mDeathParticles);
+			mDeathAnimCompetionStatus.LockTo(soon);
+			soon.OnCompleted(QueueFree);
 		}
 	}
 
-	private void OnUnitAnimationComplete(StringName pAnim)
+	public void TriggerDieForcely()
 	{
-		if (pAnim == "die")
-		{
-			QueueFree();
-		}
+		TriggerDie();
 	}
-
 
 	[Export]
 	public float MyMaxSpeed { get; private set; } = 200;
 
-	bool mDead = false;
+	TriggerFlag mDead;
+
+	Locked<AnimSoon> mDeathAnimCompetionStatus;
+
 	public bool IsDead => mDead;
 
 	protected BaseImplInfo2D lens;

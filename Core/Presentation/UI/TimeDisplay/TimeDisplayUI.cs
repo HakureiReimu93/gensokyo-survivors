@@ -119,7 +119,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 	Color MyCriticalColor { get; set; } = Colors.Red;
 
 	PrevCurrentValue<int> mCurrentSeconds;
-	EverFlag mEverUpdatedTime;
+	TriggerFlag mEverUpdatedTime;
 	Color mTextColorBase = Colors.White;
 
 	#region lens

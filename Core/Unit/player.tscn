@@ -1,14 +1,73 @@
-[gd_scene load_steps=12 format=3 uid="uid://cp5n01r4txacw"]
+[gd_scene load_steps=17 format=3 uid="uid://cp5n01r4txacw"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
+[ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://Core/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_n6y0r"]
 [ext_resource type="Script" path="res://Core/Unit/Controller/PlayerControl.cs" id="3_5tf3c"]
+[ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://Assets/ParticleSystem/death-particles.tscn" id="4_00mkl"]
+[ext_resource type="AnimationLibrary" uid="uid://56d2ljyuk4cd" path="res://Assets/Animation/UnitVisual/mono-rat.res" id="4_4i4hj"]
 [ext_resource type="PackedScene" uid="uid://mjpm7pn6vfe3" path="res://Core/Traits/cooldown_ability_spawner.tscn" id="4_p0cps"]
 [ext_resource type="PackedScene" uid="uid://dtyiv3f8hu3rq" path="res://Core/Unit/sword_ability_unit.tscn" id="5_emj28"]
 [ext_resource type="Script" path="res://Core/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://Core/Traits/hurt_box.tscn" id="7_bjeo8"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="9_ichf6"]
+
+[sub_resource type="Animation" id="Animation_jx1ob"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Anchor/Main:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Anchor:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Anchor/Main:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Anchor/Main:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hjhud"]
+_data = {
+"RESET": SubResource("Animation_jx1ob")
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]
 radius = 5.0
@@ -20,9 +79,24 @@ radius = 6.0
 collision_layer = 2
 collision_mask = 0
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="0"]
+[node name="UnitMonoVisual" parent="." index="0" instance=ExtResource("2_n6y0r")]
+MyAnimNamespace = &"mono-rat"
+
+[node name="Anchor" type="Node2D" parent="UnitMonoVisual" index="0"]
 position = Vector2(0, -8)
+
+[node name="Main" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="0"]
+position = Vector2(0, 8)
 texture = ExtResource("2_1dteh")
+offset = Vector2(0, -8)
+
+[node name="UnitMonoAnim" type="AnimationPlayer" parent="UnitMonoVisual" index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_hjhud"),
+"mono-rat": ExtResource("4_4i4hj")
+}
+
+[node name="ReleaseOnDie" parent="UnitMonoVisual" index="2" instance=ExtResource("4_00mkl")]
 
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2(0, -5)
