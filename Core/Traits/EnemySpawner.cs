@@ -1,8 +1,4 @@
 using Godot;
-using System;
-using static Godot.Mathf;
-using static GodotStrict.Helpers.Logging.StrictLog;
-using static GodotStrict.Helpers.Dependency.DependencyHelper;
 using GodotStrict.Helpers;
 using GodotStrict.Helpers.Guard;
 using GodotUtilities;
