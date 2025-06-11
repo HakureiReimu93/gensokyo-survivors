@@ -1,13 +1,14 @@
 using System;
 using System.Security;
 using GensokyoSurvivors.Core.Interface;
+using GensokyoSurvivors.Core.Interface.Lens;
 using Godot;
 using GodotStrict.Helpers.Guard;
 using GodotStrict.Types;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/brain.png")]
-public partial class PlayerControl : Node, IMobUnitController
+public partial class PlayerControl : Node, IMobUnitController, IPickupCommandReceiver
 {
 	[Signal]
 	public delegate void RequestDieEventHandler();
@@ -64,8 +65,15 @@ public partial class PlayerControl : Node, IMobUnitController
 
 	public Vector2 GetNormalMovement() => mCalculatedMovement;
 
+	public void ReceiveExpReward(int pExperienceGainedRaw)
+	{
+		mTotalExperience += pExperienceGainedRaw;
+	}
+
 	public Node Entity => this;
 
 	Vector2 mCalculatedMovement;
 	LiteFunctionalStates<Vector2> mStateMachine = new();
+
+	int mTotalExperience;
 }

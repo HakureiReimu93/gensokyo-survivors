@@ -1,18 +1,21 @@
 using Godot;
 using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
-using GodotStrict.Traits;
-using GodotStrict.Traits.EmptyImpl;
 using GodotUtilities;
 using GensokyoSurvivors.Core.Model;
 using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
 using GodotStrict.Types.Locked;
+using GensokyoSurvivors.Core.Interface.Lens;
+using GodotStrict.Traits;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
 [UseAutowiring]
-public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImplInfo2D>
+public partial class MobUnit : CharacterBody2D,
+	IKillable,
+	IPickupCommandDispatcher,
+	LInfo2D
 {
 	[Autowired]
 	UnitMonoVisual mVisuals;
@@ -150,19 +153,27 @@ public partial class MobUnit : CharacterBody2D, IKillable, ILensProvider<BaseImp
 		TriggerDie();
 	}
 
+	// Chain of responsibility that should send Exp to the player controller.
+	public Outcome TransferExpReward(int pExperienceGainedRaw)
+	{
+		if (mMovementController is not IPickupCommandReceiver pcr)
+		{
+			return Outcome.NoHandler;
+		}
+
+		pcr.ReceiveExpReward(pExperienceGainedRaw);
+		return 0;
+	}
+
 	[Export]
 	public float MyMaxSpeed { get; private set; } = 200;
 
+	Lockable<AnimSoon> mDeathAnimCompetionStatus;
 	TriggerFlag mDead;
-
-	Locked<AnimSoon> mDeathAnimCompetionStatus;
-
 	public bool IsDead => mDead;
-
-	protected BaseImplInfo2D lens;
-	public BaseImplInfo2D Lens => lens;
-	public MobUnit() { lens = new(this); }
-
 	protected BufCollection MyBufs { get; set; } = new();
 
+	Node2D ILens<Node2D>.Entity => this;
 }
+
+

@@ -1,19 +1,19 @@
 using Godot;
 using GodotStrict.Traits;
 using GodotStrict.Types.Traits;
-using GodotStrict.Traits.EmptyImpl;
 using System.Diagnostics.CodeAnalysis;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/script.png")]
-public partial class EffectLayer : Node2D, ILensProvider<LMother>
+public partial class EffectLayer : Node2D, LMother
 {
+
 	public override void _Ready()
 	{
 		ChildEnteredTree += OnChildEnteredTree;
 	}
 
-	private void OnChildEnteredTree([NotNull]Node pWhat)
+	private void OnChildEnteredTree([NotNull] Node pWhat)
 	{
 		// sometimes effects are hidden until needed.
 		if (pWhat is CanvasItem pWhatAsCanvasItem)
@@ -32,10 +32,5 @@ public partial class EffectLayer : Node2D, ILensProvider<LMother>
 		particles.SetEmitting(true);
 	}
 
-	#region lens
-	protected BaseImplMother<Node2D> lens;
-	public LMother Lens => lens;
-	public EffectLayer() { lens = new(this); }
-	#endregion
-
+	Node ILens<Node>.Entity => this;
 }

@@ -14,7 +14,7 @@ using System;
 namespace GensokyoSurvivors.Core.Presentation;
 
 [UseAutowiring]
-public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel>
+public partial class TimeDisplayUI : CanvasLayer, LTimeLeftChannel
 {
 	[Autowired]
 	Option<AnimationPlayer> mAnimation;
@@ -65,7 +65,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 		return TimeDisplayUrgency.Normal;
 	}
 
-	protected void UpdateTime(TimeBundle pInput)
+	public void ReceiveTime(TimeBundle pInput)
 	{
 		if (mAnimation && mEverUpdatedTime.Never())
 		{
@@ -74,7 +74,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 
 		int minutes = Convert.ToInt32(pInput.TimeLeft / 60);
 		int seconds = Convert.ToInt32(pInput.TimeLeft % 60);
-		int millis  = Convert.ToInt32((pInput.TimeLeft - seconds) * Math.Pow(10, 3));
+		int millis = Convert.ToInt32((pInput.TimeLeft - seconds) * Math.Pow(10, 3));
 		var secondsFraction = Calculate.Fract(pInput.TimeLeft);
 
 		if (mCurrentSeconds.NewValueNotEqualsPrevious(seconds))
@@ -117,21 +117,9 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 	[Export]
 	Color MyCriticalColor { get; set; } = Colors.Red;
 
+	Node ILens<Node>.Entity => this;
+
 	PrevCurrentValue<int> mCurrentSeconds;
 	TriggerFlag mEverUpdatedTime;
 	Color mTextColorBase = Colors.White;
-
-	#region lens
-	private class TimeLeftChannel(TimeDisplayUI en) : LTimeLeftChannel
-	{
-		Node ILens<Node>.Entity => en;
-		public void ReceiveTime(TimeBundle pInput) => en.UpdateTime(pInput);
-	}
-	public TimeDisplayUI()
-	{
-		mLens = new(this);
-	}
-	private TimeLeftChannel mLens;
-	public LTimeLeftChannel Lens => mLens;
-	#endregion
 }

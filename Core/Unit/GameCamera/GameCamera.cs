@@ -4,12 +4,10 @@ using GodotStrict.Traits;
 
 using GodotStrict.Types;
 using GodotStrict.Helpers.Guard;
-using GodotUtilities;
 using GensokyoSurvivors.Core.Interface.Lens;
-using GodotStrict.Traits.EmptyImpl;
 
 [GlobalClass]
-public partial class GameCamera : Camera2D, ILensProvider<LBoundsInfo2D>
+public partial class GameCamera : Camera2D, LBoundsInfo2D
 {
 	public override void _Ready()
 	{
@@ -35,29 +33,15 @@ public partial class GameCamera : Camera2D, ILensProvider<LBoundsInfo2D>
 		}
 	}
 
+	public Rect2 GetBounds()
+	{
+		return GetViewportRect();
+	}
+
+	Node2D ILens<Node2D>.Entity => this;
+
 	[Export]
 	string MyFocusID { get; set; } = "id-player";
-
-	public LBoundsInfo2D Lens => lens;
-	private readonly BoundsInfo2D lens;
 	Scanner<LInfo2D> mTarget;
 
-	public class BoundsInfo2D : BaseImpl<Camera2D>, LBoundsInfo2D
-	{
-		public BoundsInfo2D(Camera2D _en) : base(_en)
-		{
-		}
-
-		Node2D ILens<Node2D>.Entity => en;
-
-		public Rect2 GetBounds()
-		{
-			return en.GetViewportRect();
-		}
-	}
-
-	public GameCamera()
-	{
-		lens = new(this);
-	}
 }
