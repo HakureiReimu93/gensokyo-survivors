@@ -15,11 +15,13 @@ public partial class EnterBox : Area2D, IFactionMember
 	CollisionShape2D mCollisionShape;
 
 	[Signal]
-	public delegate void EnterBoxEnteredEventHandler();
+	public delegate void EnterBoxEnteredEventHandler(HitBox pHitBox);
 
 	public override void _Ready()
 	{
 		__PerformDependencyInjection();
+
+		CollisionMask = FactionUtil.MaskFromFaction(MyFaction);
 	}
 
 	public void SetEnabled(bool pEnabled)
@@ -32,13 +34,13 @@ public partial class EnterBox : Area2D, IFactionMember
 		if (other is HitBox otherHitBox &&
 			FactionUtil.DoFactionsOppose(otherHitBox.MyFaction, MyFaction))
 		{
-			EmitSignal(SignalName.EnterBoxEntered);
+			EmitSignal(SignalName.EnterBoxEntered, otherHitBox);
 		}
 	}
 
-	public void DoRespondToBoxEntered(Action with)
+	public void DoRespondToBoxEntered(Action<HitBox> with)
 	{
-		EnterBoxEntered += () => with();
+		EnterBoxEntered += (hb) => with(hb);
 	}
 
 	[Export]

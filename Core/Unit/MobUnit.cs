@@ -154,7 +154,7 @@ public partial class MobUnit : CharacterBody2D,
 	}
 
 	// Chain of responsibility that should send Exp to the player controller.
-	public Outcome TransferExpReward(int pExperienceGainedRaw)
+	public Outcome SendExpReward(int pExperienceGainedRaw)
 	{
 		if (mMovementController is not IPickupCommandReceiver pcr)
 		{

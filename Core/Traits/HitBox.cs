@@ -1,7 +1,9 @@
 using GensokyoSurvivors.Core.Interface;
+using GensokyoSurvivors.Core.Interface.Lens;
 using GensokyoSurvivors.Core.Utility;
 using Godot;
 using GodotStrict.Helpers.Guard;
+using GodotStrict.Types;
 
 
 /// <summary>
@@ -46,6 +48,20 @@ public partial class HitBox : Area2D, IFactionMember
 		{
 			mFaction = value;
 			CollisionLayer = FactionUtil.MaskFromFaction(mFaction);
+		}
+	}
+
+	public Option<T> DoGetContractInOwner<T>()
+	where T: class
+	{
+		var owner = GetOwnerOrNull<T>();
+		if (owner is null)
+		{
+			return Option<T>.None;
+		}
+		else
+		{
+			return Option<T>.Ok(owner);
 		}
 	}
 
