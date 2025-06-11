@@ -18,16 +18,30 @@ public static class FactionUtil
       _ => throw new NotImplementedException(),
     };
   }
-    
-    public static UInt32 MaskFromFaction(FactionEnum factionValue)
+
+  public static UInt32 MaskFromFaction(FactionEnum factionValue)
+  {
+    return factionValue switch
     {
-        return factionValue switch
-        {
-          FactionEnum.Undefined => 0b0000_0000,
-          FactionEnum.Enemy => AllyLayerID,
-          FactionEnum.Friend => EnemyLayerID,
-          FactionEnum.Both => EnemyLayerID | AllyLayerID,
-          _ => throw new NotImplementedException(),
-        };
-    }
+      FactionEnum.Undefined => 0b0000_0000,
+      FactionEnum.Enemy => AllyLayerID,
+      FactionEnum.Friend => EnemyLayerID,
+      FactionEnum.Both => EnemyLayerID | AllyLayerID,
+      _ => throw new NotImplementedException(),
+    };
+  }
+
+  public static bool DoFactionsOppose(FactionEnum a, FactionEnum b)
+  {
+    // Always oppose if either is Both
+    if (a == FactionEnum.Both || b == FactionEnum.Both)
+      return true;
+
+    // Never oppose if either is Undefined/Neither
+    if (a == FactionEnum.Undefined || b == FactionEnum.Undefined)
+      return false;
+
+    // Oppose if they are different (Friend vs Enemy)
+    return a != b;
+  }
 }
