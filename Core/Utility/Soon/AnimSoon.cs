@@ -80,8 +80,8 @@ public class AnimSoon : ISoon
         onReject = failure;
     }
 
-  public void Finally(Action final)
-  {
-    throw new NotImplementedException();
-  }
+    public void Finally(Action final)
+    {
+        onCompleteOrReject = final;   
+    }
 }
