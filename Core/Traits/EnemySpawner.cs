@@ -13,32 +13,29 @@ using GodotStrict.Traits;
 [Icon("res://Assets/GodotEditor/Icons/factory.png")]
 public partial class EnemySpawner : Node
 {
-	private const float C_SPAWN_MARGIN = 10f;
-
-	// check if player is alive (i.e. not freed)
 	[Autowired("id-player")]
-	Scanner<LInfo2D> mPlayerRef;
+	private Scanner<LInfo2D> mPlayerRef;
 
 	[Autowired("id-unit-layer")]
-	Scanner<LMother> mUnitLayerRef;
+	private Scanner<LMother> mUnitLayerRef;
 
 	[Autowired("id-game-camera")]
-	Scanner<LBoundsInfo2D> mCameraBoundsRef;
+	private Scanner<LBoundsInfo2D> mCameraBoundsRef;
 
 	[Autowired("Spawns")]
-	Node mSpawnedCollection;
+	private Node mSpawnedCollection;
 
 	public override void _Ready()
 	{
 		__PerformDependencyInjection();
 
-		SafeGuard.EnsureNotNull(mSpawnedCollection, "the 'Spawns' node shall contain a list of UnitDesignToken that describes which entities to pick from when spawning");
+		SafeGuard.EnsureNotNull(mSpawnedCollection, "The 'Spawns' node shall contain a list of UnitDesignToken that describes which entities to pick from when spawning");
 		SafeGuard.Ensure(mTimer.WaitTime != 0);
 
 		mSpawnList = mSpawnedCollection
-						.GetChildren()
-						.Cast<UnitDesignToken>()
-						.ToArray();
+			.GetChildren()
+			.Cast<UnitDesignToken>()
+			.ToArray();
 	}
 
 	public override void _Process(double delta)
@@ -59,18 +56,21 @@ public partial class EnemySpawner : Node
 
 		var bounds = cameraInfo.GetBounds();
 		bounds.Position = cameraInfo.GlobalPosition - (bounds.Size / 2);
-		
-		// make sure to offset the position by the camera's position in the world, because the bounds are screen coords.
+
+		// Make sure to offset the position by the camera's position in the world, because the bounds are screen coords.
 		var randomOrigin = Chance.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN);
 
+		// host a random enemy
 		var randomEnemy = Chance.RandomCollectionItem(mSpawnList);
 		MobUnit unit = randomEnemy.DoInstantiateNew();
 		unitLayer.TryHost(unit);
 
-		// ParamInit
 		unit.GlobalPosition = randomOrigin;
 	}
 
+	/// <summary>
+	/// The delay between spawns in seconds.
+	/// </summary>
 	[Export]
 	public float MySpawnDelay
 	{
@@ -78,18 +78,25 @@ public partial class EnemySpawner : Node
 		{
 			return mSpawnDelay;
 		}
-
 		set
 		{
-			mSpawnDelay = value;
+			SafeGuard.Ensure(value > 0);
+
 			mTimer.ResetWithCustomTime(value);
+			mSpawnDelay = value;
 		}
 	}
 
-	float mSpawnDelay;
-	LiteTimer mTimer;
+	private UnitDesignToken[] mSpawnList;
+	private float mSpawnDelay;
 
-	UnitDesignToken[] mSpawnList;
+	/// <summary>
+	/// The timer for the spawn delay.
+	/// </summary>
+	private LiteTimer mTimer;
 
-	// Run dependency injection before _Ready() is called.
+	/// <summary>
+	/// The margin between spawned enemies in pixels.
+	/// </summary>
+	private const float C_SPAWN_MARGIN = 10f;
 }
