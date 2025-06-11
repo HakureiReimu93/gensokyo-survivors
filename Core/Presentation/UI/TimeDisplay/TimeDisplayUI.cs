@@ -77,8 +77,7 @@ public partial class TimeDisplayUI : CanvasLayer, ILensProvider<LTimeLeftChannel
 		int millis  = Convert.ToInt32((pInput.TimeLeft - seconds) * Math.Pow(10, 3));
 		var secondsFraction = Calculate.Fract(pInput.TimeLeft);
 
-		mCurrentSeconds.UpdateValue(seconds);
-		if (mCurrentSeconds.CurrentNotEqualsPrevious())
+		if (mCurrentSeconds.NewValueNotEqualsPrevious(seconds))
 		{
 			var urgency = CalculateUrgency(pInput);
 			mTextColorBase = urgency switch
