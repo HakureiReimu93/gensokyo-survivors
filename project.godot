@@ -37,6 +37,7 @@ id-enemy=""
 id-unit-layer=""
 id-game-camera=""
 chan-session-time=""
+id-effect-layer=""
 
 [input]
 

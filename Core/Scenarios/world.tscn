@@ -53,7 +53,7 @@ MySubjectScene = ExtResource("5_d4mar")
 
 [node name="ArenaSession" parent="." instance=ExtResource("11_7gofa")]
 
-[node name="EffectLayer" type="Node2D" parent="."]
+[node name="EffectLayer" type="Node2D" parent="." groups=["id-effect-layer"]]
 script = ExtResource("12_hmx8h")
 
 [node name="TimeDisplay" parent="." instance=ExtResource("10_t5m4d")]
