@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://swb4bux6r2sx"]
+
+[ext_resource type="Script" path="res://Core/Traits/EnterBox.cs" id="1_ua20w"]
+
+[node name="EnterBox" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_ua20w")
