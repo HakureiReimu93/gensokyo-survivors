@@ -95,6 +95,7 @@ libraries = {
 "": SubResource("AnimationLibrary_hjhud"),
 "mono-rat": ExtResource("4_4i4hj")
 }
+autoplay = "mono-rat/idle"
 
 [node name="ReleaseOnDie" parent="UnitMonoVisual" index="2" instance=ExtResource("4_00mkl")]
 
