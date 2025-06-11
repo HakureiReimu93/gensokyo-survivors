@@ -21,14 +21,25 @@ public partial class DumbMeleeControl : Node, IMobUnitController
 
 		mTarget = ExpectFromGroup<LInfo2D>("id-player");
 
-		mMotionStateMachine.PlanRoute(CalculateDefaultMotion)
-						   .PlanRoute(CalculateSessionEndedMotion, IntoSessionEndedMotion)
-						   .StartAt(CalculateDefaultMotion);
+		mMotionStateMachine.WithOwner(this)
+							.PlanRoute(CalculateDefaultMotion)
+						   	.PlanRoute(CalculateSessionEndedMotion, IntoSessionEndedMotion)
+						   	.StartAt(CalculateDefaultMotion);
+
+		if (SessionSignalBus.SingletonInstance.Available(out var ssb))
+		{
+			ssb.SessionTimeExpired += HandleSessionTimeExpired;
+		}
 	}
 
 	public override void _Process(double delta)
 	{
 		mCalculatedMovement = mMotionStateMachine.Calculate(delta);
+	}
+
+	private void HandleSessionTimeExpired()
+	{
+		mMotionStateMachine.GoTo(CalculateSessionEndedMotion);
 	}
 
 	private Vector2 CalculateDefaultMotion(double delta)

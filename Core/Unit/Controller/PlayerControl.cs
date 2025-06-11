@@ -22,7 +22,8 @@ public partial class PlayerControl : Node, IMobUnitController
 			ssb.SessionTimeExpired += SessionTimeExpired;
 		}
 
-		mStateMachine.PlanRoute(CalculateDefaultMotion)
+		mStateMachine.WithOwner(this)
+					 .PlanRoute(CalculateDefaultMotion)
 					 .PlanRoute(CalculateSessionEndedMotion, IntoSessionEndedMotion)
 					 .StartAt(CalculateDefaultMotion);
 	}
@@ -53,7 +54,7 @@ public partial class PlayerControl : Node, IMobUnitController
 
 	private void SessionTimeExpired()
 	{
-
+		mStateMachine.GoTo(CalculateSessionEndedMotion);
 	}
 
 	public void OnControllerRequestDie(Action pEventHandler)
