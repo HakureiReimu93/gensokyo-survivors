@@ -5,6 +5,7 @@ using GensokyoSurvivors.Core.Interface;
 using GensokyoSurvivors.Core.Traits.Visuals.UnitVisual;
 using GensokyoSurvivors.Core.Utility;
 using Godot;
+using GodotStrict.AliasTypes;
 using GodotStrict.Helpers.Guard;
 using GodotStrict.Helpers.Logging;
 using GodotStrict.Types;
@@ -153,6 +154,20 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		}
 
 		return 0;
+	}
+
+	public Outcome TrySetPlayHeadToPercentDone(normal pTo)
+	{
+		if (mCurrentAnimData.Unavailable(out var data))
+		{
+			return Outcome.NoHandler;
+		}
+		if (data.PlayType == UnitAnimPlayType.SoloCanNotCancel)
+		{
+			return Outcome.Busy;
+		}
+		mAnim.Seek(pTo * mAnim.CurrentAnimationLength);
+		return Outcome.Succeed;
 	}
 
 	public Outcome TryPlayAnimationAndAwaitCompletion(string pRequestKey, out AnimSoon result)

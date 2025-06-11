@@ -11,4 +11,5 @@ public enum Outcome
     BadArgument = 100,
     EmptyQuery,
     Busy,
+    NoHandler
 }
