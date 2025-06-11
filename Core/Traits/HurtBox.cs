@@ -1,10 +1,11 @@
 using Godot;
 using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
+using GensokyoSurvivors.Core.Interface;
 
 [GlobalClass]
 [Icon("res://Assets//GodotEditor/Icons/hurtbox.png")]
-public partial class HurtBox : Area2D
+public partial class HurtBox : Area2D, IFactionMember
 {
     public override void _Ready()
     {

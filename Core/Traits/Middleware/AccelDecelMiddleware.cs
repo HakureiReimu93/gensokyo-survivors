@@ -4,10 +4,20 @@ using GodotStrict.Types.Lite;
 using GensokyoSurvivors.Core.Interface;
 using GodotStrict.AliasTypes;
 
+/// <summary>
+/// <code>
+/// {summary goes here}
+/// </code>
+/// </summary>
+/// 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/equation.png")]
 public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 {
+	private float myAccelFactor;
+	private float myDecelFactor;
+	private float myMaximum;
+
 	public override void _Ready()
 	{
 		SafeGuard.EnsureFloatsNotEqual(MyAccelFactor, 0, "Middleware user will not be able to move.");
@@ -59,9 +69,5 @@ public partial class AccelDecelMiddleware : Node, IScalarMiddleware<Vector2>
 		}
 	}
 
-	private float myDecelFactor;
-	private float myMaximum;
-	private float myAccelFactor;
-
-	FlyweightVector2 data;
+	private FlyweightVector2 data;
 }

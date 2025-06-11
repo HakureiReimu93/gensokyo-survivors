@@ -1,11 +1,23 @@
+using GensokyoSurvivors.Core.Interface;
+using GensokyoSurvivors.Core.Utility;
 using Godot;
 using GodotStrict.Helpers.Guard;
-using GensokyoSurvivors.Core.Utility;
-using GensokyoSurvivors.Core.Interface;
 
+
+/// <summary>
+/// Represents a hit box in the game, providing collision detection and damage handling.
+/// 
+/// Main features:
+/// - Collision detection with mob units
+/// - Damage calculation based on faction
+/// - Automatic update of collision layer when faction changes
+/// 
+/// Autowired members:
+/// - FactionEnum MyFaction (required)
+/// </summary>
 [GlobalClass]
 [Icon("res://Assets//GodotEditor/Icons/hitbox.png")]
-public partial class HitBox : Area2D
+public partial class HitBox : Area2D, IFactionMember
 {
 	public override void _Ready()
 	{
@@ -41,4 +53,5 @@ public partial class HitBox : Area2D
 	public float MyDamageOnHit { get; set; }
 
 	FactionEnum mFaction;
+
 }

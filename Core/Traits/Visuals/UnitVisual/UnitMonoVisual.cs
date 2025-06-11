@@ -34,7 +34,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 	{
 		__PerformDependencyInjection();
 
-		SafeGuard.EnsureNotNull(MyAnimNamespace);
+		SafeGuard.EnsureNotNull(MyAnimNamespace, "set a namespace/library name for your animation in order to classes like MobUnit to use the unit anim");
 
 		// access namespaced anims with generic names
 		// mResolvedAnimName = mAnim.GetAnimationList()
@@ -90,6 +90,10 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		SafeGuard.Ensure(mRegisteredAnims.TryAdd(pAnimKey, animData), $"'{pAnimKey}' has already been registered with me!");
 
 		mFallbackAnimData = animData;
+
+		mCurrentAnimData = mFallbackAnimData;
+		mAnim.Play(mCurrentAnimData.Value.AnimName);
+
 		return this;
 	}
 
@@ -183,6 +187,18 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		mAnim.Play(mCurrentAnimData.Value.AnimName);
 	}
 
+	public Option<StringName> GetCurrentAnimationName()
+	{
+		if (mCurrentAnimData.IsNone)
+		{
+			return Option<StringName>.None;
+		}
+		else
+		{
+			return mCurrentAnimData.Value.AnimName;
+		}
+	}
+	
 	private void HandleAnimationFinished(StringName animName)
 	{
 		SafeGuard.Ensure(mFallbackAnimData.IsSome, "No animation to fall back to");
@@ -196,17 +212,6 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		mAnim.Play(mFallbackAnimData.Value.AnimName);
 	}
 
-	public Option<StringName> GetCurrentAnimationName()
-	{
-		if (mCurrentAnimData.IsNone)
-		{
-			return Option<StringName>.None;
-		}
-		else
-		{
-			return mCurrentAnimData.Value.AnimName;
-		}
-	}
 
 	private void _Die()
 	{

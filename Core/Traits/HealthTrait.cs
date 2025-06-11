@@ -12,6 +12,12 @@ public partial class HealthTrait : Node
 		mHealth = mMaxHealth;
 	}
 
+	[Signal]
+	public delegate void MyHpDepletedEventHandler(float pRawOverflow);
+
+	[Signal]
+	public delegate void MyHpChangedEventHandler(float pOldHp, float pNewHp);
+
 	public void TriggerDamage(float pDamage)
 	{
 		SafeGuard.Ensure(pDamage > 0);
@@ -25,6 +31,15 @@ public partial class HealthTrait : Node
 			EmitSignal(SignalName.MyHpDepleted, 0 - mHealth);
 		}
 		EmitSignal(SignalName.MyHpChanged, prevHp, mHealth);
+	}
+
+	public void TriggerDamageAll()
+	{
+		SafeGuard.Ensure(mDead == false);
+
+		EmitSignal(SignalName.MyHpChanged, mHealth, 0);
+		EmitSignal(SignalName.MyHpDepleted, 0);
+		mHealth = 0;
 	}
 
 	public void TriggerHeal(float pHealAmount)
@@ -43,15 +58,6 @@ public partial class HealthTrait : Node
 		mHealth = mMaxHealth;
 	}
 
-	public void TriggerDamageAll()
-	{
-		SafeGuard.Ensure(mDead == false);
-
-		EmitSignal(SignalName.MyHpChanged, mHealth, 0);
-		EmitSignal(SignalName.MyHpDepleted, 0);
-		mHealth = 0;
-	}
-
 	[Export(PropertyHint.Range, "1,200")]
 	int @MyHealth
 	{
@@ -65,11 +71,6 @@ public partial class HealthTrait : Node
 			mHealth = Mathf.Min(mMaxHealth, mHealth);
 		}
 	}
-
-	[Signal]
-	public delegate void MyHpDepletedEventHandler(float pRawOverflow);
-	[Signal]
-	public delegate void MyHpChangedEventHandler(float pOldHp, float pNewHp);
 
 	float mHealth;
 	float mMaxHealth;
