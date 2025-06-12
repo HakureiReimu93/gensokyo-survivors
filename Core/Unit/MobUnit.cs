@@ -3,11 +3,15 @@ using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
 using GodotUtilities;
 using GensokyoSurvivors.Core.Model;
-using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
-using GodotStrict.Types.Locked;
 using GensokyoSurvivors.Core.Interface.Lens;
+using GodotStrict.Helpers.Guard;
+using GodotStrict.Types.Locked;
 using GodotStrict.Traits;
+using GodotStrict.Types.Traits;
+using GodotStrict.Helpers.Logging;
+using GodotStrict.Helpers;
+using System;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -23,9 +27,8 @@ public partial class MobUnit : CharacterBody2D,
 	[Autowired]
 	TakeDamageBuf mOnTakeDamageBufTemplate;
 
-	// Required movement controller
 	[Autowired]
-	IMobUnitController mMovementController;
+	Option<IMobUnitController> mMovementController;
 	// Principal velocity buf (which is acceleration in this case.)
 	[Autowired]
 	Option<IScalarMiddleware<Vector2>> mAccel;
@@ -35,6 +38,15 @@ public partial class MobUnit : CharacterBody2D,
 
 	[Autowired]
 	Option<HurtBox> mHurtBox;
+
+	[Autowired("id-unit-layer")]
+	Scanner<LMother> mUnitLayerRef;
+
+	[Autowired("DropOnDeath")]
+	Option<Node2D> mDropOnDeath;
+
+	[Signal]
+	public delegate void OnUnitDieEventHandler();
 
 	public override void _Ready()
 	{
@@ -49,12 +61,20 @@ public partial class MobUnit : CharacterBody2D,
 			hp.MyHpDepleted += HandleHpDropToZero;
 		}
 
-		mMovementController.OnControllerRequestDie(TriggerDie);
+		if (mMovementController.Available(out var controller))
+		{
+			controller.OnControllerRequestDie(TriggerDie);
+		}
 
 		mVisuals.DoRegisterFallbackAnim("idle")
 				.DoRegisterLoopingAnim("walk")
-				.DoRegisterFinalAnim("die");
+				.DoRegisterFinalAnim("die")
+				.TryPlayAnimation("idle");
+	}
 
+	public void OnDie(Action pContinuation)
+	{
+		OnUnitDie += () => pContinuation();
 	}
 
 	private void SwitchToSessionOver(double delta)
@@ -77,6 +97,9 @@ public partial class MobUnit : CharacterBody2D,
 	{
 		MyBufs.RemoveSpecificUnitBuf(ub);
 		ub.OnUnitRemovesMe();
+
+		// Maybe this can fix leaked ObjectDB instances?
+		ub.QueueFree();
 	}
 
 	public override void _Process(double delta)
@@ -86,7 +109,11 @@ public partial class MobUnit : CharacterBody2D,
 		// apply buf processing
 		MyBufs.ProcessAll(delta);
 
-		var moveDirection = mMovementController.GetNormalMovement();
+		var moveDirection = mMovementController.MatchValue(
+			some: (val) => val.GetNormalMovement(),
+			none: () => Vector2.Zero
+		);
+
 		var finalVelocity = moveDirection * MyMaxSpeed;
 
 		if (mAccel.Available(out var accel))
@@ -102,9 +129,11 @@ public partial class MobUnit : CharacterBody2D,
 		// Talk to unit anim
 		if (moveDirection.IsZeroApprox() || finalVelocity.IsZeroApprox())
 		{
+			mVisuals.TryPlayAnimation("idle");
 		}
 		else
 		{
+			mVisuals.TryPlayAnimation("walk");
 		}
 
 		// apply color buf
@@ -115,7 +144,7 @@ public partial class MobUnit : CharacterBody2D,
 
 	private void HandleHurtByDamageSource(float pRawDamage)
 	{
-		if (mHealth.Available(out var hp))
+		if (mHealth.Available(out var hp) && !mDead)
 		{
 			hp.TriggerDamage(pRawDamage);
 
@@ -123,7 +152,10 @@ public partial class MobUnit : CharacterBody2D,
 			SafeGuard.Ensure(duplicated is TakeDamageBuf);
 			TakeDamageBuf buf = duplicated as TakeDamageBuf;
 
-			AddUnitBuf(buf);
+			if (hp.GetHealth().IsNegative() is false)
+			{
+				AddUnitBuf(buf);
+			}
 		}
 		else
 		{
@@ -141,11 +173,34 @@ public partial class MobUnit : CharacterBody2D,
 		SafeGuard.Ensure(mDead.Never());
 		SafeGuard.Ensure(mDeathAnimCompetionStatus.IsLocked is false);
 
+		EmitSignal(SignalName.OnUnitDie);
+
+		MyBufs.OnDieAll();
+
 		if (mVisuals.TryPlayAnimationAndAwaitCompletion("die", out var soon) is Outcome.Succeed)
 		{
 			mDeathAnimCompetionStatus.LockTo(soon);
-			soon.OnCompleted(QueueFree);
+			soon.OnCompleted(_Die);
 		}
+	}
+
+	/// <summary>
+	/// Final dead effects
+	/// </summary>
+	protected void _Die()
+	{
+		if (mUnitLayerRef.Available(out var unitLayer) &&
+			mDropOnDeath.Available(out var drops))
+		{
+			unitLayer.TryHost(drops);
+
+			drops.GlobalPosition = GlobalPosition;
+		}
+		else
+		{
+			this.LogWarn("Could not find unitlayer");
+		}	
+		QueueFree();
 	}
 
 	public void TriggerDieForcely()
@@ -156,16 +211,22 @@ public partial class MobUnit : CharacterBody2D,
 	// Chain of responsibility that should send Exp to the player controller.
 	public Outcome SendExpReward(int pExperienceGainedRaw)
 	{
-		if (mMovementController is not IPickupCommandReceiver pcr)
+		if (mMovementController.IsSome &&
+			mMovementController.Value is not IPickupCommandReceiver pcr)
 		{
 			return Outcome.NoHandler;
 		}
+		else
+		{
+			var reciever = mMovementController.Value as IPickupCommandReceiver;
+			reciever.ReceiveExpReward(pExperienceGainedRaw);
+		}
 
-		pcr.ReceiveExpReward(pExperienceGainedRaw);
 		return 0;
 	}
 
-	[Export]
+  
+  [Export]
 	public float MyMaxSpeed { get; private set; } = 200;
 
 	Lockable<AnimSoon> mDeathAnimCompetionStatus;

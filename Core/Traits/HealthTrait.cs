@@ -25,7 +25,7 @@ public partial class HealthTrait : Node
 
 		var prevHp = mHealth;
 		mHealth -= pDamage;
-		if (mHealth < 0)
+		if (mHealth <= 0)
 		{
 			mDead = true;
 			EmitSignal(SignalName.MyHpDepleted, 0 - mHealth);
@@ -71,6 +71,8 @@ public partial class HealthTrait : Node
 			mHealth = Mathf.Min(mMaxHealth, mHealth);
 		}
 	}
+
+	public float GetHealth() => mHealth;
 
 	float mHealth;
 	float mMaxHealth;
