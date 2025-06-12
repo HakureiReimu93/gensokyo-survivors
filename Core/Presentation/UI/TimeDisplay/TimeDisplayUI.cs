@@ -74,7 +74,7 @@ public partial class TimeDisplayUI : CanvasLayer, LTimeLeftChannel
 
 		int minutes = Convert.ToInt32(pInput.TimeLeft / 60);
 		int seconds = Convert.ToInt32(pInput.TimeLeft % 60);
-		int millis = Convert.ToInt32((pInput.TimeLeft - seconds) * Math.Pow(10, 3));
+		int millis = Convert.ToInt32(Calculate.Fract(pInput.TimeLeft) * Math.Pow(10, 3));
 		var secondsFraction = Calculate.Fract(pInput.TimeLeft);
 
 		if (mCurrentSeconds.NewValueNotEqualsPrevious(seconds))
