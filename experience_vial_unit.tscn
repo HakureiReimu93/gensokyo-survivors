@@ -57,6 +57,8 @@ _data = {
 
 [node name="ExperienceVialUnit" type="Node2D"]
 script = ExtResource("1_j1q8g")
+MyExperiencePoints = 5
+MyChaseSpeed = 200.0
 
 [node name="CollectEnterBox" parent="." instance=ExtResource("2_bcjnw")]
 MyFaction = 2
@@ -65,16 +67,16 @@ MyFaction = 2
 position = Vector2(0, -8)
 shape = SubResource("CircleShape2D_x4lnu")
 
-[node name="GravitateEnterBox" parent="." instance=ExtResource("2_bcjnw")]
+[node name="ChaseEnterBox" parent="." instance=ExtResource("2_bcjnw")]
 MyFaction = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GravitateEnterBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChaseEnterBox"]
 position = Vector2(0, -8)
 shape = SubResource("CircleShape2D_n25ri")
 debug_color = Color(0.68231, 0.6138, 0.93, 0.054902)
 
 [node name="UnitMonoVisual" parent="." instance=ExtResource("2_yn5a5")]
-MyAnimNamespace = &"experience-vial"
+MyAnimNamespace = &"mono-experience"
 
 [node name="Anchor" type="Node2D" parent="UnitMonoVisual"]
 
@@ -82,7 +84,7 @@ MyAnimNamespace = &"experience-vial"
 texture = ExtResource("1_memlh")
 offset = Vector2(0, -8)
 
-[node name="UnitAnim" type="AnimationPlayer" parent="UnitMonoVisual"]
+[node name="UnitMonoAnim" type="AnimationPlayer" parent="UnitMonoVisual"]
 libraries = {
 "": SubResource("AnimationLibrary_bmhtu"),
 "mono-experience": ExtResource("5_g8t1y")

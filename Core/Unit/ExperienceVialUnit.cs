@@ -7,11 +7,12 @@ using GodotStrict.Types;
 using GensokyoSurvivors.Core.Interface.Lens;
 using GodotStrict.Helpers.Logging;
 using GodotStrict.Traits;
+using GensokyoSurvivors.Core.Interface;
 
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://Assets/GodotEditor/Icons/script.png")]
-public partial class ExperienceVialUnit : Node2D
+public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUnit>
 {
 	[Autowired]
 	UnitMonoVisual mVisuals;
@@ -19,7 +20,7 @@ public partial class ExperienceVialUnit : Node2D
 	[Autowired("CollectEnterBox")]
 	EnterBox mCollectListener;
 
-	[Autowired("GravitateEnterBox")]
+	[Autowired("ChaseEnterBox")]
 	EnterBox mGravitateListener;
 
 	public override void _Ready()
@@ -30,7 +31,7 @@ public partial class ExperienceVialUnit : Node2D
 		SafeGuard.Ensure(MyExperiencePoints > 0);
 
 		mCollectListener.EnterBoxEntered += OnCollectionRegionEnter;
-		mGravitateListener.EnterBoxEntered += OnGravitateRegionEnter;
+		mGravitateListener.EnterBoxEntered += OnChaseRegionEnter;
 
 		mVisuals.DoRegisterFallbackAnim("idle")
 				.DoRegisterLoopingAnim("chase")
@@ -46,6 +47,21 @@ public partial class ExperienceVialUnit : Node2D
 		mGravitateListener.SetEnabled(false);
 
 		SafeGuard.Ensure(mCollectListener.MyFaction == mGravitateListener.MyFaction);
+
+		// Disable, since this is treated as a design token.
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
+	}
+
+	public void Activate()
+	{
+		Visible = true;
+		ProcessMode = ProcessModeEnum.Inherit;
+	}
+
+	public ExperienceVialUnit Duplicate()
+	{
+		return this.Duplicate();
 	}
 
 	public override void _Process(double delta)
@@ -79,17 +95,14 @@ public partial class ExperienceVialUnit : Node2D
 
 	private void OnCollectionRegionEnter(HitBox pHitBox)
 	{
-		if (mTargetExpGainHandler.Unavailable(out var handler))
-		{
-			this.LogWarn("collection region entered, handler not found!");
-		}
+		SafeGuard.Ensure(mTargetExpGainHandler.Available(out var handler));
 
 		handler.SendExpReward(MyExperiencePoints);
 
 		QueueFree();
 	}
 
-	private void OnGravitateRegionEnter(HitBox pHitBox)
+	private void OnChaseRegionEnter(HitBox pHitBox)
 	{
 		SafeGuard.Ensure(mTargetExpGainHandler.IsNone);
 		mTargetExpGainHandler = pHitBox.DoGetContractInOwner<IPickupCommandDispatcher>();
@@ -109,6 +122,7 @@ public partial class ExperienceVialUnit : Node2D
 		mState.GoTo(DoChaseRoutine);
 	}
 
+
 	[Export(PropertyHint.Range, "0,100")]
 	int MyExperiencePoints
 	{
@@ -126,7 +140,7 @@ public partial class ExperienceVialUnit : Node2D
 	private int myExperience;
 
 	AnimSoon mSpawnAnimAwaiter;
-	LiteStates mState;
+	LiteStates mState = new();
 
 	Option<IPickupCommandDispatcher> mTargetExpGainHandler;
 	Option<LInfo2D> mTargetInfo2D;
