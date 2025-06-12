@@ -9,10 +9,18 @@ public partial class HurtBox : Area2D, IFactionMember
 {
     public override void _Ready()
     {
-        SafeGuard.EnsureIsConstType<Node2D>(Owner);
+        SafeGuard.EnsureIsConstType<IKillable>(Owner);
         SafeGuard.Ensure(CollisionLayer == 0, "Do not set the collision layer!");
         AreaEntered += HandleAreaEntered;
+
+        (Owner as IKillable).OnDie(Deactivate);
     }
+
+    private void Deactivate()
+	{
+		Callable.From(() => ProcessMode = ProcessModeEnum.Disabled).CallDeferred();
+		Visible = false;
+	}
 
     private void HandleAreaEntered(Area2D other)
     {

@@ -26,6 +26,17 @@ public partial class HitBox : Area2D, IFactionMember
 		SafeGuard.EnsureIsConstType<Node2D>(Owner);
 		SafeGuard.Ensure(CollisionMask == 0, "Do not set the collision mask!");
 		SafeGuard.Ensure(mFaction != FactionEnum.Undefined, "Set the faction");
+
+		if (Owner is IKillable killable)
+		{
+			killable.OnDie(Deactivate);
+		}
+	}
+
+	private void Deactivate()
+	{
+		Callable.From(() => ProcessMode = ProcessModeEnum.Disabled).CallDeferred();
+		Visible = false;
 	}
 
 	public virtual void OnCollidedWith(HurtBox pHurtBox)

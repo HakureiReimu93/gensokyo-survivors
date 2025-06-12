@@ -28,6 +28,12 @@ script = ExtResource("3_djpdo")
 [node name="Rat3" parent="UnitLayer" instance=ExtResource("5_d4mar")]
 position = Vector2(593, 220)
 
+[node name="Rat4" parent="UnitLayer" instance=ExtResource("5_d4mar")]
+position = Vector2(817, 344)
+
+[node name="Rat5" parent="UnitLayer" instance=ExtResource("5_d4mar")]
+position = Vector2(927, 437)
+
 [node name="Rat" parent="UnitLayer" instance=ExtResource("5_d4mar")]
 position = Vector2(747, 259)
 

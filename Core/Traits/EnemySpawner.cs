@@ -58,10 +58,10 @@ public partial class EnemySpawner : Node
 		bounds.Position = cameraInfo.GlobalPosition - (bounds.Size / 2);
 
 		// Make sure to offset the position by the camera's position in the world, because the bounds are screen coords.
-		var randomOrigin = Chance.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN);
+		var randomOrigin = Calculate.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN);
 
 		// host a random enemy
-		var randomEnemy = Chance.RandomCollectionItem(mSpawnList);
+		var randomEnemy = Calculate.RandomCollectionItem(mSpawnList);
 		MobUnit unit = randomEnemy.DoInstantiateNew();
 		unitLayer.TryHost(unit);
 
