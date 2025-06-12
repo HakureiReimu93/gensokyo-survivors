@@ -213,7 +213,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 			return mCurrentAnimData.Value.AnimName;
 		}
 	}
-	
+
 	private void HandleAnimationFinished(StringName animName)
 	{
 		SafeGuard.Ensure(mFallbackAnimData.IsSome, "No animation to fall back to");
@@ -268,6 +268,11 @@ public partial class UnitMonoVisual : Node2D, IKillable
 	public void TriggerDieForcely()
 	{
 		_Die();
+	}
+
+	public void OnDie(Action pContinuation)
+	{
+		SafeGuard.Fail("Listen to unit death instead");
 	}
 
 	[Export]

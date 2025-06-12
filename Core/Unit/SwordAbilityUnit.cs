@@ -57,7 +57,6 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 
 	public void OnEnemyHit(MobUnit enemy)
 	{
-		LogAny("I hit an enemy with a sword. His name was: " + enemy.Name);
 	}
 
 	Option<UnitBuf> mAnticipateBufInstance = Option<UnitBuf>.None;
