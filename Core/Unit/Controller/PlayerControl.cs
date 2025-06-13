@@ -2,20 +2,31 @@ using System;
 using System.Security;
 using GensokyoSurvivors.Core.Interface;
 using GensokyoSurvivors.Core.Interface.Lens;
+using GensokyoSurvivors.Core.Interface.Lens.Experience;
+using GensokyoSurvivors.Core.Model;
 using Godot;
 using GodotStrict.Helpers.Guard;
+using GodotStrict.Helpers.Logging;
 using GodotStrict.Types;
+using GodotUtilities;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/brain.png")]
+[UseAutowiring]
 public partial class PlayerControl : Node, IMobUnitController, IPickupCommandReceiver
 {
 	[Signal]
 	public delegate void RequestDieEventHandler();
 
+	private const int cBaseLevelUpExpRequirement = (20);
+
+	[Autowired("chan-experience")]
+	Scanner<LExperienceChannel> mExperienceListeners;
 
 	public override void _Ready()
 	{
+		__PerformDependencyInjection();
+
 		SafeGuard.Ensure(Owner is MobUnit mu);
 
 		if (SessionSignalBus.SingletonInstance.Available(out var ssb))
@@ -65,9 +76,46 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 
 	public Vector2 GetNormalMovement() => mCalculatedMovement;
 
-	public void ReceiveExpReward(int pExperienceGainedRaw)
+	public void ReceiveExpReward(uint pExperienceGainedRaw)
 	{
-		mTotalExperience += pExperienceGainedRaw;
+		mCurrentExp += pExperienceGainedRaw;
+		if (mCurrentExp >= mMaxXp)
+		{
+			// will populate mLevel and mCurrentExp when called.
+			CalculateLevelUpInfo(mCurrentExp, mLevel, out mLevel, out mCurrentExp);
+			mMaxXp = GetLevelUpExperienceRequirement(mLevel);
+		}
+		if (mExperienceListeners.Available(out var expListeners))
+		{
+			expListeners.ReceiveExperience(new ExperienceBundle(
+				mCurrentExp,
+				mMaxXp,
+				mLevel
+			));
+		}
+	}
+
+	private static void CalculateLevelUpInfo(uint exp, uint lev, out uint newLevel, out uint expRemainder)
+	{
+		var nextLevelRequirement = GetLevelUpExperienceRequirement(lev);
+		while (nextLevelRequirement <= exp)
+		{
+			lev += 1;
+			exp -= nextLevelRequirement;
+		}
+
+		newLevel = lev;
+		expRemainder = exp;
+	}
+
+	public void OnUnitDie()
+	{
+		// upload final experience to PostmortemSession 
+	}
+
+	public static uint GetLevelUpExperienceRequirement(uint level)
+	{
+		return cBaseLevelUpExpRequirement + (level * 20);
 	}
 
 	public Node Entity => this;
@@ -75,5 +123,7 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 	Vector2 mCalculatedMovement;
 	LiteFunctionalStates<Vector2> mStateMachine = new();
 
-	int mTotalExperience;
+	uint mCurrentExp = 0;
+	uint mMaxXp = GetLevelUpExperienceRequirement(1);
+	uint mLevel = 1;
 }
