@@ -32,8 +32,11 @@ public partial class SwordAbilityUnit : Node2D, IPhysicalSkill
 		QueueFree();
 
 		// remove buf that was slapped on top of enemy.
+
+		// TODO: extend Option class to support IsDead, IsActivated, etc.
 		if (mAnticipateBufInstance.Available(out var buf) &&
-			mTarget.Available(out var target))
+			mTarget.Available(out var target) &&
+			target.IsDead is false)
 		{
 			target.RemoveUnitBuf(buf);
 		}
