@@ -74,6 +74,11 @@ public partial class DumbMeleeControl : Node, IMobUnitController
 		OnRequestDie += () => mEventHandler();
 	}
 
+	public void OnUnitDie()
+	{
+		
+	}
+
 	[Export]
 	string MyFocusID { get; set; } = "id-player";
 

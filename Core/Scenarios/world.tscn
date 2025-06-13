@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://c8sn3jjv4ccri"]
+[gd_scene load_steps=15 format=4 uid="uid://c8sn3jjv4ccri"]
 
 [ext_resource type="TileSet" uid="uid://6se6r8y0ieqy" path="res://Assets/Resources/tilemap/kenney-dungeon.tres" id="1_5nx0d"]
 [ext_resource type="Script" path="res://Core/Scenarios/World.cs" id="1_nufap"]
@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://cyq2268oa8ytu" path="res://Core/Presentation/UI/time_display.tscn" id="10_t5m4d"]
 [ext_resource type="PackedScene" uid="uid://by6jslyghfr11" path="res://Core/Level/arena_session.tscn" id="11_7gofa"]
 [ext_resource type="Script" path="res://Core/Level/EffectLayer.cs" id="12_hmx8h"]
+[ext_resource type="PackedScene" uid="uid://d3xjm0o3pgwfq" path="res://experience_vial_unit.tscn" id="13_0daar"]
+[ext_resource type="PackedScene" uid="uid://2deusagr8034" path="res://Core/Presentation/UI/experience_bar_ui.tscn" id="14_dpeab"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_nufap")
@@ -25,28 +27,14 @@ tile_set = ExtResource("1_5nx0d")
 [node name="UnitLayer" type="Node2D" parent="." groups=["id-unit-layer"]]
 script = ExtResource("3_djpdo")
 
-[node name="Rat3" parent="UnitLayer" instance=ExtResource("5_d4mar")]
-position = Vector2(593, 220)
-
-[node name="Rat4" parent="UnitLayer" instance=ExtResource("5_d4mar")]
-position = Vector2(817, 344)
-
-[node name="Rat5" parent="UnitLayer" instance=ExtResource("5_d4mar")]
-position = Vector2(927, 437)
-
-[node name="Rat" parent="UnitLayer" instance=ExtResource("5_d4mar")]
-position = Vector2(747, 259)
-
-[node name="Rat2" parent="UnitLayer" instance=ExtResource("5_d4mar")]
-position = Vector2(457, 363)
-
 [node name="PlayerUnit" parent="UnitLayer" instance=ExtResource("6_cp0xy")]
-position = Vector2(707, 489)
+position = Vector2(577, 321)
 
 [node name="SkillLayer" type="Node2D" parent="." groups=["id-skill-layer"]]
 script = ExtResource("6_wwqe1")
 
 [node name="EnemySpawner" type="Node" parent="."]
+process_mode = 4
 script = ExtResource("6_nti6e")
 MySpawnDelay = 2.0
 
@@ -63,3 +51,29 @@ MySubjectScene = ExtResource("5_d4mar")
 script = ExtResource("12_hmx8h")
 
 [node name="TimeDisplay" parent="." instance=ExtResource("10_t5m4d")]
+
+[node name="ExperienceVialUnit" parent="." instance=ExtResource("13_0daar")]
+position = Vector2(694, 288)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit2" parent="." instance=ExtResource("13_0daar")]
+position = Vector2(840, 210)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit3" parent="." instance=ExtResource("13_0daar")]
+position = Vector2(848, 341)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit4" parent="." instance=ExtResource("13_0daar")]
+position = Vector2(702, 118)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit5" parent="." instance=ExtResource("13_0daar")]
+position = Vector2(522, 144)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit6" parent="." instance=ExtResource("13_0daar")]
+position = Vector2(408, 305)
+ActivateAtStart = true
+
+[node name="ExperienceBarUI" parent="." instance=ExtResource("14_dpeab")]
