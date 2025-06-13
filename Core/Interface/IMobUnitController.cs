@@ -7,4 +7,5 @@ public interface IMobUnitController
 {
     public Vector2 GetNormalMovement();
     public void OnControllerRequestDie(Action mEventHandler);
+    public void OnUnitDie();
 }
