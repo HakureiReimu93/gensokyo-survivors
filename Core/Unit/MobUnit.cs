@@ -12,6 +12,7 @@ using GodotStrict.Types.Traits;
 using GodotStrict.Helpers.Logging;
 using GodotStrict.Helpers;
 using System;
+using System.Linq;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -28,7 +29,7 @@ public partial class MobUnit : CharacterBody2D,
 	TakeDamageBuf mOnTakeDamageBufTemplate;
 
 	[Autowired]
-	Option<IMobUnitController> mMovementController;
+	Option<IMobUnitController> mUnitBrain;
 	// Principal velocity buf (which is acceleration in this case.)
 	[Autowired]
 	Option<IScalarMiddleware<Vector2>> mAccel;
@@ -42,7 +43,7 @@ public partial class MobUnit : CharacterBody2D,
 	[Autowired("id-unit-layer")]
 	Scanner<LMother> mUnitLayerRef;
 
-	[Autowired("DropOnDeath")]
+	[Autowired("ReleaseOnDieLoot")]
 	Option<Node2D> mDropOnDeath;
 
 	[Signal]
@@ -61,7 +62,7 @@ public partial class MobUnit : CharacterBody2D,
 			hp.MyHpDepleted += HandleHpDropToZero;
 		}
 
-		if (mMovementController.Available(out var controller))
+		if (mUnitBrain.Available(out var controller))
 		{
 			controller.OnControllerRequestDie(TriggerDie);
 		}
@@ -109,7 +110,7 @@ public partial class MobUnit : CharacterBody2D,
 		// apply buf processing
 		MyBufs.ProcessAll(delta);
 
-		var moveDirection = mMovementController.MatchValue(
+		var moveDirection = mUnitBrain.MatchValue(
 			some: (val) => val.GetNormalMovement(),
 			none: () => Vector2.Zero
 		);
@@ -192,14 +193,23 @@ public partial class MobUnit : CharacterBody2D,
 		if (mUnitLayerRef.Available(out var unitLayer) &&
 			mDropOnDeath.Available(out var drops))
 		{
-			unitLayer.TryHost(drops);
-
-			drops.GlobalPosition = GlobalPosition;
+			foreach (var dropsChild in drops.GetChildren().Cast<Node2D>())
+			{
+				drops.RemoveChild(dropsChild);
+				unitLayer.TryHost(dropsChild);
+				dropsChild.GlobalPosition = GlobalPosition;
+			}
 		}
 		else
 		{
 			this.LogWarn("Could not find unitlayer");
-		}	
+		}
+
+		if (mUnitBrain.Available(out var controller))
+		{
+			controller.OnUnitDie();
+		}
+
 		QueueFree();
 	}
 
@@ -209,16 +219,16 @@ public partial class MobUnit : CharacterBody2D,
 	}
 
 	// Chain of responsibility that should send Exp to the player controller.
-	public Outcome SendExpReward(int pExperienceGainedRaw)
+	public Outcome SendExpReward(uint pExperienceGainedRaw)
 	{
-		if (mMovementController.IsSome &&
-			mMovementController.Value is not IPickupCommandReceiver pcr)
+		if (mUnitBrain.IsSome &&
+			mUnitBrain.Value is not IPickupCommandReceiver pcr)
 		{
 			return Outcome.NoHandler;
 		}
 		else
 		{
-			var reciever = mMovementController.Value as IPickupCommandReceiver;
+			var reciever = mUnitBrain.Value as IPickupCommandReceiver;
 			reciever.ReceiveExpReward(pExperienceGainedRaw);
 		}
 

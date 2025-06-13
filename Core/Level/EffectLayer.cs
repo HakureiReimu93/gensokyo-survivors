@@ -21,15 +21,10 @@ public partial class EffectLayer : Node2D, LMother
 			pWhatAsCanvasItem.Show();
 		}
 
-		if (pWhat is CpuParticles2D)
+		if (pWhat is CpuParticles2D particles)
 		{
-			OnAdoptNewParticleEffect(pWhat as CpuParticles2D);
+			particles.SetEmitting(true);
 		}
-	}
-
-	private void OnAdoptNewParticleEffect([NotNull] CpuParticles2D particles)
-	{
-		particles.SetEmitting(true);
 	}
 
 	Node ILens<Node>.Entity => this;

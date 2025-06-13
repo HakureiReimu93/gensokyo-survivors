@@ -7,10 +7,10 @@ namespace GensokyoSurvivors.Core.Interface.Lens;
 
 public interface IPickupCommandDispatcher
 {
-    public Outcome SendExpReward(int pExperienceGainedRaw);
+    public Outcome SendExpReward(uint pExperienceGainedRaw);
 }
 
 public interface IPickupCommandReceiver
 {
-    public void ReceiveExpReward(int pExperienceGainedRaw);
+    public void ReceiveExpReward(uint pExperienceGainedRaw);
 }
