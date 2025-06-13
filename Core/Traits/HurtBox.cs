@@ -24,8 +24,7 @@ public partial class HurtBox : Area2D, IFactionMember
 
     private void HandleAreaEntered(Area2D other)
     {
-        SafeGuard.Ensure(other is HitBox);
-        HitBox hitBox = other as HitBox;
+        if (other is not HitBox hitBox) return;
         hitBox.OnCollidedWith(this);
 
         var damage = hitBox.MyDamageOnHit;

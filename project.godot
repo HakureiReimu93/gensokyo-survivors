@@ -38,6 +38,7 @@ id-unit-layer=""
 id-game-camera=""
 chan-session-time=""
 id-effect-layer=""
+chan-experience=""
 
 [input]
 
@@ -73,6 +74,8 @@ move_down={
 2d_physics/layer_3="hard-enemy"
 2d_physics/layer_4="id-player"
 2d_physics/layer_5="id-enemy"
+2d_physics/layer_6="id-pickup-player"
+2d_physics/layer_7="id-pickup-enemy"
 
 [rendering]
 

@@ -30,8 +30,8 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		SafeGuard.Ensure(MyChaseSpeed > 0);
 		SafeGuard.Ensure(MyExperiencePoints > 0);
 
-		mCollectListener.EnterBoxEntered += OnCollectionRegionEnter;
-		mGravitateListener.EnterBoxEntered += OnChaseRegionEnter;
+		mCollectListener.AreaEntered += OnCollectionRegionEnter;
+		mGravitateListener.AreaEntered += OnChaseRegionEnter;
 
 		mVisuals.DoRegisterFallbackAnim("idle")
 				.DoRegisterLoopingAnim("chase")
@@ -41,7 +41,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 				.PlanRoute(DoChaseRoutine, DoEnterChaseRoutine);
 
 		mVisuals.TryPlayAnimationAndAwaitCompletion("spawn", out mSpawnAnimAwaiter);
-		mSpawnAnimAwaiter.OnCompleted(DoLoadIdleStance);
+		mSpawnAnimAwaiter.OnCompleted(DoEnterIdleRoutine);
 
 		mCollectListener.SetEnabled(false);
 		mGravitateListener.SetEnabled(false);
@@ -49,8 +49,11 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		SafeGuard.Ensure(mCollectListener.MyFaction == mGravitateListener.MyFaction);
 
 		// Disable, since this is treated as a design token.
-		Visible = false;
-		ProcessMode = ProcessModeEnum.Disabled;
+		if (ActivateAtStart is false)
+		{
+			Visible = false;
+			ProcessMode = ProcessModeEnum.Disabled;
+		}
 	}
 
 	public void Activate()
@@ -69,7 +72,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		mState.Process(delta);
 	}
 
-	private void DoLoadIdleStance()
+	private void DoEnterIdleRoutine()
 	{
 		mCollectListener.SetEnabled(true);
 		mGravitateListener.SetEnabled(true);
@@ -84,7 +87,9 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 	{
 		if (mTargetInfo2D.Unavailable(out var target2D)) return;
 
-		LookAt(target2D.GlobalPosition);
+		var directionToTarget = GlobalPosition.DirectionTo(target2D.GlobalPosition);
+		GlobalRotation = directionToTarget.Angle() + Calculate.Pi270;
+
 		GlobalPosition = GlobalPosition.MoveToward(target2D.GlobalPosition, (float)delta * MyChaseSpeed);
 	}
 
@@ -93,8 +98,14 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		mVisuals.TryPlayAnimation("chase");
 	}
 
-	private void OnCollectionRegionEnter(HitBox pHitBox)
+	private void OnCollectionRegionEnter(Area2D pArea)
 	{
+		// rare instance where player triggers collection region before gravitate region
+		// gravitate region sets necessary info.
+		if (mTargetExpGainHandler.IsNone)
+		{
+			OnChaseRegionEnter(pArea);
+		}
 		SafeGuard.Ensure(mTargetExpGainHandler.Available(out var handler));
 
 		handler.SendExpReward(MyExperiencePoints);
@@ -102,11 +113,20 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		QueueFree();
 	}
 
-	private void OnChaseRegionEnter(HitBox pHitBox)
+	private void OnChaseRegionEnter(Area2D pArea)
 	{
 		SafeGuard.Ensure(mTargetExpGainHandler.IsNone);
-		mTargetExpGainHandler = pHitBox.DoGetContractInOwner<IPickupCommandDispatcher>();
-		mTargetInfo2D = pHitBox.DoGetContractInOwner<LInfo2D>();
+
+		var parent = pArea.GetParent();
+
+		if (parent is IPickupCommandDispatcher ipcd)
+		{
+			mTargetExpGainHandler = Option<IPickupCommandDispatcher>.Ok(ipcd);
+		}
+		if (parent is LInfo2D lInfo2D)
+		{
+			mTargetInfo2D = Option<LInfo2D>.Ok(lInfo2D);
+		}
 
 		if (mTargetExpGainHandler.IsNone)
 		{
@@ -124,12 +144,11 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 
 
 	[Export(PropertyHint.Range, "0,100")]
-	int MyExperiencePoints
+	uint MyExperiencePoints
 	{
 		get => myExperience;
 		set
 		{
-			SafeGuard.Ensure(value > 0);
 			myExperience = value;
 		}
 	}
@@ -137,7 +156,10 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 	[Export(PropertyHint.Range, "0,500")]
 	float MyChaseSpeed { get; set; }
 
-	private int myExperience;
+	[Export]
+	bool ActivateAtStart { get; set; }
+
+	private uint myExperience;
 
 	AnimSoon mSpawnAnimAwaiter;
 	LiteStates mState = new();

@@ -9,7 +9,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4lnu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n25ri"]
-radius = 48.5077
+radius = 78.1025
 
 [sub_resource type="Animation" id="Animation_1tufn"]
 length = 0.001
@@ -57,7 +57,7 @@ _data = {
 
 [node name="ExperienceVialUnit" type="Node2D"]
 script = ExtResource("1_j1q8g")
-MyExperiencePoints = 5
+MyExperiencePoints = 15
 MyChaseSpeed = 200.0
 
 [node name="CollectEnterBox" parent="." instance=ExtResource("2_bcjnw")]

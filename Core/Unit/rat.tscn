@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dp8m18k023b00"]
+[gd_scene load_steps=17 format=3 uid="uid://dp8m18k023b00"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
 [ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://Core/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_5uh2a"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://Assets/ParticleSystem/death-particles.tscn" id="5_kt565"]
 [ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://Core/Traits/hit_box.tscn" id="6_pvhtr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="7_nnyfb"]
+[ext_resource type="PackedScene" uid="uid://d3xjm0o3pgwfq" path="res://experience_vial_unit.tscn" id="11_avxmw"]
 
 [sub_resource type="Animation" id="Animation_itbep"]
 length = 0.001
@@ -131,3 +132,9 @@ MyHealth = 20
 
 [node name="OnTakeDamage" parent="." index="7"]
 MyBaseMovementSpeedScale = 0.8
+
+[node name="ReleaseOnDieLoot" type="Node2D" parent="." index="8"]
+
+[node name="ExperienceVialUnit" parent="ReleaseOnDieLoot" index="0" instance=ExtResource("11_avxmw")]
+process_mode = 4
+visible = false

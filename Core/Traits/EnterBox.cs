@@ -21,7 +21,9 @@ public partial class EnterBox : Area2D, IFactionMember
 	{
 		__PerformDependencyInjection();
 
-		CollisionMask = FactionUtil.MaskFromFaction(MyFaction);
+		CollisionMask = FactionUtil.PickUpMaskFromFaction(MyFaction);
+
+		AreaEntered += HandleAreaEntered;
 	}
 
 	public void SetEnabled(bool pEnabled)
