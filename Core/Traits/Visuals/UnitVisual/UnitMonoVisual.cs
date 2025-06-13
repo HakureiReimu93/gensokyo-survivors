@@ -90,10 +90,8 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		SafeGuard.EnsureFalse(mAnim.GetAnimation(trueAnimName)?.LoopMode == Animation.LoopModeEnum.None, $"animation '{pAnimKey}' does not loop");
 		SafeGuard.Ensure(mRegisteredAnims.TryAdd(pAnimKey, animData), $"'{pAnimKey}' has already been registered with me!");
 
-		mFallbackAnimData = animData;
-
 		mCurrentAnimData = mFallbackAnimData;
-		mAnim.Play(mCurrentAnimData.Value.AnimName);
+		_Play(mCurrentAnimData.Value.AnimName);
 
 		return this;
 	}
@@ -106,7 +104,6 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		SafeGuard.Ensure(mAnim.GetAnimation(trueAnimName)?.LoopMode == Animation.LoopModeEnum.None, $"animation '{pAnimKey}' should not loop");
 		SafeGuard.Ensure(mRegisteredAnims.TryAdd(pAnimKey, animData), $"'{pAnimKey}' has already been registered with me!");
 
-		mFallbackAnimData = animData;
 		return this;
 	}
 
@@ -131,7 +128,6 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		SafeGuard.Ensure(mAnim.GetAnimation(trueAnimName)?.LoopMode == Animation.LoopModeEnum.None, $"animation '{pAnimKey}' should not loop");
 		SafeGuard.Ensure(mRegisteredAnims.TryAdd(pAnimKey, animData), $"'{pAnimKey}' has already been registered with me!");
 
-		mFallbackAnimData = animData;
 		return this;
 	}
 
@@ -143,14 +139,14 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		if (mCurrentAnimData.Unavailable(out var currentAnim))
 		{
 			mCurrentAnimData = requestedAnim;
-			mAnim.Play(requestedAnim.AnimName);
+			_Play(requestedAnim.AnimName);
 			return 0;
 		}
 		if (currentAnim != requestedAnim)
 		{
 			if (currentAnim.PlayType == UnitAnimPlayType.SoloCanNotCancel) return Outcome.Busy;
 			mCurrentAnimData = requestedAnim;
-			mAnim.Play(requestedAnim.AnimName);
+			_Play(requestedAnim.AnimName);
 		}
 
 		return 0;
@@ -183,23 +179,32 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		if (mCurrentAnimData.Unavailable(out var currentAnim))
 		{
 			mCurrentAnimData = requestedAnim;
-			mAnim.Play(requestedAnim.AnimName);
+			_Play(requestedAnim.AnimName);
 		}
 		else if (currentAnim != requestedAnim)
 		{
 			if (currentAnim.PlayType == UnitAnimPlayType.SoloCanNotCancel) return Outcome.Busy;
 			mCurrentAnimData = requestedAnim;
-			mAnim.Play(requestedAnim.AnimName);
+			_Play(requestedAnim.AnimName);
 		}
 
 		result = new AnimSoon(mAnim, requestedAnim.AnimName);
 		return 0;
 	}
 
+	private void _Play(string pRequestKey)
+	{
+		// Needed because the new animation forgets to initialize values changed by the previous animation
+		mAnim.Play("RESET");
+		mAnim.Advance(0f);
+		mAnim.Play(pRequestKey);
+		mAnim.Advance(0f);
+	}
+
 	public void PlayAnimationForcely(string pRequestKey)
 	{
 		mCurrentAnimData = mRegisteredAnims[pRequestKey];
-		mAnim.Play(mCurrentAnimData.Value.AnimName);
+		_Play(mCurrentAnimData.Value.AnimName);
 	}
 
 	public Option<StringName> GetCurrentAnimationName()
@@ -224,7 +229,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 			_Die();
 		}
 
-		mAnim.Play(mFallbackAnimData.Value.AnimName);
+		_Play(mFallbackAnimData.Value.AnimName);
 	}
 
 
@@ -239,6 +244,8 @@ public partial class UnitMonoVisual : Node2D, IKillable
 			{
 				RemoveChild(visual);
 				effectLayer.TryHost(visual);
+
+				visual.GlobalPosition = GlobalPosition;
 			}
 			else
 			{
@@ -257,7 +264,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		if (mFinalAnimData.IsSome)
 		{
 			mCurrentAnimData = mFinalAnimData;
-			mAnim.Play(mCurrentAnimData.Value.AnimName);
+			_Play(mCurrentAnimData.Value.AnimName);
 		}
 		else
 		{
