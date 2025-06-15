@@ -14,6 +14,8 @@ using GodotStrict.Helpers;
 using System;
 using System.Linq;
 using GodotStrict.Types.Coroutine;
+using System.Collections.ObjectModel;
+using GodotStrict.AliasTypes;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -21,7 +23,8 @@ using GodotStrict.Types.Coroutine;
 public partial class MobUnit : CharacterBody2D,
 	IKillable,
 	IPickupCommandDispatcher,
-	LInfo2D
+	LInfo2D,
+	INewUpgradeDispatcher
 {
 	[Autowired]
 	UnitMonoVisual mVisuals;
@@ -47,6 +50,12 @@ public partial class MobUnit : CharacterBody2D,
 	[Autowired("ReleaseOnDieLoot")]
 	Option<Node2D> mDropOnDeath;
 
+	[Autowired]
+	Option<Node> mSkillRoster;
+
+	[Autowired]
+	Option<HealthBar> mHealthBar;
+
 	[Signal]
 	public delegate void OnUnitDieEventHandler();
 
@@ -66,6 +75,11 @@ public partial class MobUnit : CharacterBody2D,
 		if (mUnitBrain.Available(out var controller))
 		{
 			controller.OnControllerRequestDie(TriggerDie);
+		}
+
+		if (mHealthBar.Available(out var hpBar))
+		{
+			hpBar.UpdatePercentage(new normal(1f));
 		}
 
 		mVisuals.DoRegisterFallbackAnim("idle")
@@ -158,6 +172,13 @@ public partial class MobUnit : CharacterBody2D,
 			{
 				AddUnitBuf(buf);
 			}
+
+			if (mHealthBar.Available(out var healthBar))
+			{
+				healthBar.UpdatePercentage(
+					new normal(hp.GetHealth() / hp.GetMaxHealth())
+				);
+			}
 		}
 		else
 		{
@@ -236,8 +257,21 @@ public partial class MobUnit : CharacterBody2D,
 		return 0;
 	}
 
-  
-  [Export]
+	public void SendNewUpgrade(UpgradeMetaData pUpgrade, ReadOnlyDictionary<UpgradeMetaData, uint> pAllUpgrades)
+	{
+		SafeGuard.Ensure(mSkillRoster.IsSome);
+
+		var subjects = mSkillRoster.Value
+							.GetChildren()
+							.Cast<INewUpgradeSubject>();
+
+		foreach (var subject in subjects)
+		{
+			subject.ConsiderNewUpgrade(pUpgrade, pAllUpgrades);
+		}
+	}
+
+	[Export]
 	public float MyMaxSpeed { get; private set; } = 200;
 
 	Lockable<AnimationCompletionSoon> mDeathAnimCompetionStatus;

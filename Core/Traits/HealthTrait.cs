@@ -73,6 +73,7 @@ public partial class HealthTrait : Node
 	}
 
 	public float GetHealth() => mHealth;
+	public float GetMaxHealth() => mMaxHealth;
 
 	float mHealth;
 	float mMaxHealth;

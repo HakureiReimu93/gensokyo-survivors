@@ -23,12 +23,38 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAAAAQAAAAAAAEAAAAAAAQAAAABAAEAAAAAAAQ
 tile_set = ExtResource("1_5nx0d")
 
 [node name="UnitLayer" type="Node2D" parent="." groups=["id-unit-layer"]]
+y_sort_enabled = true
 script = ExtResource("3_djpdo")
 
 [node name="PlayerUnit" parent="UnitLayer" instance=ExtResource("6_cp0xy")]
-position = Vector2(577, 321)
+position = Vector2(594, 346)
+
+[node name="ExperienceVialUnit" parent="UnitLayer" instance=ExtResource("13_0daar")]
+position = Vector2(694, 288)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit2" parent="UnitLayer" instance=ExtResource("13_0daar")]
+position = Vector2(840, 210)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit3" parent="UnitLayer" instance=ExtResource("13_0daar")]
+position = Vector2(848, 341)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit4" parent="UnitLayer" instance=ExtResource("13_0daar")]
+position = Vector2(702, 118)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit5" parent="UnitLayer" instance=ExtResource("13_0daar")]
+position = Vector2(522, 144)
+ActivateAtStart = true
+
+[node name="ExperienceVialUnit6" parent="UnitLayer" instance=ExtResource("13_0daar")]
+position = Vector2(408, 305)
+ActivateAtStart = true
 
 [node name="SkillLayer" type="Node2D" parent="." groups=["id-skill-layer"]]
+y_sort_enabled = true
 script = ExtResource("6_wwqe1")
 
 [node name="EnemySpawner" type="Node" parent="."]
@@ -46,30 +72,6 @@ MySubjectScene = ExtResource("5_d4mar")
 script = ExtResource("12_hmx8h")
 
 [node name="TimeDisplayUI" parent="." instance=ExtResource("10_t5m4d")]
-
-[node name="ExperienceVialUnit" parent="." instance=ExtResource("13_0daar")]
-position = Vector2(694, 288)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit2" parent="." instance=ExtResource("13_0daar")]
-position = Vector2(840, 210)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit3" parent="." instance=ExtResource("13_0daar")]
-position = Vector2(848, 341)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit4" parent="." instance=ExtResource("13_0daar")]
-position = Vector2(702, 118)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit5" parent="." instance=ExtResource("13_0daar")]
-position = Vector2(522, 144)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit6" parent="." instance=ExtResource("13_0daar")]
-position = Vector2(408, 305)
-ActivateAtStart = true
 
 [node name="ArenaSession" parent="." instance=ExtResource("11_7gofa")]
 

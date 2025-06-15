@@ -6,6 +6,7 @@ using static GodotStrict.Helpers.Dependency.DependencyHelper;
 using GensokyoSurvivors.Core.Interface;
 using System.Linq;
 using GodotUtilities;
+using System.Collections.ObjectModel;
 
 /// <summary>
 /// Spawns skills for the current player.
@@ -13,21 +14,15 @@ using GodotUtilities;
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/factory.png")]
 [UseAutowiring]
-public partial class CooldownAbilitySpawner : Node, IAbilitySpawner
+public partial class CooldownAbilitySpawner : Node, IAbilitySpawner, INewUpgradeSubject
 {
-    /// <summary>
-    /// The layer upon which to spawn the ability
-    /// </summary>
+
     [Autowired("id-skill-layer")]
     private Scanner<LMother> mSkillLayerRef;
 
-    /// <summary>
-    /// The unit picker strategy node.
-    /// </summary>
     [Autowired]
     private IAdversarialUnitPicker mVictimPicker;
 
-    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         __PerformDependencyInjection();
@@ -40,61 +35,58 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner
         mOwner = Owner as Node2D;
     }
 
-    /// <summary>
-    /// Called every physics frame.
-    /// </summary>
     public override void _PhysicsProcess(double delta)
     {
         if (mTimer.Tick(delta))
         {
-            mTimer.Reset();
+            mTimer.ResetWithCustomTime(MySpawnDelay * mSpawnDelayMultiplier);
             SpawnNext();
         }
     }
 
-	/// <summary>
-	/// Pick an antagonist and spawn the skill on the skill layer
-	/// </summary>
-	private void SpawnNext()
-	{
-		if (mSkillLayerRef.Unavailable(out var skillLayerInfo)) return;
+    private void SpawnNext()
+    {
+        if (mSkillLayerRef.Unavailable(out var skillLayerInfo)) return;
 
-		var playerRef = GetTree().GetFirstNodeInGroup("id-player");
-		SafeGuard.EnsureIsConstType<MobUnit>(playerRef);
+        var playerRef = GetTree().GetFirstNodeInGroup("id-player");
+        SafeGuard.EnsureIsConstType<MobUnit>(playerRef);
 
-		var pickResult = mVictimPicker
-			.WithProtagonist(playerRef as MobUnit)
-			.WithAntagonists(
-				GetTree()
-					.GetNodesInGroup("id-enemy")
-					.Cast<MobUnit>()
-			)
-			.ComputeUnitVictim();
+        var pickResult = mVictimPicker
+            .WithProtagonist(playerRef as MobUnit)
+            .WithAntagonists(
+                GetTree()
+                    .GetNodesInGroup("id-enemy")
+                    .Cast<MobUnit>()
+            )
+            .ComputeUnitVictim();
 
-		if (pickResult.Unavailable(out MobUnit victim)) return;
+        if (pickResult.Unavailable(out MobUnit victim)) return;
 
-		var instantiated = MySkillToSpawn.InstantiateOrNull<Node2D>();
-		SafeGuard.EnsureIsConstType<IPhysicalSkill>(instantiated);
+        var instantiated = MySkillToSpawn.InstantiateOrNull<Node2D>();
+        SafeGuard.EnsureIsConstType<IPhysicalSkill>(instantiated);
 
-		skillLayerInfo.TryHost(instantiated);
+        skillLayerInfo.TryHost(instantiated);
 
-		// Set the position for the ability.
-		instantiated.GlobalPosition = victim.GlobalPosition;
+        // Set the position for the ability.
+        instantiated.GlobalPosition = victim.GlobalPosition;
 
-		// Set up the skill
-		var skill = instantiated as IPhysicalSkill;
-		skill.OnEnemyChosen(victim);
-	}
+        // Set up the skill
+        var skill = instantiated as IPhysicalSkill;
+        skill.OnEnemyChosen(victim);
+    }
 
-    /// <summary>
-    /// The packed scene with the skill to spawn.
-    /// </summary>
+    public void ConsiderNewUpgrade(UpgradeMetaData pMeta, ReadOnlyDictionary<UpgradeMetaData, uint> pAllUpgrades)
+    {
+        if (pMeta.MyID == cDecreaseCooldownUpgradeID)
+        {
+            mSpawnDelayMultiplier *= 1 - 0.10f;
+        }
+    }
+
+
     [Export]
     public PackedScene MySkillToSpawn { get; set; }
 
-    /// <summary>
-    /// The delay between spawns in seconds.
-    /// </summary>
     [Export(PropertyHint.Range, "0,10")]
     public float MySpawnDelay
     {
@@ -111,15 +103,13 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner
         }
     }
 
+    private float mSpawnDelayMultiplier = 1f;
+
     private float mSpawnDelay;
 
-    /// <summary>
-    /// The owner node.
-    /// </summary>
     private Node2D mOwner;
 
-    /// <summary>
-    /// The timer for the spawn delay.
-    /// </summary>
     private LiteTimer mTimer;
+
+    readonly StringName cDecreaseCooldownUpgradeID = new("100_000");
 }
