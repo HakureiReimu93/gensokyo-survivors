@@ -1,13 +1,13 @@
 using System;
-using System.Security;
 using GensokyoSurvivors.Core.Interface;
 using GensokyoSurvivors.Core.Interface.Lens;
 using GensokyoSurvivors.Core.Interface.Lens.Experience;
 using GensokyoSurvivors.Core.Model;
 using Godot;
+using GodotStrict.Helpers;
 using GodotStrict.Helpers.Guard;
-using GodotStrict.Helpers.Logging;
 using GodotStrict.Types;
+using GodotStrict.Types.Coroutine;
 using GodotUtilities;
 
 [GlobalClass]
@@ -15,13 +15,11 @@ using GodotUtilities;
 [UseAutowiring]
 public partial class PlayerControl : Node, IMobUnitController, IPickupCommandReceiver
 {
-	[Signal]
-	public delegate void RequestDieEventHandler();
-
-	private const int cBaseLevelUpExpRequirement = (20);
-
 	[Autowired("chan-experience")]
 	Scanner<LExperienceChannel> mExperienceListeners;
+
+	[Autowired]
+	UpgradeLayer mUpgrades;
 
 	public override void _Ready()
 	{
@@ -48,9 +46,9 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 	private Vector2 CalculateDefaultMotion(double delta)
 	{
 		return Input.GetVector("move_left",
-						"move_right",
-						"move_up",
-						"move_down");
+							   "move_right",
+							   "move_up",
+							   "move_down");
 	}
 
 	private Vector2 CalculateSessionEndedMotion(double delta)
@@ -82,8 +80,28 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 		if (mCurrentExp >= mMaxXp)
 		{
 			// will populate mLevel and mCurrentExp when called.
-			CalculateLevelUpInfo(mCurrentExp, mLevel, out mLevel, out mCurrentExp);
+			UpdateLevelAndExp(mCurrentExp, mLevel, out mLevel, out mCurrentExp);
 			mMaxXp = GetLevelUpExperienceRequirement(mLevel);
+
+			// TODO: handle multi-level up
+			var possibleUpgrades = mUpgrades.DoGetNextUpgrades_3();
+
+			if (IsInstanceValid(MyUpgradeSelectorPacked))
+			{
+				var ui = GensokyoSurvivorsSession.Instance.HostBlockingUIFromPacked<UpgradeSelectUi>(
+					MyUpgradeSelectorPacked,
+					out var unblockFunction
+				);
+
+				ui.ShowAndAwaitChoice(possibleUpgrades, unblockFunction)
+					.OnCompletedWithOutput(DoAddNewUpgrade);
+			}
+			else
+			{
+				DoAddNewUpgrade(
+					Calculate.RandomCollectionItem(possibleUpgrades)
+				);
+			}
 		}
 		if (mExperienceListeners.Available(out var expListeners))
 		{
@@ -95,17 +113,22 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 		}
 	}
 
-	private static void CalculateLevelUpInfo(uint exp, uint lev, out uint newLevel, out uint expRemainder)
+	private void DoAddNewUpgrade(UpgradeMetaData pUpgrade)
 	{
-		var nextLevelRequirement = GetLevelUpExperienceRequirement(lev);
-		while (nextLevelRequirement <= exp)
+		mUpgrades.HostUpgrade(pUpgrade);
+	}
+
+	private static void UpdateLevelAndExp(uint currentExperience, uint currentLevel, out uint newLevel, out uint expRemainder)
+	{
+		var nextLevelRequirement = GetLevelUpExperienceRequirement(currentLevel);
+		while (nextLevelRequirement <= currentExperience)
 		{
-			lev += 1;
-			exp -= nextLevelRequirement;
+			currentLevel += 1;
+			currentExperience -= nextLevelRequirement;
 		}
 
-		newLevel = lev;
-		expRemainder = exp;
+		newLevel = currentLevel;
+		expRemainder = currentExperience;
 	}
 
 	public void OnUnitDie()
@@ -118,10 +141,20 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 		return cBaseLevelUpExpRequirement + (level * 20);
 	}
 
+	[Signal]
+	public delegate void RequestDieEventHandler();
+
+	[Export]
+	PackedScene MyUpgradeSelectorPacked { get; set; }
+
+	private const int cBaseLevelUpExpRequirement = (20);
+
 	public Node Entity => this;
 
 	Vector2 mCalculatedMovement;
 	LiteFunctionalStates<Vector2> mStateMachine = new();
+
+	FuncAdventureSoon<UpgradeMetaData> mUpgradeAwaiter;
 
 	uint mCurrentExp = 0;
 	uint mMaxXp = GetLevelUpExperienceRequirement(1);

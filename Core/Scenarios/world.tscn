@@ -1,7 +1,6 @@
-[gd_scene load_steps=15 format=4 uid="uid://c8sn3jjv4ccri"]
+[gd_scene load_steps=14 format=4 uid="uid://c8sn3jjv4ccri"]
 
 [ext_resource type="TileSet" uid="uid://6se6r8y0ieqy" path="res://Assets/Resources/tilemap/kenney-dungeon.tres" id="1_5nx0d"]
-[ext_resource type="Script" path="res://Core/Scenarios/World.cs" id="1_nufap"]
 [ext_resource type="Script" path="res://Core/Level/UnitLayer.cs" id="3_djpdo"]
 [ext_resource type="PackedScene" uid="uid://ccn1ocsgum2gx" path="res://Core/Unit/game_camera.tscn" id="4_amet7"]
 [ext_resource type="PackedScene" uid="uid://dp8m18k023b00" path="res://Core/Unit/rat.tscn" id="5_d4mar"]
@@ -16,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://2deusagr8034" path="res://Core/Presentation/UI/experience_bar_ui.tscn" id="14_dpeab"]
 
 [node name="World" type="Node2D"]
-script = ExtResource("1_nufap")
 
 [node name="Tilemap" type="Node2D" parent="."]
 
@@ -34,7 +32,6 @@ position = Vector2(577, 321)
 script = ExtResource("6_wwqe1")
 
 [node name="EnemySpawner" type="Node" parent="."]
-process_mode = 4
 script = ExtResource("6_nti6e")
 MySpawnDelay = 2.0
 
@@ -45,12 +42,10 @@ MySubjectScene = ExtResource("5_d4mar")
 
 [node name="GameCamera" parent="." instance=ExtResource("4_amet7")]
 
-[node name="ArenaSession" parent="." instance=ExtResource("11_7gofa")]
-
 [node name="EffectLayer" type="Node2D" parent="." groups=["id-effect-layer"]]
 script = ExtResource("12_hmx8h")
 
-[node name="TimeDisplay" parent="." instance=ExtResource("10_t5m4d")]
+[node name="TimeDisplayUI" parent="." instance=ExtResource("10_t5m4d")]
 
 [node name="ExperienceVialUnit" parent="." instance=ExtResource("13_0daar")]
 position = Vector2(694, 288)
@@ -75,5 +70,7 @@ ActivateAtStart = true
 [node name="ExperienceVialUnit6" parent="." instance=ExtResource("13_0daar")]
 position = Vector2(408, 305)
 ActivateAtStart = true
+
+[node name="ArenaSession" parent="." instance=ExtResource("11_7gofa")]
 
 [node name="ExperienceBarUI" parent="." instance=ExtResource("14_dpeab")]
