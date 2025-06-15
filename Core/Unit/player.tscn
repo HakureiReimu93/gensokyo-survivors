@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cp5n01r4txacw"]
+[gd_scene load_steps=25 format=3 uid="uid://cp5n01r4txacw"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
@@ -11,8 +11,11 @@
 [ext_resource type="Script" path="res://Core/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
 [ext_resource type="Script" path="res://Core/Unit/UpgradeLayer.cs" id="7_17dvk"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://Core/Traits/hurt_box.tscn" id="7_bjeo8"]
+[ext_resource type="PackedScene" uid="uid://bfdmc1igpkepm" path="res://Core/Presentation/UI/upgrade_select_ui.tscn" id="7_pbwh5"]
+[ext_resource type="Script" path="res://Assets/Resources/Custom/UpgradeMetaData/UpgradeMetaData.cs" id="8_jwiim"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="9_ichf6"]
+[ext_resource type="Resource" uid="uid://dphpkbjeyu5wo" path="res://Assets/Resources/Custom/UpgradeMetaData/fallback.tres" id="9_t6c80"]
 
 [sub_resource type="Animation" id="Animation_jx1ob"]
 length = 0.001
@@ -73,6 +76,24 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]
 radius = 5.0
 
+[sub_resource type="Resource" id="Resource_wrcld"]
+script = ExtResource("8_jwiim")
+MyID = &"100000"
+MyDisplayName = "Deft Swing"
+MyDescription = "Slightly improves the attack speed of your abilities."
+
+[sub_resource type="Resource" id="Resource_avq78"]
+script = ExtResource("8_jwiim")
+MyID = &"100001"
+MyDisplayName = "Lighter Boots"
+MyDescription = "Slightly improves your character's movement speed."
+
+[sub_resource type="Resource" id="Resource_jmw1l"]
+script = ExtResource("8_jwiim")
+MyID = &"100002"
+MyDisplayName = "Thunder Strike"
+MyDescription = "Occasionally summons a thunder strike on the closest enemy."
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_j8tic"]
 radius = 6.0
 
@@ -110,9 +131,12 @@ debug_color = Color(0.0235294, 0.423529, 0.611765, 0.278431)
 
 [node name="PlayerUnitInput" type="Node" parent="." index="2"]
 script = ExtResource("3_5tf3c")
+MyUpgradeSelectorPacked = ExtResource("7_pbwh5")
 
 [node name="UpgradeLayer" type="Node" parent="PlayerUnitInput" index="0"]
 script = ExtResource("7_17dvk")
+MyPool = Array[Resource]([SubResource("Resource_wrcld"), SubResource("Resource_avq78"), SubResource("Resource_jmw1l")])
+MyFallbackUpgrade = ExtResource("9_t6c80")
 
 [node name="HurtBox" parent="." index="3" instance=ExtResource("7_bjeo8")]
 MyFaction = 1

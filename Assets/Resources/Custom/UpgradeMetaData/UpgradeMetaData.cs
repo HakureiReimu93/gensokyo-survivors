@@ -1,14 +1,16 @@
 using Godot;
 using System;
 
+[GlobalClass]
+[Icon("res://Assets/GodotEditor/Icons/bundle.png")]
 public partial class UpgradeMetaData : Resource
 {
     [Export]
-    StringName MyID { get; set; }
+    public StringName MyID { get; set; }
 
     [Export]
-    string DisplayName { get; set; }
+    public string MyDisplayName { get; set; }
 
     [Export(PropertyHint.MultilineText)]
-    string Description{ get; set; }
+    public string MyDescription { get; set; }
 }
