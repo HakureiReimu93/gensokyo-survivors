@@ -9,7 +9,7 @@ using GensokyoSurvivors.Core.Interface.Lens;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/bundle.png")]
-public partial class UpgradeSelectUnitUI : PanelContainer
+public partial class UpgradeSelectCardUI : PanelContainer
 {
 	public BaseButton ConfirmButton => MyButton;
 

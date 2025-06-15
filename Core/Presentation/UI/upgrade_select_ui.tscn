@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://bfdmc1igpkepm"]
 
 [ext_resource type="Script" path="res://Core/Presentation/UI/UpgradeSelectUi.cs" id="1_h77hp"]
-[ext_resource type="PackedScene" uid="uid://83vlxjb0xhk5" path="res://Core/Presentation/UI/upgrade_select_unit_ui.tscn" id="2_m3yvw"]
+[ext_resource type="PackedScene" uid="uid://83vlxjb0xhk5" path="res://Core/Presentation/UI/upgrade_select_card_ui.tscn" id="2_m3yvw"]
 
 [sub_resource type="Animation" id="Animation_jqqk3"]
 length = 0.001

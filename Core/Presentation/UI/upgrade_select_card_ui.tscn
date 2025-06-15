@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://83vlxjb0xhk5"]
 
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://Assets/Resources/theme/ui_default.tres" id="1_rvahg"]
-[ext_resource type="Script" path="res://Core/Presentation/UI/UpgradeSelectUnitUI.cs" id="2_2xayy"]
+[ext_resource type="Script" path="res://Core/Presentation/UI/UpgradeSelectCardUI.cs" id="2_4iu3o"]
 
-[node name="UpgradeSelectUnitUI" type="PanelContainer" node_paths=PackedStringArray("MyNameLabel", "MyDescriptionLabel", "MyButton")]
+[node name="UpgradeSelectCardUI" type="PanelContainer" node_paths=PackedStringArray("MyNameLabel", "MyDescriptionLabel", "MyButton")]
 theme = ExtResource("1_rvahg")
-script = ExtResource("2_2xayy")
+script = ExtResource("2_4iu3o")
 MyNameLabel = NodePath("MarginContainer/VBoxContainer/Label")
 MyDescriptionLabel = NodePath("MarginContainer/VBoxContainer/MarginContainer/Label")
 MyButton = NodePath("MarginContainer/VBoxContainer/MarginContainer2/Button")

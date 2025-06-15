@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using GodotStrict.Traits;
 using Adventure = System.Collections.Generic.IEnumerator<GodotStrict.Types.Coroutine.BaseSoon>;
 using System.Linq;
+using static GodotStrict.Types.Coroutine.AdventureExtensions;
 
 [GlobalClass]
 [UseAutowiring]
@@ -16,16 +17,11 @@ public partial class UpgradeSelectUi : CanvasLayer, IUpgradeChoiceSelector
 {
 	[Autowired]
 	AnimationPlayer mAnim;
-
-	[Autowired("MainUI")]
-	Control mMainUI;
-
 	public override void _Ready()
 	{
 		__PerformDependencyInjection();
 		// When creating the upgrade select ui, RESET track will make all cards fully visible
 		Visible = false;
-		mMainUI.Visible = false;
 
 		SafeGuard.EnsureNotNull(MyLeftCardContainer);
 		SafeGuard.EnsureNotNull(MyMiddleCardContainer);
@@ -44,7 +40,7 @@ public partial class UpgradeSelectUi : CanvasLayer, IUpgradeChoiceSelector
 
 		for (int i = 0; i < pUpgrades.Length; i++)
 		{
-			var upgradeUi = MyCardUnitScene.Instantiate<UpgradeSelectUnitUI>();
+			var upgradeUi = MyCardUnitScene.Instantiate<UpgradeSelectCardUI>();
 			SafeGuard.EnsureNotNull(upgradeUi);
 			upgradeUi.Hydrate(pUpgrades[i]);
 
@@ -78,68 +74,32 @@ public partial class UpgradeSelectUi : CanvasLayer, IUpgradeChoiceSelector
 		return this.StartFuncAdventure<UpgradeMetaData>(ShowSelectThenRewardUpgrade);
 	}
 
-	/// <summary>
-	/// Yield return 
-	/// </summary>
-	/// <returns></returns>
 	private Adventure ShowSelectThenRewardUpgrade()
 	{
-		SafeGuard.EnsureNotNull(mUpgrades);
-
 		Visible = true;
+		SafeGuard.EnsureNotNull(mUpgrades);
+		foreach (UpgradeSelectCardUI card in mUpgradeUIs) card.ConfirmButton.Disabled = true;
 
-		mAnim.Play("fade-in");
-		yield return new AnimationCompletionSoon(mAnim, "fade-in");
+		yield return WaitTillAnimationFinish(mAnim, "fade-in");
+		yield return WaitTillAnimationFinish(mAnim, $"fly-in_{mUpgradeUIs.Count}");
+		foreach (UpgradeSelectCardUI card in mUpgradeUIs) card.ConfirmButton.Disabled = false;
 
-		mMainUI.Visible = true;
+		UnionSoon<int> cardButtonToIndex = WaitForChosenIndexed(
+			mUpgradeUIs.Count,
+			(idx) => new ButtonClickSoon(mUpgradeUIs[idx].ConfirmButton)
+		);
+		yield return cardButtonToIndex;
 
-		foreach (var card in mUpgradeUIs)
-		{
-			card.ConfirmButton.Disabled = true;
-		}
-
-		var flyInAnimName = $"fly-in_{mUpgradeUIs.Count}";
-
-		mAnim.Play(flyInAnimName);
-		yield return new AnimationCompletionSoon(mAnim, flyInAnimName);
-
-		foreach (var card in mUpgradeUIs)
-		{
-			card.ConfirmButton.Disabled = false;
-		}
-
-		var buttons_3_toIdx = new UnionSoon<int>();
-
-		for (int i = 0; i < mUpgradeUIs.Count; i++)
-		{
-			buttons_3_toIdx.AddSuspendedResult(
-				new ButtonClickSoon(mUpgradeUIs[i].ConfirmButton),
-				i
-			);
-		}
-
-		yield return buttons_3_toIdx;
-
-		foreach (var card in mUpgradeUIs)
-		{
-			card.ConfirmButton.Disabled = true;
-		}
-
-		var flyOutAnimName = $"fly-out_{buttons_3_toIdx.Result + 1}";
-		mAnim.Play(flyOutAnimName);
-		yield return new AnimationCompletionSoon(mAnim, flyOutAnimName);
-
-		mAnim.Play("fade-out");
-		yield return new AnimationCompletionSoon(mAnim, "fade-out");
-
-		mMainUI.Visible = false;
+		foreach (UpgradeSelectCardUI card in mUpgradeUIs) card.ConfirmButton.Disabled = true;
+		yield return WaitTillAnimationFinish(mAnim, $"fly-out_{cardButtonToIndex.Result + 1}");
+		yield return WaitTillAnimationFinish(mAnim, "fade-out");
 
 		// close the ui
 		QueueFree();
 		mUnblockFunction?.Invoke();
 
 		yield return new AdventureResult<UpgradeMetaData>(
-			mUpgrades.ElementAt(buttons_3_toIdx.Result)
+			mUpgrades[cardButtonToIndex.Result]
 		);
 	}
 
@@ -157,7 +117,7 @@ public partial class UpgradeSelectUi : CanvasLayer, IUpgradeChoiceSelector
 
 	CanvasLayer ILens<CanvasLayer>.Entity => this;
 
-	List<UpgradeSelectUnitUI> mUpgradeUIs = new();
+	List<UpgradeSelectCardUI> mUpgradeUIs = new();
 	UpgradeMetaData[] mUpgrades;
 
 	Action mUnblockFunction;
