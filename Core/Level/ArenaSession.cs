@@ -3,7 +3,6 @@ using GodotStrict.Helpers.Guard;
 using GodotUtilities;
 using GodotStrict.Types;
 using GensokyoSurvivors.Core.Interface.Lens;
-using GodotStrict.Types.PrevCurrent;
 
 [GlobalClass]
 [UseAutowiring]
@@ -17,16 +16,21 @@ public partial class ArenaSession : Node
 	[Autowired("SessionDuration")]
 	Timer mTimer;
 
+	public static ArenaSession SingletonInstance => mSingleton;
+	private static ArenaSession mSingleton;
+
 	public override void _Ready()
 	{
+		GensokyoSurvivorsSession.Instance.MyMainSceneRoot = GetOwner<Node2D>();
+
 		__PerformDependencyInjection();
 
 		SafeGuard.Ensure(mTimer.WaitTime > 1f);
 		SafeGuard.Ensure(mTimer.OneShot);
-		// Automatically set to false when entering the tree
-		// SafeGuard.Ensure(mTimer.Autostart);
 
 		mTimer.Timeout += OnSessionTimeExpire;
+
+		mSingleton = this;
 	}
 
 	private void OnSessionTimeExpire()
@@ -41,12 +45,11 @@ public partial class ArenaSession : Node
 		base._Process(delta);
 
 		// may change later.
-		if ( mTimer.IsStopped() is false &&
+		if (mTimer.IsStopped() is false &&
 			mTimeChannel.Available(out var chan))
 		{
 			// update those that are listening to changes to time.
 			chan.ReceiveTime(new(mTimer.TimeLeft, mTimer.WaitTime));
 		}
 	}
-
 }
