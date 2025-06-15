@@ -9,6 +9,7 @@ using GodotStrict.AliasTypes;
 using GodotStrict.Helpers.Guard;
 using GodotStrict.Helpers.Logging;
 using GodotStrict.Types;
+using GodotStrict.Types.Coroutine;
 using GodotStrict.Types.Traits;
 using GodotUtilities;
 
@@ -166,7 +167,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		return Outcome.Succeed;
 	}
 
-	public Outcome TryPlayAnimationAndAwaitCompletion(string pRequestKey, out AnimSoon result)
+	public Outcome TryPlayAnimationAndAwaitCompletion(string pRequestKey, out AnimationCompletionSoon result)
 	{
 		result = default;
 
@@ -188,7 +189,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 			_Play(requestedAnim.AnimName);
 		}
 
-		result = new AnimSoon(mAnim, requestedAnim.AnimName);
+		result = new AnimationCompletionSoon(mAnim, requestedAnim.AnimName);
 		return 0;
 	}
 
@@ -229,6 +230,7 @@ public partial class UnitMonoVisual : Node2D, IKillable
 			_Die();
 		}
 
+		mCurrentAnimData = mFallbackAnimData;
 		_Play(mFallbackAnimData.Value.AnimName);
 	}
 

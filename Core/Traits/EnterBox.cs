@@ -1,9 +1,7 @@
 using Godot;
 using GensokyoSurvivors.Core.Utility;
 using GensokyoSurvivors.Core.Interface;
-using GensokyoSurvivors.Core.Utility.Adventure;
 using System;
-using GodotStrict.Types;
 using GodotUtilities;
 
 [GlobalClass]

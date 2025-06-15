@@ -8,6 +8,7 @@ using GensokyoSurvivors.Core.Interface.Lens;
 using GodotStrict.Helpers.Logging;
 using GodotStrict.Traits;
 using GensokyoSurvivors.Core.Interface;
+using GodotStrict.Types.Coroutine;
 
 [GlobalClass]
 [UseAutowiring]
@@ -21,7 +22,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 	EnterBox mCollectListener;
 
 	[Autowired("ChaseEnterBox")]
-	EnterBox mGravitateListener;
+	EnterBox mChaseBox;
 
 	public override void _Ready()
 	{
@@ -31,7 +32,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		SafeGuard.Ensure(MyExperiencePoints > 0);
 
 		mCollectListener.AreaEntered += OnCollectionRegionEnter;
-		mGravitateListener.AreaEntered += OnChaseRegionEnter;
+		mChaseBox.AreaEntered += OnChaseRegionEnter;
 
 		mVisuals.DoRegisterFallbackAnim("idle")
 				.DoRegisterLoopingAnim("chase")
@@ -41,12 +42,13 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 				.PlanRoute(DoChaseRoutine, DoEnterChaseRoutine);
 
 		mVisuals.TryPlayAnimationAndAwaitCompletion("spawn", out mSpawnAnimAwaiter);
+
 		mSpawnAnimAwaiter.OnCompleted(DoEnterIdleRoutine);
 
 		mCollectListener.SetEnabled(false);
-		mGravitateListener.SetEnabled(false);
+		mChaseBox.SetEnabled(false);
 
-		SafeGuard.Ensure(mCollectListener.MyFaction == mGravitateListener.MyFaction);
+		SafeGuard.Ensure(mCollectListener.MyFaction == mChaseBox.MyFaction);
 
 		// Disable, since this is treated as a design token.
 		if (ActivateAtStart is false)
@@ -75,7 +77,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 	private void DoEnterIdleRoutine()
 	{
 		mCollectListener.SetEnabled(true);
-		mGravitateListener.SetEnabled(true);
+		mChaseBox.SetEnabled(true);
 
 		mVisuals.TryPlayAnimation("idle");
 
@@ -88,7 +90,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 		if (mTargetInfo2D.Unavailable(out var target2D)) return;
 
 		var directionToTarget = GlobalPosition.DirectionTo(target2D.GlobalPosition);
-		GlobalRotation = directionToTarget.Angle() + Calculate.Pi270;
+		GlobalRotation = directionToTarget.Angle();
 
 		GlobalPosition = GlobalPosition.MoveToward(target2D.GlobalPosition, (float)delta * MyChaseSpeed);
 	}
@@ -137,7 +139,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 			this.LogWarn("No info2D in hitbox owner.");
 		}
 
-		mGravitateListener.QueueFree();
+		mChaseBox.QueueFree();
 
 		mState.GoTo(DoChaseRoutine);
 	}
@@ -161,7 +163,7 @@ public partial class ExperienceVialUnit : Node2D, IDesignToken<ExperienceVialUni
 
 	private uint myExperience;
 
-	AnimSoon mSpawnAnimAwaiter;
+	AnimationCompletionSoon mSpawnAnimAwaiter;
 	LiteStates mState = new();
 
 	Option<IPickupCommandDispatcher> mTargetExpGainHandler;

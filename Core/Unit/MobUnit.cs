@@ -13,6 +13,7 @@ using GodotStrict.Helpers.Logging;
 using GodotStrict.Helpers;
 using System;
 using System.Linq;
+using GodotStrict.Types.Coroutine;
 
 [GlobalClass]
 [Icon("res://Assets/GodotEditor/Icons/unit.png")]
@@ -239,7 +240,7 @@ public partial class MobUnit : CharacterBody2D,
   [Export]
 	public float MyMaxSpeed { get; private set; } = 200;
 
-	Lockable<AnimSoon> mDeathAnimCompetionStatus;
+	Lockable<AnimationCompletionSoon> mDeathAnimCompetionStatus;
 	TriggerFlag mDead;
 	public bool IsDead => mDead;
 	protected BufCollection MyBufs { get; set; } = new();
