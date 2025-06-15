@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cp5n01r4txacw"]
+[gd_scene load_steps=26 format=3 uid="uid://cp5n01r4txacw"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="9_ichf6"]
 [ext_resource type="Resource" uid="uid://dphpkbjeyu5wo" path="res://Assets/Resources/Custom/UpgradeMetaData/fallback.tres" id="9_t6c80"]
+[ext_resource type="PackedScene" uid="uid://bcnqaxxn2j5dr" path="res://Core/Presentation/health_bar.tscn" id="17_7te83"]
 
 [sub_resource type="Animation" id="Animation_jx1ob"]
 length = 0.001
@@ -171,3 +172,14 @@ collision_mask = 0
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_m4cxi")
 debug_color = Color(0.929111, 0.569295, 0.35541, 0.00784314)
+
+[node name="HealthBar" parent="." index="9" instance=ExtResource("17_7te83")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = 2.0
+offset_right = 14.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
