@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://c8sn3jjv4ccri"]
+[gd_scene load_steps=15 format=4 uid="uid://c8sn3jjv4ccri"]
 
 [ext_resource type="TileSet" uid="uid://6se6r8y0ieqy" path="res://Assets/Resources/tilemap/kenney-dungeon.tres" id="1_5nx0d"]
 [ext_resource type="Script" path="res://Core/Level/UnitLayer.cs" id="3_djpdo"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://by6jslyghfr11" path="res://Core/Level/arena_session.tscn" id="11_7gofa"]
 [ext_resource type="Script" path="res://Core/Level/EffectLayer.cs" id="12_hmx8h"]
 [ext_resource type="PackedScene" uid="uid://d3xjm0o3pgwfq" path="res://experience_vial_unit.tscn" id="13_0daar"]
+[ext_resource type="PackedScene" uid="uid://bw23mogi1c02k" path="res://Core/Presentation/UI/victory_screen.tscn" id="13_kd2ga"]
 [ext_resource type="PackedScene" uid="uid://2deusagr8034" path="res://Core/Presentation/UI/experience_bar_ui.tscn" id="14_dpeab"]
 
 [node name="World" type="Node2D"]
@@ -74,5 +75,6 @@ script = ExtResource("12_hmx8h")
 [node name="TimeDisplayUI" parent="." instance=ExtResource("10_t5m4d")]
 
 [node name="ArenaSession" parent="." instance=ExtResource("11_7gofa")]
+MyVictoryDefeatUI = ExtResource("13_kd2ga")
 
 [node name="ExperienceBarUI" parent="." instance=ExtResource("14_dpeab")]

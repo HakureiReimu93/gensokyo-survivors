@@ -3,6 +3,7 @@ using GodotStrict.Helpers.Guard;
 using GodotUtilities;
 using GodotStrict.Types;
 using GensokyoSurvivors.Core.Interface.Lens;
+using System;
 
 [GlobalClass]
 [UseAutowiring]
@@ -21,12 +22,13 @@ public partial class ArenaSession : Node
 
 	public override void _Ready()
 	{
-		GensokyoSurvivorsSession.Instance.MyMainSceneRoot = GetOwner<Node2D>();
-
 		__PerformDependencyInjection();
+
+		GensokyoSurvivorsSession.Instance.MyMainSceneRoot = GetOwner<Node2D>();
 
 		SafeGuard.Ensure(mTimer.WaitTime > 1f);
 		SafeGuard.Ensure(mTimer.OneShot);
+		SafeGuard.EnsureNotNull(MyVictoryDefeatUI);
 
 		mTimer.Timeout += OnSessionTimeExpire;
 
@@ -36,6 +38,21 @@ public partial class ArenaSession : Node
 	private void OnSessionTimeExpire()
 	{
 		if (SessionSignalBus.SingletonInstance.Unavailable(out var ssb)) return;
+
+		// present the victory screen if the player still exists.
+		if (GetTree().GetFirstNodeInGroup("id-player") is not null)
+		{
+			VictoryScreen ui = GensokyoSurvivorsSession.Instance.HostBlockingUIFromPacked<VictoryScreen>(
+				MyVictoryDefeatUI,
+				out Action unblock
+			);
+
+			ui.ShowAndInvokeChosen(
+				pQuit: () => GetTree().Quit(),
+				pRestart: () => GetTree().ReloadCurrentScene(),
+				unblock
+			);
+		}
 
 		ssb.BroadcastSessionTimeExpired();
 	}
@@ -52,4 +69,7 @@ public partial class ArenaSession : Node
 			chan.ReceiveTime(new(mTimer.TimeLeft, mTimer.WaitTime));
 		}
 	}
+
+	[Export]
+	PackedScene MyVictoryDefeatUI;
 }

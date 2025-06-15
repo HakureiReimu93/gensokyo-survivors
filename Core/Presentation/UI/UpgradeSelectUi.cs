@@ -7,12 +7,10 @@ using GodotStrict.Types.Coroutine;
 using System.Collections.Generic;
 using GodotStrict.Traits;
 using Adventure = System.Collections.Generic.IEnumerator<GodotStrict.Types.Coroutine.BaseSoon>;
-using System.Linq;
 using static GodotStrict.Types.Coroutine.AdventureExtensions;
 
 [GlobalClass]
 [UseAutowiring]
-[Icon("res://Assets/GodotEditor/Icons/script.png")]
 public partial class UpgradeSelectUi : CanvasLayer, IUpgradeChoiceSelector
 {
 	[Autowired]
@@ -23,11 +21,24 @@ public partial class UpgradeSelectUi : CanvasLayer, IUpgradeChoiceSelector
 		// When creating the upgrade select ui, RESET track will make all cards fully visible
 		Visible = false;
 
+		if (SessionSignalBus.SingletonInstance.Available(out var ssb))
+		{
+			ssb.SessionTimeExpired += OnArenaSessionTimedOut;
+		}
+
 		SafeGuard.EnsureNotNull(MyLeftCardContainer);
 		SafeGuard.EnsureNotNull(MyMiddleCardContainer);
 		SafeGuard.EnsureNotNull(MyRightCardContainer);
 		SafeGuard.EnsureCanInstantiate(MyCardUnitScene);
 
+	}
+
+	private void OnArenaSessionTimedOut()
+	{
+		if (!IsInstanceValid(this)) return;
+		
+		this.EndAdventure(ShowSelectThenRewardUpgrade);
+		QueueFree();
 	}
 
 	public FuncAdventureSoon<UpgradeMetaData> ShowAndAwaitChoice(UpgradeMetaData[] pUpgrades, Action unblockFunction)
