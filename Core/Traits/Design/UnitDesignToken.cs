@@ -13,6 +13,12 @@ public partial class UnitDesignToken : Node
 	[Export]
 	PackedScene MySubjectScene;
 
+	[Export(PropertyHint.Range,"0,2")]
+	public float MySpawnWeight { get; set; }
+
+	[Export(PropertyHint.Range, "0,8")]
+	public uint MyDifficulty { get; set; }
+
 	public override void _Ready()
 	{
 	}
