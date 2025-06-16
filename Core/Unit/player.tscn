@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cp5n01r4txacw"]
+[gd_scene load_steps=27 format=3 uid="uid://cp5n01r4txacw"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://Core/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="9_ichf6"]
 [ext_resource type="Resource" uid="uid://dphpkbjeyu5wo" path="res://Assets/Resources/Custom/UpgradeMetaData/fallback.tres" id="9_t6c80"]
+[ext_resource type="PackedScene" uid="uid://1xljxqaqvdjr" path="res://Assets/UpgradeScenes/axe_ability_spawner.tscn" id="10_7t637"]
 [ext_resource type="PackedScene" uid="uid://bcnqaxxn2j5dr" path="res://Core/Presentation/health_bar.tscn" id="17_7te83"]
 
 [sub_resource type="Animation" id="Animation_jx1ob"]
@@ -82,18 +83,22 @@ script = ExtResource("8_jwiim")
 MyID = &"100000"
 MyDisplayName = "Deft Swing"
 MyDescription = "Slightly improves the attack speed of your abilities."
+MyStackType = 0
 
 [sub_resource type="Resource" id="Resource_avq78"]
 script = ExtResource("8_jwiim")
 MyID = &"100001"
 MyDisplayName = "Lighter Boots"
 MyDescription = "Slightly improves your character's movement speed."
+MyStackType = 0
 
 [sub_resource type="Resource" id="Resource_jmw1l"]
 script = ExtResource("8_jwiim")
 MyID = &"100002"
-MyDisplayName = "Thunder Strike"
-MyDescription = "Occasionally summons a thunder strike on the closest enemy."
+MyDisplayName = "Iron Axe"
+MyDescription = "Occasionally summons an iron axe that spins around the player and destroys anything in its way."
+MyStackType = 1
+MyRewardScene = ExtResource("10_7t637")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j8tic"]
 radius = 6.0
@@ -103,7 +108,6 @@ radius = 13.1529
 
 [node name="PlayerUnit" groups=["id-player"] instance=ExtResource("1_0iav6")]
 collision_layer = 2
-collision_mask = 0
 
 [node name="UnitMonoVisual" parent="." index="0" instance=ExtResource("2_n6y0r")]
 MyAnimNamespace = &"mono-rat"
@@ -139,6 +143,16 @@ script = ExtResource("7_17dvk")
 MyPool = Array[Resource]([SubResource("Resource_wrcld"), SubResource("Resource_avq78"), SubResource("Resource_jmw1l")])
 MyFallbackUpgrade = ExtResource("9_t6c80")
 
+[node name="SkillRoster" type="Node" parent="PlayerUnitInput" index="1"]
+
+[node name="SwordSkillSpawner" parent="PlayerUnitInput/SkillRoster" index="0" instance=ExtResource("4_p0cps")]
+MySkillToSpawn = ExtResource("5_emj28")
+MySpawnDelay = 1.596
+
+[node name="SelectVictimStrategy" type="Node" parent="PlayerUnitInput/SkillRoster/SwordSkillSpawner" index="0"]
+script = ExtResource("6_apv4w")
+MyMaxRange = 159.868
+
 [node name="HurtBox" parent="." index="3" instance=ExtResource("7_bjeo8")]
 MyFaction = 1
 
@@ -151,20 +165,10 @@ debug_color = Color(0.666667, 0.0941176, 0.172549, 0.188235)
 MyAccelFactor = 0.404
 MyDecelFactor = 0.305
 
-[node name="SkillRoster" type="Node" parent="." index="5"]
+[node name="HealthTrait" parent="." index="5" instance=ExtResource("9_ichf6")]
+MyHealth = 90
 
-[node name="SwordSkillSpawner" parent="SkillRoster" index="0" instance=ExtResource("4_p0cps")]
-MySkillToSpawn = ExtResource("5_emj28")
-MySpawnDelay = 1.596
-
-[node name="SelectVictimStrategy" type="Node" parent="SkillRoster/SwordSkillSpawner" index="0"]
-script = ExtResource("6_apv4w")
-MyMaxRange = 281.915
-
-[node name="HealthTrait" parent="." index="6" instance=ExtResource("9_ichf6")]
-MyHealth = 10
-
-[node name="ExpCollectionRadius" type="Area2D" parent="." index="8"]
+[node name="ExpCollectionRadius" type="Area2D" parent="." index="7"]
 collision_layer = 32
 collision_mask = 0
 
@@ -173,13 +177,13 @@ position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_m4cxi")
 debug_color = Color(0.929111, 0.569295, 0.35541, 0.00784314)
 
-[node name="HealthBar" parent="." index="9" instance=ExtResource("17_7te83")]
+[node name="HealthBar" parent="." index="8" instance=ExtResource("17_7te83")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -15.0
-offset_top = 2.0
-offset_right = 14.0
-offset_bottom = 12.0
+offset_left = -18.0
+offset_top = -28.0
+offset_right = 18.0
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
