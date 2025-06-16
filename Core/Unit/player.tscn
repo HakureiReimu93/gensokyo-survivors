@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cp5n01r4txacw"]
+[gd_scene load_steps=28 format=3 uid="uid://cp5n01r4txacw"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Core/Unit/Controller/PlayerControl.cs" id="3_5tf3c"]
 [ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://Assets/ParticleSystem/death-particles.tscn" id="4_00mkl"]
 [ext_resource type="AnimationLibrary" uid="uid://56d2ljyuk4cd" path="res://Assets/Animation/UnitVisual/mono-rat.res" id="4_4i4hj"]
+[ext_resource type="Material" uid="uid://bpbm43h4bsxr4" path="res://Assets/Resources/shader/overwrite-color-mat.tres" id="4_8hixx"]
 [ext_resource type="PackedScene" uid="uid://mjpm7pn6vfe3" path="res://Core/Traits/cooldown_ability_spawner.tscn" id="4_p0cps"]
 [ext_resource type="PackedScene" uid="uid://dtyiv3f8hu3rq" path="res://Core/Unit/sword_ability_unit.tscn" id="5_emj28"]
 [ext_resource type="Script" path="res://Core/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
@@ -109,13 +110,21 @@ radius = 13.1529
 [node name="PlayerUnit" groups=["id-player"] instance=ExtResource("1_0iav6")]
 collision_layer = 2
 
-[node name="UnitMonoVisual" parent="." index="0" instance=ExtResource("2_n6y0r")]
+[node name="UnitMonoVisual" parent="." index="0" node_paths=PackedStringArray("MyWhiteFlashable") instance=ExtResource("2_n6y0r")]
 MyAnimNamespace = &"mono-rat"
+MyWhiteFlashable = NodePath("Anchor/WhiteFlash")
 
 [node name="Anchor" type="Node2D" parent="UnitMonoVisual" index="0"]
 position = Vector2(0, -8)
 
 [node name="Main" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="0"]
+position = Vector2(0, 8)
+texture = ExtResource("2_1dteh")
+offset = Vector2(0, -8)
+
+[node name="WhiteFlash" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="1"]
+visible = false
+material = ExtResource("4_8hixx")
 position = Vector2(0, 8)
 texture = ExtResource("2_1dteh")
 offset = Vector2(0, -8)

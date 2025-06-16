@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dp8m18k023b00"]
+[gd_scene load_steps=19 format=3 uid="uid://dp8m18k023b00"]
 
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://Core/Unit/mob_unit.tscn" id="1_vrk1u"]
 [ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://Core/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_5uh2a"]
@@ -8,9 +8,11 @@
 [ext_resource type="Script" path="res://Core/Unit/Controller/DumbMeleeControl.cs" id="4_cntq3"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://Core/Traits/hurt_box.tscn" id="5_d4tq7"]
 [ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://Assets/ParticleSystem/death-particles.tscn" id="5_kt565"]
+[ext_resource type="Material" uid="uid://bpbm43h4bsxr4" path="res://Assets/Resources/shader/overwrite-color-mat.tres" id="6_haw5j"]
 [ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://Core/Traits/hit_box.tscn" id="6_pvhtr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://Core/Traits/health_trait.tscn" id="7_nnyfb"]
 [ext_resource type="PackedScene" uid="uid://d3xjm0o3pgwfq" path="res://experience_vial_unit.tscn" id="11_avxmw"]
+[ext_resource type="PackedScene" uid="uid://bcnqaxxn2j5dr" path="res://Core/Presentation/health_bar.tscn" id="12_ae23e"]
 
 [sub_resource type="Animation" id="Animation_itbep"]
 length = 0.001
@@ -81,8 +83,9 @@ collision_layer = 4
 collision_mask = 5
 MyMaxSpeed = 50.0
 
-[node name="UnitMonoVisual" parent="." index="0" instance=ExtResource("2_5uh2a")]
+[node name="UnitMonoVisual" parent="." index="0" node_paths=PackedStringArray("MyWhiteFlashable") instance=ExtResource("2_5uh2a")]
 MyAnimNamespace = &"mono-rat"
+MyWhiteFlashable = NodePath("Anchor/WhiteFlash")
 
 [node name="UnitMonoAnim" type="AnimationPlayer" parent="UnitMonoVisual" index="0"]
 libraries = {
@@ -98,6 +101,13 @@ position = Vector2(0, -9)
 
 [node name="Main" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="0"]
 position = Vector2(0, 9)
+texture = ExtResource("2_ng83w")
+offset = Vector2(0, -8)
+
+[node name="WhiteFlash" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="1"]
+visible = false
+material = ExtResource("6_haw5j")
+position = Vector2(0, 8)
 texture = ExtResource("2_ng83w")
 offset = Vector2(0, -8)
 
@@ -141,3 +151,9 @@ metadata/ThisDropChance = 0.4
 [node name="ExperienceVialUnit" parent="ReleaseOnDieLoot" index="0" instance=ExtResource("11_avxmw")]
 process_mode = 4
 visible = false
+
+[node name="HealthBar" parent="." index="9" instance=ExtResource("12_ae23e")]
+offset_left = -10.0
+offset_top = 2.0
+offset_right = 10.0
+offset_bottom = 12.0
