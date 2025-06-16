@@ -21,6 +21,9 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 	[Autowired]
 	UpgradeLayer mUpgrades;
 
+	[Autowired("SkillRoster")]
+	Node mSkillRoster;
+
 	public override void _Ready()
 	{
 		__PerformDependencyInjection();
@@ -79,6 +82,12 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 
 	private void DoAddNewUpgrade(UpgradeMetaData pUpgrade)
 	{
+		if (pUpgrade.MyRewardScene != null &&
+			!mUpgrades.TryGetUpgradeMetaDataFrom(pUpgrade.MyID, out _))
+		{
+			mSkillRoster.AddChild(pUpgrade.MyRewardScene.Instantiate());
+		}
+
 		mUpgrades.HostUpgrade(pUpgrade);
 	}
 
