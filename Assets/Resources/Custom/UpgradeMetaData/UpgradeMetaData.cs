@@ -13,4 +13,16 @@ public partial class UpgradeMetaData : Resource
 
     [Export(PropertyHint.MultilineText)]
     public string MyDescription { get; set; }
+
+    [Export]
+    public SkillStackType MyStackType { get; set; }
+
+    [Export]
+    public PackedScene MyRewardScene { get; set; }
+}
+
+public enum SkillStackType
+{
+    Unlimit,
+    OnlyOne
 }
