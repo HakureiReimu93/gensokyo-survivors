@@ -137,10 +137,11 @@ _data = {
 "fly-out": SubResource("Animation_tmokq")
 }
 
-[node name="VictoryScreen" type="CanvasLayer" node_paths=PackedStringArray("MyQuitButton", "MyRestartButton")]
+[node name="VictoryScreen" type="CanvasLayer" node_paths=PackedStringArray("MyQuitButton", "MyRestartButton", "MyTitle")]
 script = ExtResource("1_14si2")
 MyQuitButton = NodePath("MarginContainer/PanelContainer/MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer2/Quit")
 MyRestartButton = NodePath("MarginContainer/PanelContainer/MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer2/Retry")
+MyTitle = NodePath("MarginContainer/PanelContainer/MarginContainer/VBoxContainer2/Label")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../ColorRect")

@@ -162,7 +162,7 @@ script = ExtResource("6_apv4w")
 MyMaxRange = 281.915
 
 [node name="HealthTrait" parent="." index="6" instance=ExtResource("9_ichf6")]
-MyHealth = 200
+MyHealth = 10
 
 [node name="ExpCollectionRadius" type="Area2D" parent="." index="8"]
 collision_layer = 32

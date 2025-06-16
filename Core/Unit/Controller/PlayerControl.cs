@@ -26,45 +26,6 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 		__PerformDependencyInjection();
 
 		SafeGuard.Ensure(Owner is MobUnit mu);
-
-		if (SessionSignalBus.SingletonInstance.Available(out var ssb))
-		{
-			ssb.SessionTimeExpired += SessionTimeExpired;
-		}
-
-		mStateMachine.WithOwner(this)
-					 .PlanRoute(CalculateDefaultMotion)
-					 .PlanRoute(CalculateSessionEndedMotion, IntoSessionEndedMotion)
-					 .StartAt(CalculateDefaultMotion);
-	}
-
-	public override void _Process(double delta)
-	{
-		mCalculatedMovement = mStateMachine.Calculate(delta);
-	}
-
-	private Vector2 CalculateDefaultMotion(double delta)
-	{
-		return Input.GetVector("move_left",
-							   "move_right",
-							   "move_up",
-							   "move_down");
-	}
-
-	private Vector2 CalculateSessionEndedMotion(double delta)
-	{
-		return Vector2.Zero;
-	}
-
-
-	private Vector2 IntoSessionEndedMotion(double delta)
-	{
-		return default;
-	}
-
-	private void SessionTimeExpired()
-	{
-		mStateMachine.GoTo(CalculateSessionEndedMotion);
 	}
 
 	public void OnControllerRequestDie(Action pEventHandler)
@@ -72,7 +33,10 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 		RequestDie += () => pEventHandler();
 	}
 
-	public Vector2 GetNormalMovement() => mCalculatedMovement;
+	public Vector2 GetNormalMovement() => Input.GetVector("move_left",
+														  "move_right",
+													  	  "move_up",
+														  "move_down");
 
 	public void ReceiveExpReward(uint pExperienceGainedRaw)
 	{
@@ -134,6 +98,10 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 	public void OnUnitDie()
 	{
 		// upload final experience to PostmortemSession 
+		if (ArenaSession.SingletonInstance is not null)
+		{
+			ArenaSession.SingletonInstance.TriggerDefeat();
+		}
 	}
 
 	public static uint GetLevelUpExperienceRequirement(uint level)
@@ -147,16 +115,13 @@ public partial class PlayerControl : Node, IMobUnitController, IPickupCommandRec
 	[Export]
 	PackedScene MyUpgradeSelectorPacked { get; set; }
 
-	private const int cBaseLevelUpExpRequirement = (20);
-
 	public Node Entity => this;
 
-	Vector2 mCalculatedMovement;
-	LiteFunctionalStates<Vector2> mStateMachine = new();
-
 	FuncAdventureSoon<UpgradeMetaData> mUpgradeAwaiter;
-
+	Vector2 mCalculatedMovement;
 	uint mCurrentExp = 0;
 	uint mMaxXp = GetLevelUpExperienceRequirement(1);
 	uint mLevel = 1;
+
+	private const int cBaseLevelUpExpRequirement = (20);
 }

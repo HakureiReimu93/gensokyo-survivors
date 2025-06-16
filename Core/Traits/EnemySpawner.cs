@@ -7,11 +7,12 @@ using GodotStrict.Types;
 using GensokyoSurvivors.Core.Interface.Lens;
 using System.Linq;
 using GodotStrict.Traits;
+using GodotStrict.Helpers.Logging;
 
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://Assets/GodotEditor/Icons/factory.png")]
-public partial class EnemySpawner : Node
+public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 {
 	[Autowired("id-player")]
 	private Scanner<LInfo2D> mPlayerRef;
@@ -36,15 +37,22 @@ public partial class EnemySpawner : Node
 			.GetChildren()
 			.Cast<UnitDesignToken>()
 			.ToArray();
+
+		mOriginalSpawnDelay = MySpawnDelay;
 	}
 
 	public override void _Process(double delta)
 	{
+		if (mAcquiredArenaSession.Never())
+		{
+			ArenaSession.SingletonInstance?.AddDifficultyIncreaseRecipient(this);
+		}
+
 		base._Process(delta);
 		if (mTimer.Tick(delta))
 		{
 			DoSpawnNewEnemy();
-			mTimer.Reset();
+			mTimer.ResetWithCustomTime(MySpawnDelay - mDecreaseToSpawnDelay);
 		}
 	}
 
@@ -68,10 +76,13 @@ public partial class EnemySpawner : Node
 		unit.GlobalPosition = randomOrigin;
 	}
 
-	/// <summary>
-	/// The delay between spawns in seconds.
-	/// </summary>
-	[Export]
+	public void ConsiderNewDifficulty(uint pDifficulty)
+	{
+		MySpawnDelay = Mathf.Remap(pDifficulty, 0, 8, mOriginalSpawnDelay, 1f);
+		this.LogAny(MySpawnDelay);
+	}
+
+	[Export(PropertyHint.Range, "0.1,8")]
 	public float MySpawnDelay
 	{
 		get
@@ -89,14 +100,11 @@ public partial class EnemySpawner : Node
 
 	private UnitDesignToken[] mSpawnList;
 	private float mSpawnDelay;
+	private float mDecreaseToSpawnDelay = 0f;
+	private float mOriginalSpawnDelay;
 
-	/// <summary>
-	/// The timer for the spawn delay.
-	/// </summary>
 	private LiteTimer mTimer;
-
-	/// <summary>
-	/// The margin between spawned enemies in pixels.
-	/// </summary>
 	private const float C_SPAWN_MARGIN = 10f;
+
+	private TriggerFlag mAcquiredArenaSession;
 }
