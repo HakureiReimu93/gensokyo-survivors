@@ -94,7 +94,10 @@ public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 		if (foundEmptySpot is false) return;
 
 		// host a random enemy
-		var allWeightsSum = mSpawnList.Aggregate(0f, (sum, udt) => sum + udt.MySpawnWeight);
+		var allWeightsSum = mSpawnList.Aggregate(
+			0f,
+			(sum, udt) => sum + udt.CalculateSpawnChance(mCurrentDifficulty, 4)
+		);
 		var randomChanceNum = Calculate.Random() * allWeightsSum;
 		var currentBracketSum = 0f;
 		var chosen = mSpawnList.SkipWhile(delegate (UnitDesignToken udt)
@@ -104,17 +107,17 @@ public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 			{
 				result = false;
 			}
-			currentBracketSum += udt.MySpawnWeight;
+			currentBracketSum += udt.CalculateSpawnChance(mCurrentDifficulty, 4);
 			return result;
 		});
-		var randomEnemy = Calculate.RandomCollectionItem(mSpawnList);
+		var randomEnemy = chosen.Any() ? chosen.First() : mSpawnList.First(); 
 		MobUnit unit = randomEnemy.DoInstantiateNew();
 		unitLayer.TryHost(unit);
 
 		unit.GlobalPosition = randomSpawnPoint;
 	}
 
-	public void ConsiderNewDifficulty(uint pDifficulty)
+	public void ConsiderNewDifficulty(int pDifficulty)
 	{
 		MySpawnDelay = Mathf.Remap(pDifficulty, 0, 8, mOriginalSpawnDelay, 1f);
 		mCurrentDifficulty = pDifficulty;
@@ -142,7 +145,7 @@ public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 	private float mDecreaseToSpawnDelay = 0f;
 	private float mOriginalSpawnDelay;
 
-	private uint mCurrentDifficulty = 0;
+	private int mCurrentDifficulty = 0;
 
 	private LiteTimer mTimer;
 	private const float SPAWN_MARGIN = 10f;

@@ -3,14 +3,24 @@ using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Core.Utility;
 using GensokyoSurvivors.Core.Interface;
 using GodotStrict.Types;
+using GodotUtilities;
+using GodotStrict.Types.Traits;
+using GodotStrict.Helpers.Logging;
 
 [GlobalClass]
+[UseAutowiring]
 [Icon("res://Assets//GodotEditor/Icons/hurtbox.png")]
 public partial class HurtBox : Area2D, IFactionMember
 {
+    [Autowired("id-effect-layer")]
+    Scanner<LMother> mEffectLayerRef;
+
     public override void _Ready()
     {
+        __PerformDependencyInjection();
+
         SafeGuard.EnsureIsConstType<IKillable>(Owner);
+        SafeGuard.EnsureNotNull(MyHurtLabel);
 
         mGraceTimer = new LiteTimer(MyGracePeriod);
 
@@ -36,6 +46,21 @@ public partial class HurtBox : Area2D, IFactionMember
         if (damage > 0)
         {
             EmitSignal(SignalName.MyTakeRawDamage, hitBox.MyDamageOnHit);
+
+            if (mEffectLayerRef.Available(out var effectLayer))
+            {
+                var label = MyHurtLabel.InstantiateOrNull<EffectLabel>();
+                SafeGuard.EnsureNotNull(label);
+
+                effectLayer.TryHost(label);
+                label.GlobalPosition = GlobalPosition;
+
+                label.ShowMe(damage.ToString());
+            }
+            else
+            {
+                this.LogWarn("Effect layer missing");
+            }
         }
 
         Callable.From(() => SetMonitoring(false)).CallDeferred();
@@ -49,6 +74,9 @@ public partial class HurtBox : Area2D, IFactionMember
             Callable.From(() => SetMonitoring(true)).CallDeferred();
         }
     }
+
+    [Export]
+    PackedScene MyHurtLabel { get; set; }
 
     [Export]
     public FactionEnum MyFaction

@@ -107,6 +107,14 @@ public partial class MobUnit : CharacterBody2D,
 	{
 		MyBufs.Add(ub);
 		ub.OnUnitAddsMe(this);
+
+		foreach (var child in this.GetChildren())
+		{
+			if (child is INewBufSubject subject)
+			{
+				subject.ConsiderNewBuf(ub);
+			}
+		}
 	}
 
 	public void RemoveUnitBuf(UnitBuf ub)

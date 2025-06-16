@@ -122,10 +122,10 @@ public partial class ArenaSession : Node
 
 	HashSet<Option<IDifficultyIncreasedSubject>> mDifficultyIncreaseSubjects = new();
 	private LiteTimer mDifficultyChangeTimer = new(5f);
-	private uint mDifficulty = 0;
+	private int mDifficulty = 0;
 }
 
 public interface IDifficultyIncreasedSubject
 {
-	public void ConsiderNewDifficulty(uint pDifficulty);
+	public void ConsiderNewDifficulty(int pDifficulty);
 }

@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bh576cylacoox"]
+[gd_scene load_steps=3 format=3 uid="uid://bh576cylacoox"]
 
 [ext_resource type="Script" path="res://Core/Traits/HurtBox.cs" id="1_bfbe3"]
+[ext_resource type="PackedScene" uid="uid://b8vq21fituwm5" path="res://Core/Presentation/UI/effect_label.tscn" id="2_gccjt"]
 
 [node name="HurtBox" type="Area2D"]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_bfbe3")
+MyHurtLabel = ExtResource("2_gccjt")

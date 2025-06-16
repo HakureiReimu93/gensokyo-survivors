@@ -13,6 +13,10 @@ using GodotStrict.Types.Coroutine;
 using GodotStrict.Types.Traits;
 using GodotUtilities;
 
+using Adventure = System.Collections.Generic.IEnumerator<GodotStrict.Types.Coroutine.BaseSoon>;
+using static GodotStrict.Types.Coroutine.AdventureExtensions;
+
+
 /// <summary>
 /// Annotate a Visual for a Unit with lifetime.
 /// Supports an enter and exit animation.
@@ -21,7 +25,7 @@ using GodotUtilities;
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://Assets/GodotEditor/Icons/visual.png")]
-public partial class UnitMonoVisual : Node2D, IKillable
+public partial class UnitMonoVisual : Node2D, IKillable, INewBufSubject
 {
 	[Autowired("UnitMonoAnim")]
 	AnimationPlayer mAnim;
@@ -38,17 +42,15 @@ public partial class UnitMonoVisual : Node2D, IKillable
 
 		SafeGuard.EnsureNotNull(MyAnimNamespace, "set a namespace/library name for your animation in order to classes like MobUnit to use the unit anim");
 
-		// access namespaced anims with generic names
-		// mResolvedAnimName = mAnim.GetAnimationList()
-		// 	.ToDictionary(
-		// 		animName => animName.Replace($"{MyAnimNamespace}/", ""), // value
-		// 		animName => new StringName(animName) // new key
-		// 	);
+		if (MyWhiteFlashable is not null)
+		{
+			MyWhiteFlashable.Visible = false;
+		}
 
 		if (mOnDieVisual.Available(out var visual))
-		{
-			visual.Hide();
-		}
+			{
+				visual.Hide();
+			}
 
 		mAnim.AnimationFinished += HandleAnimationFinished;
 	}
@@ -284,6 +286,24 @@ public partial class UnitMonoVisual : Node2D, IKillable
 		SafeGuard.Fail("Listen to unit death instead");
 	}
 
+	public void ConsiderNewBuf(UnitBuf mBuf)
+	{
+		if (mBuf is TakeDamageBuf && MyWhiteFlashable is not null)
+		{
+			this.StartAdventure(DoHitFlashMotion);
+		}
+	}
+
+	private Adventure DoHitFlashMotion()
+	{
+		SafeGuard.EnsureNotNull(MyWhiteFlashable);
+		MyWhiteFlashable.Visible = true;
+		yield return WaitForSeconds(0.2f).Meanwhile((timeLeft, waitTime) =>
+						MyWhiteFlashable.Modulate = new Color(1, 1, 1, timeLeft / waitTime)
+		);
+		MyWhiteFlashable.Visible = false;
+	}
+
 	[Export]
 	StringName MyAnimNamespace { get; set; }
 	Dictionary<string, UnitAnimMetaData> mRegisteredAnims = [];
@@ -307,6 +327,9 @@ public partial class UnitMonoVisual : Node2D, IKillable
 			}
 		}
 	}
+
+	[Export]
+	CanvasItem MyWhiteFlashable { get; set; }
 
 	public bool IsDead => mDidFinalize || mCurrentAnimData == mFinalAnimData;
 
