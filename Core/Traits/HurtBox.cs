@@ -38,7 +38,7 @@ public partial class HurtBox : Area2D, IFactionMember
             EmitSignal(SignalName.MyTakeRawDamage, hitBox.MyDamageOnHit);
         }
 
-        Monitoring = false;
+        Callable.From(() => SetMonitoring(false)).CallDeferred();
         mGraceTimer.ResetWithCustomTime(MyGracePeriod);
     }
 
@@ -46,7 +46,7 @@ public partial class HurtBox : Area2D, IFactionMember
     {
         if (mGraceTimer.Tick(delta))
         {
-            Monitoring = true;
+            Callable.From(() => SetMonitoring(true)).CallDeferred();
         }
     }
 
