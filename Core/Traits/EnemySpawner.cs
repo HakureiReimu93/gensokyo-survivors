@@ -63,19 +63,61 @@ public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 		if (mPlayerRef.Unavailable(out _)) return;
 
 		// Make sure to offset the position by the camera's position in the world, because the bounds are screen coords.
-		var randomOrigin = Calculate.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN);
+		var randomSpawnPoint = Calculate.RandomSpotRectangleShell(cameraInfo.GetBounds(), SPAWN_MARGIN);
+
+		var spaceState = PhysicsServer2D.SpaceGetDirectState(cameraInfo.GetWorld2D().Space);
+
+		bool foundEmptySpot = false;
+		Vector2 cameraCenter = cameraInfo.GlobalPosition;
+
+		for (int i = 0; i < 4; i++)
+		{
+			Vector2 displacement = (randomSpawnPoint - cameraCenter).Rotated(Calculate.Pi90 * i);
+			Vector2 destination = displacement + cameraCenter;
+
+			// Ensure enemies cannot spawn in walls
+			var queryParameters = PhysicsRayQueryParameters2D.Create(
+				cameraCenter,
+				destination,
+				1 << 0
+			);
+			var queryResult = spaceState.IntersectRay(queryParameters);
+
+			if (queryResult.Count == 0)
+			{
+				foundEmptySpot = true;
+				randomSpawnPoint = destination;
+				break;
+			}
+		}
+
+		if (foundEmptySpot is false) return;
 
 		// host a random enemy
+		var allWeightsSum = mSpawnList.Aggregate(0f, (sum, udt) => sum + udt.MySpawnWeight);
+		var randomChanceNum = Calculate.Random() * allWeightsSum;
+		var currentBracketSum = 0f;
+		var chosen = mSpawnList.SkipWhile(delegate (UnitDesignToken udt)
+		{
+			bool result = true;
+			if (randomChanceNum <= currentBracketSum)
+			{
+				result = false;
+			}
+			currentBracketSum += udt.MySpawnWeight;
+			return result;
+		});
 		var randomEnemy = Calculate.RandomCollectionItem(mSpawnList);
 		MobUnit unit = randomEnemy.DoInstantiateNew();
 		unitLayer.TryHost(unit);
 
-		unit.GlobalPosition = randomOrigin;
+		unit.GlobalPosition = randomSpawnPoint;
 	}
 
 	public void ConsiderNewDifficulty(uint pDifficulty)
 	{
 		MySpawnDelay = Mathf.Remap(pDifficulty, 0, 8, mOriginalSpawnDelay, 1f);
+		mCurrentDifficulty = pDifficulty;
 		this.LogAny(MySpawnDelay);
 	}
 
@@ -100,8 +142,10 @@ public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 	private float mDecreaseToSpawnDelay = 0f;
 	private float mOriginalSpawnDelay;
 
+	private uint mCurrentDifficulty = 0;
+
 	private LiteTimer mTimer;
-	private const float C_SPAWN_MARGIN = 10f;
+	private const float SPAWN_MARGIN = 10f;
 
 	private TriggerFlag mAcquiredArenaSession;
 }
