@@ -180,10 +180,6 @@ public partial class MobUnit : CharacterBody2D,
 				);
 			}
 		}
-		else
-		{
-			TriggerDie();
-		}
 	}
 
 	private void HandleHpDropToZero(float pUnderflowRawDamage)
@@ -215,11 +211,15 @@ public partial class MobUnit : CharacterBody2D,
 		if (mUnitLayerRef.Available(out var unitLayer) &&
 			mDropOnDeath.Available(out var drops))
 		{
-			foreach (var dropsChild in drops.GetChildren().Cast<Node2D>())
+			normal thisDropChance = new(drops.GetMeta("ThisDropChance", 0.5f).AsSingle());
+			if (Calculate.ChanceOf(thisDropChance))
 			{
-				drops.RemoveChild(dropsChild);
-				unitLayer.TryHost(dropsChild);
-				dropsChild.GlobalPosition = GlobalPosition;
+				foreach (var dropsChild in drops.GetChildren().Cast<Node2D>())
+				{
+					drops.RemoveChild(dropsChild);
+					unitLayer.TryHost(dropsChild);
+					dropsChild.GlobalPosition = GlobalPosition;
+				}
 			}
 		}
 		else
