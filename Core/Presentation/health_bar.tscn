@@ -42,5 +42,5 @@ grow_vertical = 2
 theme = ExtResource("1_nb0r6")
 theme_override_styles/background = SubResource("StyleBoxFlat_pxtuo")
 theme_override_styles/fill = SubResource("StyleBoxFlat_u1wkp")
-value = 50.0
+value = 100.0
 show_percentage = false
