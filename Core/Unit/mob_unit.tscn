@@ -5,6 +5,7 @@
 
 [node name="MobUnit" type="CharacterBody2D"]
 editor_description = "OPTIONAL: HealthTrait"
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("1_afq5s")
 

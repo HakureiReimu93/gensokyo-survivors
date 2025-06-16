@@ -77,6 +77,8 @@ radius = 9.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_h4det"]
 
 [node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_vrk1u")]
+collision_layer = 4
+collision_mask = 5
 MyMaxSpeed = 50.0
 
 [node name="UnitMonoVisual" parent="." index="0" instance=ExtResource("2_5uh2a")]
@@ -104,8 +106,8 @@ position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_ss4gt")
 
 [node name="AccelDecelMiddleware" parent="." index="2" instance=ExtResource("3_rw55v")]
-MyAccelFactor = 0.415
-MyDecelFactor = 0.33
+MyAccelFactor = 0.141
+MyDecelFactor = 0.082
 
 [node name="DumbMeleeControl" type="Node" parent="." index="3"]
 script = ExtResource("4_cntq3")
@@ -134,6 +136,7 @@ MyHealth = 20
 MyBaseMovementSpeedScale = 0.8
 
 [node name="ReleaseOnDieLoot" type="Node2D" parent="." index="8"]
+metadata/ThisDropChance = 0.4
 
 [node name="ExperienceVialUnit" parent="ReleaseOnDieLoot" index="0" instance=ExtResource("11_avxmw")]
 process_mode = 4
