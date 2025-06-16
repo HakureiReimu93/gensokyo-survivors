@@ -21,7 +21,10 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner, INewUpgrade
     private Scanner<LMother> mSkillLayerRef;
 
     [Autowired]
-    private IAdversarialUnitPicker mVictimPicker;
+    private Option<IAdversarialUnitPicker> mVictimPicker;
+
+    [Autowired]
+    private Option<IPickPointArountProtagonist> mPlayerPointPicker;
 
     public override void _Ready()
     {
@@ -29,10 +32,6 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner, INewUpgrade
 
         SafeGuard.EnsureNotNull(MySkillToSpawn);
         SafeGuard.EnsureFloatsNotEqual(MySpawnDelay, 0f, "delay cannot be 0");
-        SafeGuard.Ensure(Owner is Node2D, "Cannot take advantage of certain spawn strategies without Position reference");
-
-        //TODO: Ensure owner is a player, because this spawner only works on players.
-        mOwner = Owner as Node2D;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -51,28 +50,47 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner, INewUpgrade
         var playerRef = GetTree().GetFirstNodeInGroup("id-player");
         SafeGuard.EnsureIsConstType<MobUnit>(playerRef);
 
-        var pickResult = mVictimPicker
-            .WithProtagonist(playerRef as MobUnit)
-            .WithAntagonists(
-                GetTree()
-                    .GetNodesInGroup("id-enemy")
-                    .Cast<MobUnit>()
-            )
-            .ComputeUnitVictim();
+        if (mVictimPicker.Available(out var victimPicker))
+        {
+            var pickResult = victimPicker
+                .WithProtagonist(playerRef as MobUnit)
+                .WithAntagonists(
+                    GetTree()
+                        .GetNodesInGroup("id-enemy")
+                        .Cast<MobUnit>()
+                )
+                .ComputeUnitVictim();
 
-        if (pickResult.Unavailable(out MobUnit victim)) return;
+            if (pickResult.Unavailable(out MobUnit victim)) return;
 
-        var instantiated = MySkillToSpawn.InstantiateOrNull<Node2D>();
-        SafeGuard.EnsureIsConstType<IPhysicalSkill>(instantiated);
+            var instantiated = MySkillToSpawn.InstantiateOrNull<Node2D>();
+            SafeGuard.EnsureIsConstType<IPhysicalSkill>(instantiated);
 
-        skillLayerInfo.TryHost(instantiated);
+            skillLayerInfo.TryHost(instantiated);
 
-        // Set the position for the ability.
-        instantiated.GlobalPosition = victim.GlobalPosition;
+            // Set the position for the ability.
+            instantiated.GlobalPosition = victim.GlobalPosition;
 
-        // Set up the skill
-        var skill = instantiated as IPhysicalSkill;
-        skill.OnEnemyChosen(victim);
+            // Set up the skill
+            var skill = instantiated as IPhysicalSkill;
+            skill.OnEnemyChosen(victim);
+        }
+        else if (mPlayerPointPicker.Available(out var ppp))
+        {
+            var pickedPosition = ppp.WithProtagonist(playerRef as MobUnit)
+                                    .ComputeOffset();
+            
+            var instantiated = MySkillToSpawn.InstantiateOrNull<Node2D>();
+            SafeGuard.EnsureIsConstType<IPhysicalSkill>(instantiated);
+
+            // Set the position for the ability.
+            // do this first because some abilities read Global Position on _Ready
+            instantiated.GlobalPosition = pickedPosition;
+
+            skillLayerInfo.TryHost(instantiated);
+
+        }
+        
     }
 
     public void ConsiderNewUpgrade(UpgradeMetaData pMeta, ReadOnlyDictionary<UpgradeMetaData, uint> pAllUpgrades)
@@ -106,8 +124,6 @@ public partial class CooldownAbilitySpawner : Node, IAbilitySpawner, INewUpgrade
     private float mSpawnDelayMultiplier = 1f;
 
     private float mSpawnDelay;
-
-    private Node2D mOwner;
 
     private LiteTimer mTimer;
 

@@ -11,3 +11,9 @@ public interface IAdversarialUnitPicker
     IAdversarialUnitPicker WithProtagonist(MobUnit protagonist);
     IAdversarialUnitPicker WithAntagonists(IEnumerable<MobUnit> antagonists);
 }
+
+public interface IPickPointArountProtagonist
+{
+    Vector2 ComputeOffset();
+    IPickPointArountProtagonist WithProtagonist(MobUnit protagonist);
+}
