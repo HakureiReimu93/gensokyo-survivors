@@ -62,9 +62,6 @@ public partial class EnemySpawner : Node, IDifficultyIncreasedSubject
 		if (mUnitLayerRef.Unavailable(out var unitLayer)) return;
 		if (mPlayerRef.Unavailable(out _)) return;
 
-		var bounds = cameraInfo.GetBounds();
-		bounds.Position = cameraInfo.GlobalPosition - (bounds.Size / 2);
-
 		// Make sure to offset the position by the camera's position in the world, because the bounds are screen coords.
 		var randomOrigin = Calculate.RandomSpotRectangleShell(bounds, C_SPAWN_MARGIN);
 

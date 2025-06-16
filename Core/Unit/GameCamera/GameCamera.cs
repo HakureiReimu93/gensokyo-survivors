@@ -35,7 +35,10 @@ public partial class GameCamera : Camera2D, LBoundsInfo2D
 
 	public Rect2 GetBounds()
 	{
-		return GetViewportRect();
+		var baseRect = GetViewportRect();
+		baseRect.Position = GlobalPosition - (baseRect.Size / Zoom / 2);
+		baseRect.Size /= Zoom;
+		return baseRect;
 	}
 
 	Node2D ILens<Node2D>.Entity => this;
