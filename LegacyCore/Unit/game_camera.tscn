@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccn1ocsgum2gx"]
+
+[ext_resource type="Script" path="res://LegacyCore/Unit/GameCamera/GameCamera.cs" id="1_3rbk6"]
+
+[node name="GameCamera" type="Camera2D" groups=["id-game-camera"]]
+script = ExtResource("1_3rbk6")

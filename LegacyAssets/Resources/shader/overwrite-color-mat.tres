@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bpbm43h4bsxr4"]
+
+[ext_resource type="Shader" path="res://LegacyAssets/Resources/shader/overwrite_white.gdshader" id="1_w7ry4"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_w7ry4")
+shader_parameter/color = Color(1, 1, 1, 1)

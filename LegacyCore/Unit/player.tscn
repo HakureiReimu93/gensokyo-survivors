@@ -1,0 +1,205 @@
+[gd_scene load_steps=28 format=3 uid="uid://cp5n01r4txacw"]
+
+[ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://LegacyCore/Unit/mob_unit.tscn" id="1_0iav6"]
+[ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
+[ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://LegacyCore/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_n6y0r"]
+[ext_resource type="Script" path="res://LegacyCore/Unit/Controller/PlayerControl.cs" id="3_5tf3c"]
+[ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://LegacyAssets/ParticleSystem/death-particles.tscn" id="4_00mkl"]
+[ext_resource type="AnimationLibrary" uid="uid://56d2ljyuk4cd" path="res://LegacyAssets/Animation/UnitVisual/mono-rat.res" id="4_4i4hj"]
+[ext_resource type="Material" uid="uid://bpbm43h4bsxr4" path="res://LegacyAssets/Resources/shader/overwrite-color-mat.tres" id="4_8hixx"]
+[ext_resource type="PackedScene" uid="uid://mjpm7pn6vfe3" path="res://LegacyCore/Traits/cooldown_ability_spawner.tscn" id="4_p0cps"]
+[ext_resource type="PackedScene" uid="uid://dtyiv3f8hu3rq" path="res://LegacyCore/Unit/sword_ability_unit.tscn" id="5_emj28"]
+[ext_resource type="Script" path="res://LegacyCore/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
+[ext_resource type="Script" path="res://LegacyCore/Unit/UpgradeLayer.cs" id="7_17dvk"]
+[ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://LegacyCore/Traits/hurt_box.tscn" id="7_bjeo8"]
+[ext_resource type="PackedScene" uid="uid://bfdmc1igpkepm" path="res://LegacyCore/Presentation/UI/upgrade_select_ui.tscn" id="7_pbwh5"]
+[ext_resource type="Script" path="res://LegacyAssets/Resources/Custom/UpgradeMetaData/UpgradeMetaData.cs" id="8_jwiim"]
+[ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://LegacyCore/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
+[ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://LegacyCore/Traits/health_trait.tscn" id="9_ichf6"]
+[ext_resource type="Resource" uid="uid://dphpkbjeyu5wo" path="res://LegacyAssets/Resources/Custom/UpgradeMetaData/fallback.tres" id="9_t6c80"]
+[ext_resource type="PackedScene" uid="uid://1xljxqaqvdjr" path="res://LegacyAssets/UpgradeScenes/axe_ability_spawner.tscn" id="10_7t637"]
+[ext_resource type="PackedScene" uid="uid://bcnqaxxn2j5dr" path="res://LegacyCore/Presentation/health_bar.tscn" id="17_7te83"]
+
+[sub_resource type="Animation" id="Animation_jx1ob"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Anchor/Main:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Anchor:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Anchor/Main:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Anchor/Main:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hjhud"]
+_data = {
+"RESET": SubResource("Animation_jx1ob")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]
+radius = 5.0
+
+[sub_resource type="Resource" id="Resource_wrcld"]
+script = ExtResource("8_jwiim")
+MyID = &"100000"
+MyDisplayName = "Deft Swing"
+MyDescription = "Slightly improves the attack speed of your abilities."
+MyStackType = 0
+MyDetails = {
+"player-attack-speed": 0.1
+}
+
+[sub_resource type="Resource" id="Resource_13pl5"]
+script = ExtResource("8_jwiim")
+MyID = &"100001"
+MyDisplayName = "Lightweight Boots"
+MyDescription = ""
+MyStackType = 0
+MyDetails = {
+"player-movement-speed": 0.1
+}
+
+[sub_resource type="Resource" id="Resource_jmw1l"]
+script = ExtResource("8_jwiim")
+MyID = &"100002"
+MyDisplayName = "Iron Axe"
+MyDescription = "Occasionally summons an iron axe that spins around the player and destroys anything in its way."
+MyStackType = 1
+MyRewardScene = ExtResource("10_7t637")
+MyDetails = null
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j8tic"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m4cxi"]
+radius = 13.1529
+
+[node name="PlayerUnit" groups=["id-player"] instance=ExtResource("1_0iav6")]
+collision_layer = 2
+
+[node name="UnitMonoVisual" parent="." index="0" node_paths=PackedStringArray("MyWhiteFlashable") instance=ExtResource("2_n6y0r")]
+MyAnimNamespace = &"mono-rat"
+MyWhiteFlashable = NodePath("Anchor/WhiteFlash")
+
+[node name="Anchor" type="Node2D" parent="UnitMonoVisual" index="0"]
+position = Vector2(0, -8)
+
+[node name="Main" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="0"]
+position = Vector2(0, 8)
+texture = ExtResource("2_1dteh")
+offset = Vector2(0, -8)
+
+[node name="WhiteFlash" type="Sprite2D" parent="UnitMonoVisual/Anchor" index="1"]
+visible = false
+material = ExtResource("4_8hixx")
+position = Vector2(0, 8)
+texture = ExtResource("2_1dteh")
+offset = Vector2(0, -8)
+
+[node name="UnitMonoAnim" type="AnimationPlayer" parent="UnitMonoVisual" index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_hjhud"),
+"mono-rat": ExtResource("4_4i4hj")
+}
+autoplay = "mono-rat/idle"
+
+[node name="ReleaseOnDie" parent="UnitMonoVisual" index="2" instance=ExtResource("4_00mkl")]
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_cgh1n")
+debug_color = Color(0.0235294, 0.423529, 0.611765, 0.278431)
+
+[node name="PlayerUnitInput" type="Node" parent="." index="2"]
+script = ExtResource("3_5tf3c")
+MyUpgradeSelectorPacked = ExtResource("7_pbwh5")
+
+[node name="UpgradeLayer" type="Node" parent="PlayerUnitInput" index="0"]
+script = ExtResource("7_17dvk")
+MyPool = Array[Resource]([SubResource("Resource_wrcld"), SubResource("Resource_13pl5"), SubResource("Resource_jmw1l")])
+MyFallbackUpgrade = ExtResource("9_t6c80")
+
+[node name="SkillRoster" type="Node" parent="PlayerUnitInput" index="1"]
+
+[node name="SwordSkillSpawner" parent="PlayerUnitInput/SkillRoster" index="0" instance=ExtResource("4_p0cps")]
+MySkillToSpawn = ExtResource("5_emj28")
+MySpawnDelay = 1.596
+
+[node name="SelectVictimStrategy" type="Node" parent="PlayerUnitInput/SkillRoster/SwordSkillSpawner" index="0"]
+script = ExtResource("6_apv4w")
+MyMaxRange = 159.868
+
+[node name="HurtBox" parent="." index="3" instance=ExtResource("7_bjeo8")]
+MyFaction = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_j8tic")
+debug_color = Color(0.666667, 0.0941176, 0.172549, 0.188235)
+
+[node name="AccelDecelMiddleware" parent="." index="4" instance=ExtResource("8_kburr")]
+MyAccelFactor = 0.404
+MyDecelFactor = 0.305
+
+[node name="HealthTrait" parent="." index="5" instance=ExtResource("9_ichf6")]
+MyHealth = 90
+
+[node name="ExpCollectionRadius" type="Area2D" parent="." index="7"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExpCollectionRadius" index="0"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_m4cxi")
+debug_color = Color(0.929111, 0.569295, 0.35541, 0.00784314)
+
+[node name="HealthBar" parent="." index="8" instance=ExtResource("17_7te83")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -28.0
+offset_right = 18.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2

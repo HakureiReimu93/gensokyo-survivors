@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="UpgradeMetaData" load_steps=2 format=3 uid="uid://dphpkbjeyu5wo"]
+
+[ext_resource type="Script" path="res://LegacyAssets/Resources/Custom/UpgradeMetaData/UpgradeMetaData.cs" id="1_hlqme"]
+
+[resource]
+script = ExtResource("1_hlqme")
+MyID = &"000000"
+DisplayName = "unknown"
+Description = "Seeing this means that upgrade fetching has failed to return results."

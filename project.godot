@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Gensokyo Survivors"
-run/main_scene="res://Core/Scenarios/world.tscn"
+run/main_scene="res://LegacyCore/Scenarios/world.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GensokyoSurvivorsSession="*res://Core/GensokyoSurvivorsSession.cs"
-SessionSignalBus="*res://Core/Services/SessionSignalBus.cs"
+GensokyoSurvivorsSession="*res://LegacyCore/GensokyoSurvivorsSession.cs"
+SessionSignalBus="*res://LegacyCore/Services/SessionSignalBus.cs"
 
 [display]
 

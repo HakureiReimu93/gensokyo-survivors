@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=3 uid="uid://d3xjm0o3pgwfq"]
 
-[ext_resource type="Script" path="res://Core/Unit/ExperienceVialUnit.cs" id="1_j1q8g"]
-[ext_resource type="Texture2D" uid="uid://c2q0vstkqdbb7" path="res://Assets/kenney_tiny-dungeon/Individual Tiles/tile_0126.png" id="1_memlh"]
-[ext_resource type="PackedScene" uid="uid://swb4bux6r2sx" path="res://Core/Traits/enter_box.tscn" id="2_bcjnw"]
-[ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://Core/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_yn5a5"]
-[ext_resource type="AnimationLibrary" uid="uid://1rb3pjcc2c1p" path="res://Assets/Animation/UnitVisual/mono-experience.res" id="5_g8t1y"]
+[ext_resource type="Script" path="res://LegacyCore/Unit/ExperienceVialUnit.cs" id="1_j1q8g"]
+[ext_resource type="Texture2D" uid="uid://c2q0vstkqdbb7" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0126.png" id="1_memlh"]
+[ext_resource type="PackedScene" uid="uid://swb4bux6r2sx" path="res://LegacyCore/Traits/enter_box.tscn" id="2_bcjnw"]
+[ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://LegacyCore/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_yn5a5"]
+[ext_resource type="AnimationLibrary" uid="uid://1rb3pjcc2c1p" path="res://LegacyAssets/Animation/UnitVisual/mono-experience.res" id="5_g8t1y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x4lnu"]
 

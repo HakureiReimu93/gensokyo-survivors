@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b5ir4npraixws"]
 
-[ext_resource type="PackedScene" uid="uid://bfdmc1igpkepm" path="res://Core/Presentation/UI/upgrade_select_ui.tscn" id="1_7annq"]
+[ext_resource type="PackedScene" uid="uid://bfdmc1igpkepm" path="res://LegacyCore/Presentation/UI/upgrade_select_ui.tscn" id="1_7annq"]
 [ext_resource type="Script" path="res://UpgradeSelUiTest.cs" id="1_ixeaa"]
 
 [node name="World" type="Node2D"]

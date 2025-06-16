@@ -1,0 +1,26 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://c4sn06yena44e"]
+
+[ext_resource type="FontFile" uid="uid://bd1hekpuxjv23" path="res://LegacyAssets/Fonts/Norwester.ttf" id="1_ysjrx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ir5i3"]
+bg_color = Color(0.948746, 0.769729, 0.626249, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3r5v2"]
+bg_color = Color(0.701677, 0.40822, 0.598816, 1)
+border_width_bottom = 4
+border_color = Color(0.480631, 0.219112, 0.380599, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_318p1"]
+bg_color = Color(0.1242, 0.127727, 0.23, 0.823529)
+border_width_top = 5
+border_color = Color(0.36043, 0.665326, 0.580462, 0.811765)
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[resource]
+default_font = ExtResource("1_ysjrx")
+default_font_size = 22
+Button/colors/font_hover_color = Color(0.37977, 0.157385, 0.253604, 1)
+Button/styles/hover = SubResource("StyleBoxFlat_ir5i3")
+Button/styles/normal = SubResource("StyleBoxFlat_3r5v2")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_318p1")

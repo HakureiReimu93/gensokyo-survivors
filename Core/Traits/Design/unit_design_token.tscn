@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bowi67qqy5r5b"]
-
-[ext_resource type="Script" path="res://Core/Traits/Design/UnitDesignToken.cs" id="1_go3jq"]
-
-[node name="UnitDesignToken" type="Node"]
-script = ExtResource("1_go3jq")
