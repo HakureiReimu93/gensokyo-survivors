@@ -8,10 +8,10 @@
 [ext_resource type="Script" path="res://Core/Traits/EnemySpawner.cs" id="6_nti6e"]
 [ext_resource type="Script" path="res://Core/Level/SkillLayer.cs" id="6_wwqe1"]
 [ext_resource type="PackedScene" uid="uid://bowi67qqy5r5b" path="res://Core/Traits/Design/unit_design_token.tscn" id="7_lb07p"]
+[ext_resource type="PackedScene" uid="uid://hw6nb53qc1yw" path="res://Core/Unit/wizard.tscn" id="8_23len"]
 [ext_resource type="PackedScene" uid="uid://cyq2268oa8ytu" path="res://Core/Presentation/UI/time_display.tscn" id="10_t5m4d"]
 [ext_resource type="PackedScene" uid="uid://by6jslyghfr11" path="res://Core/Level/arena_session.tscn" id="11_7gofa"]
 [ext_resource type="Script" path="res://Core/Level/EffectLayer.cs" id="12_hmx8h"]
-[ext_resource type="PackedScene" uid="uid://d3xjm0o3pgwfq" path="res://experience_vial_unit.tscn" id="13_0daar"]
 [ext_resource type="PackedScene" uid="uid://bw23mogi1c02k" path="res://Core/Presentation/UI/victory_screen.tscn" id="13_kd2ga"]
 [ext_resource type="PackedScene" uid="uid://2deusagr8034" path="res://Core/Presentation/UI/experience_bar_ui.tscn" id="14_dpeab"]
 
@@ -30,30 +30,6 @@ script = ExtResource("3_djpdo")
 [node name="PlayerUnit" parent="UnitLayer" instance=ExtResource("6_cp0xy")]
 position = Vector2(594, 346)
 
-[node name="ExperienceVialUnit" parent="UnitLayer" instance=ExtResource("13_0daar")]
-position = Vector2(694, 288)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit2" parent="UnitLayer" instance=ExtResource("13_0daar")]
-position = Vector2(840, 210)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit3" parent="UnitLayer" instance=ExtResource("13_0daar")]
-position = Vector2(848, 341)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit4" parent="UnitLayer" instance=ExtResource("13_0daar")]
-position = Vector2(702, 118)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit5" parent="UnitLayer" instance=ExtResource("13_0daar")]
-position = Vector2(522, 144)
-ActivateAtStart = true
-
-[node name="ExperienceVialUnit6" parent="UnitLayer" instance=ExtResource("13_0daar")]
-position = Vector2(408, 305)
-ActivateAtStart = true
-
 [node name="SkillLayer" type="Node2D" parent="." groups=["id-skill-layer"]]
 y_sort_enabled = true
 script = ExtResource("6_wwqe1")
@@ -66,8 +42,14 @@ MySpawnDelay = 4.986
 
 [node name="RatToken" parent="EnemySpawner/Spawns" instance=ExtResource("7_lb07p")]
 MySubjectScene = ExtResource("5_d4mar")
+MySpawnWeight = 0.786
+
+[node name="WizardToken" parent="EnemySpawner/Spawns" instance=ExtResource("7_lb07p")]
+MySubjectScene = ExtResource("8_23len")
+MySpawnWeight = 0.205
 
 [node name="GameCamera" parent="." instance=ExtResource("4_amet7")]
+zoom = Vector2(2.3, 2.3)
 
 [node name="TileMapBacksplash" type="ColorRect" parent="GameCamera"]
 modulate = Color(0.462745, 0.231373, 0.211765, 1)
