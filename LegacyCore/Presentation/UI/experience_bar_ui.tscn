@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://2deusagr8034"]
 
-[ext_resource type="Script" path="res://LegacyCore/Presentation/UI/ExperienceBarUI.cs" id="1_vvq36"]
+[ext_resource type="Script" uid="uid://d14obmeefjb3n" path="res://LegacyCore/Presentation/UI/ExperienceBarUI.cs" id="1_vvq36"]
 
 [node name="ExperienceBarUI" type="CanvasLayer" node_paths=PackedStringArray("MyProgressBar") groups=["chan-experience"]]
 script = ExtResource("1_vvq36")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8vq21fituwm5"]
 
-[ext_resource type="Script" path="res://LegacyCore/Presentation/UI/EffectLabel.cs" id="1_sag03"]
+[ext_resource type="Script" uid="uid://b05v0bigd8uu0" path="res://LegacyCore/Presentation/UI/EffectLabel.cs" id="1_sag03"]
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://LegacyAssets/Resources/theme/ui_default.tres" id="1_sim2s"]
 
 [node name="EffectLabel" type="Node2D" node_paths=PackedStringArray("mLabel")]

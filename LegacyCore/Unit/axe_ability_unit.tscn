@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://c6y48akhs2dig"]
 
-[ext_resource type="Script" path="res://LegacyCore/Unit/AxeAbilityUnit.cs" id="1_3q6h4"]
+[ext_resource type="Script" uid="uid://7bfij62k3tkq" path="res://LegacyCore/Unit/AxeAbilityUnit.cs" id="1_3q6h4"]
 [ext_resource type="Texture2D" uid="uid://bdkv46ug5i6v5" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0118.png" id="2_s3yvp"]
 [ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://LegacyCore/Traits/hit_box.tscn" id="3_cfoow"]
 [ext_resource type="Material" uid="uid://c8wapmftkaghy" path="res://LegacyAssets/Resources/shader/overwrite_color.tres" id="3_pw1k1"]
@@ -163,11 +163,11 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bps07"]
 _data = {
-"RESET": SubResource("Animation_ghj68"),
-"die": SubResource("Animation_ea71d"),
-"idle": SubResource("Animation_d7s3r"),
-"spawn": SubResource("Animation_saaul"),
-"spin": SubResource("Animation_lf4j3")
+&"RESET": SubResource("Animation_ghj68"),
+&"die": SubResource("Animation_ea71d"),
+&"idle": SubResource("Animation_d7s3r"),
+&"spawn": SubResource("Animation_saaul"),
+&"spin": SubResource("Animation_lf4j3")
 }
 
 [node name="AxeAbilityUnit" type="Node2D"]

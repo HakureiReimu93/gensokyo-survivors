@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://bfdmc1igpkepm"]
 
-[ext_resource type="Script" path="res://LegacyCore/Presentation/UI/UpgradeSelectUi.cs" id="1_h77hp"]
+[ext_resource type="Script" uid="uid://btg8ibeowisww" path="res://LegacyCore/Presentation/UI/UpgradeSelectUi.cs" id="1_h77hp"]
 [ext_resource type="PackedScene" uid="uid://83vlxjb0xhk5" path="res://LegacyCore/Presentation/UI/upgrade_select_card_ui.tscn" id="2_m3yvw"]
 
 [sub_resource type="Animation" id="Animation_jqqk3"]
@@ -508,15 +508,15 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o7lno"]
 _data = {
-"RESET": SubResource("Animation_jqqk3"),
-"fade-in": SubResource("Animation_mgb4e"),
-"fade-out": SubResource("Animation_7gh6i"),
-"fly-in_1": SubResource("Animation_ax1o6"),
-"fly-in_2": SubResource("Animation_7s1lt"),
-"fly-in_3": SubResource("Animation_edtl4"),
-"fly-out_1": SubResource("Animation_qo3vf"),
-"fly-out_2": SubResource("Animation_i2x0s"),
-"fly-out_3": SubResource("Animation_s6wm2")
+&"RESET": SubResource("Animation_jqqk3"),
+&"fade-in": SubResource("Animation_mgb4e"),
+&"fade-out": SubResource("Animation_7gh6i"),
+&"fly-in_1": SubResource("Animation_ax1o6"),
+&"fly-in_2": SubResource("Animation_7s1lt"),
+&"fly-in_3": SubResource("Animation_edtl4"),
+&"fly-out_1": SubResource("Animation_qo3vf"),
+&"fly-out_2": SubResource("Animation_i2x0s"),
+&"fly-out_3": SubResource("Animation_s6wm2")
 }
 
 [node name="UpgradeSelectUI" type="CanvasLayer" node_paths=PackedStringArray("MyLeftCardContainer", "MyMiddleCardContainer", "MyRightCardContainer") groups=["chan-upgrade-selector"]]

@@ -3,17 +3,17 @@
 [ext_resource type="PackedScene" uid="uid://bgb5tdw2ptkus" path="res://LegacyCore/Unit/mob_unit.tscn" id="1_0iav6"]
 [ext_resource type="Texture2D" uid="uid://d06ejldnlgmfb" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0112.png" id="2_1dteh"]
 [ext_resource type="PackedScene" uid="uid://bctmqjmdpue8i" path="res://LegacyCore/Traits/Visuals/UnitVisual/unit_mono_visual.tscn" id="2_n6y0r"]
-[ext_resource type="Script" path="res://LegacyCore/Unit/Controller/PlayerControl.cs" id="3_5tf3c"]
+[ext_resource type="Script" uid="uid://dgw8633dnwbpc" path="res://LegacyCore/Unit/Controller/PlayerControl.cs" id="3_5tf3c"]
 [ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://LegacyAssets/ParticleSystem/death-particles.tscn" id="4_00mkl"]
 [ext_resource type="AnimationLibrary" uid="uid://56d2ljyuk4cd" path="res://LegacyAssets/Animation/UnitVisual/mono-rat.res" id="4_4i4hj"]
 [ext_resource type="Material" uid="uid://bpbm43h4bsxr4" path="res://LegacyAssets/Resources/shader/overwrite-color-mat.tres" id="4_8hixx"]
 [ext_resource type="PackedScene" uid="uid://mjpm7pn6vfe3" path="res://LegacyCore/Traits/cooldown_ability_spawner.tscn" id="4_p0cps"]
 [ext_resource type="PackedScene" uid="uid://dtyiv3f8hu3rq" path="res://LegacyCore/Unit/sword_ability_unit.tscn" id="5_emj28"]
-[ext_resource type="Script" path="res://LegacyCore/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
-[ext_resource type="Script" path="res://LegacyCore/Unit/UpgradeLayer.cs" id="7_17dvk"]
+[ext_resource type="Script" uid="uid://716pj7p3c1j7" path="res://LegacyCore/Traits/Strategy/PickClosestUnit.cs" id="6_apv4w"]
+[ext_resource type="Script" uid="uid://15qyo4ptu1q" path="res://LegacyCore/Unit/UpgradeLayer.cs" id="7_17dvk"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://LegacyCore/Traits/hurt_box.tscn" id="7_bjeo8"]
 [ext_resource type="PackedScene" uid="uid://bfdmc1igpkepm" path="res://LegacyCore/Presentation/UI/upgrade_select_ui.tscn" id="7_pbwh5"]
-[ext_resource type="Script" path="res://LegacyAssets/Resources/Custom/UpgradeMetaData/UpgradeMetaData.cs" id="8_jwiim"]
+[ext_resource type="Script" uid="uid://dqte20n7t25qk" path="res://LegacyAssets/Resources/Custom/UpgradeMetaData/UpgradeMetaData.cs" id="8_jwiim"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://LegacyCore/Traits/Middleware/accel_decel_middleware.tscn" id="8_kburr"]
 [ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://LegacyCore/Traits/health_trait.tscn" id="9_ichf6"]
 [ext_resource type="Resource" uid="uid://dphpkbjeyu5wo" path="res://LegacyAssets/Resources/Custom/UpgradeMetaData/fallback.tres" id="9_t6c80"]
@@ -73,7 +73,7 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hjhud"]
 _data = {
-"RESET": SubResource("Animation_jx1ob")
+&"RESET": SubResource("Animation_jx1ob")
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cgh1n"]

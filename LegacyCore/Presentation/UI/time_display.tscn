@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://cyq2268oa8ytu"]
 
-[ext_resource type="Script" path="res://LegacyCore/Presentation/UI/TimeDisplay/TimeDisplayUI.cs" id="1_6upx5"]
+[ext_resource type="Script" uid="uid://bnp0i2kjrrdhc" path="res://LegacyCore/Presentation/UI/TimeDisplay/TimeDisplayUI.cs" id="1_6upx5"]
 [ext_resource type="Texture2D" uid="uid://jc27o477oqyo" path="res://LegacyAssets/UI/ui-flourish-back.png" id="1_7kk0a"]
 [ext_resource type="Texture2D" uid="uid://djynvt8b1bih5" path="res://LegacyAssets/UI/clock-icon.png" id="1_86y2l"]
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://LegacyAssets/Resources/theme/ui_default.tres" id="2_mjehc"]
@@ -119,10 +119,10 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fgn34"]
 _data = {
-"RESET": SubResource("Animation_6asjx"),
-"pop-in": SubResource("Animation_g7ph3"),
-"pop-out": SubResource("Animation_dlnok"),
-"pulse-value": SubResource("Animation_jx66e")
+&"RESET": SubResource("Animation_6asjx"),
+&"pop-in": SubResource("Animation_g7ph3"),
+&"pop-out": SubResource("Animation_dlnok"),
+&"pulse-value": SubResource("Animation_jx66e")
 }
 
 [node name="TimeDisplay" type="CanvasLayer" node_paths=PackedStringArray("MyTimeLabel", "MyMillisLabel") groups=["chan-session-time"]]

@@ -9,11 +9,11 @@ using GodotStrict.Helpers.Guard;
 
 [GlobalClass]
 // [UseAutowiring]
-[Icon("res://GodotEditor/Icons/script.png")]
+[Icon("res://GodotEditor/Icons/output.png")]
 public partial class HealthTrait : Node
 {
 	[Signal]
-	public delegate void MyHealthChangedEventHandler(float old, float newValue);
+	public delegate void MyHealthChangedEventHandler(float old, float newValue, float maxHealth);
 
 	[Signal]
 	public delegate void MyDiedEventHandler();
@@ -60,7 +60,7 @@ public partial class HealthTrait : Node
 
 			if (mHealth != value)
 			{
-				EmitSignal(SignalName.MyHealthChanged, mHealth, value);
+				EmitSignal(SignalName.MyHealthChanged, mHealth, value, mMaximum);
 				mHealth = value;
 				if (mHealth <= 0)
 				{

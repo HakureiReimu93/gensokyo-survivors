@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dxkk8cc7lkv44" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0124.png" id="2_ng83w"]
 [ext_resource type="AnimationLibrary" uid="uid://56d2ljyuk4cd" path="res://LegacyAssets/Animation/UnitVisual/mono-rat.res" id="3_1s8s2"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://LegacyCore/Traits/Middleware/accel_decel_middleware.tscn" id="3_rw55v"]
-[ext_resource type="Script" path="res://LegacyCore/Unit/Controller/DumbMeleeControl.cs" id="4_cntq3"]
+[ext_resource type="Script" uid="uid://da1spaxqw4xtm" path="res://LegacyCore/Unit/Controller/DumbMeleeControl.cs" id="4_cntq3"]
 [ext_resource type="PackedScene" uid="uid://bh576cylacoox" path="res://LegacyCore/Traits/hurt_box.tscn" id="5_d4tq7"]
 [ext_resource type="PackedScene" uid="uid://bneu6eo6f6fpk" path="res://LegacyAssets/ParticleSystem/death-particles.tscn" id="5_kt565"]
 [ext_resource type="Material" uid="uid://bpbm43h4bsxr4" path="res://LegacyAssets/Resources/shader/overwrite-color-mat.tres" id="6_haw5j"]
@@ -67,7 +67,7 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_natnb"]
 _data = {
-"RESET": SubResource("Animation_itbep")
+&"RESET": SubResource("Animation_itbep")
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ss4gt"]

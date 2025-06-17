@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgb5tdw2ptkus"]
 
-[ext_resource type="Script" path="res://LegacyCore/Unit/MobUnit.cs" id="1_afq5s"]
+[ext_resource type="Script" uid="uid://bgjbgtdeyv8bk" path="res://LegacyCore/Unit/MobUnit.cs" id="1_afq5s"]
 [ext_resource type="PackedScene" uid="uid://dii8rew8pag6q" path="res://LegacyCore/Traits/Buf/on_take_damage.tscn" id="2_jmnk7"]
 
 [node name="MobUnit" type="CharacterBody2D"]

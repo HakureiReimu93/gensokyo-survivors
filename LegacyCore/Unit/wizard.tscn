@@ -10,7 +10,7 @@
 [ext_resource type="Material" uid="uid://bpbm43h4bsxr4" path="res://LegacyAssets/Resources/shader/overwrite-color-mat.tres" id="6_qflid"]
 [ext_resource type="PackedScene" uid="uid://d3xjm0o3pgwfq" path="res://experience_vial_unit.tscn" id="7_vkyby"]
 [ext_resource type="PackedScene" uid="uid://di7s4px2ovlv0" path="res://LegacyCore/Traits/Middleware/accel_decel_middleware.tscn" id="9_6xfjp"]
-[ext_resource type="Script" path="res://LegacyCore/Unit/Controller/DumbMeleeControl.cs" id="10_8xwcq"]
+[ext_resource type="Script" uid="uid://da1spaxqw4xtm" path="res://LegacyCore/Unit/Controller/DumbMeleeControl.cs" id="10_8xwcq"]
 [ext_resource type="PackedScene" uid="uid://c7nc4ig3mahju" path="res://LegacyCore/Traits/hit_box.tscn" id="11_js17q"]
 [ext_resource type="PackedScene" uid="uid://bcnqaxxn2j5dr" path="res://LegacyCore/Presentation/health_bar.tscn" id="12_ssl13"]
 
@@ -58,7 +58,7 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ontv5"]
 _data = {
-"RESET": SubResource("Animation_h7xny")
+&"RESET": SubResource("Animation_h7xny")
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dc1nu"]

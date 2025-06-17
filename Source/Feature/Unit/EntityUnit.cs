@@ -10,6 +10,7 @@ using GodotStrict.Traits;
 using GensokyoSurvivors.Source.Library;
 using GodotStrict.Helpers.Guard;
 using GensokyoSurvivors.Source.Library.Common;
+using GodotStrict.Types;
 
 [GlobalClass]
 [UseAutowiring]
@@ -22,6 +23,9 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 	[Autowired]
 	IValueBuf<Vector2> mMovementMware;
 
+	[Autowired]
+	Option<HealthTrait> mHealth;
+
 
 	public override void _Ready()
 	{
@@ -29,6 +33,8 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 
 		SafeGuard.Ensure(MyFaction != Faction.Inherit);
 		SafeGuard.Ensure(MyMaxMovementSpeed != 0);
+
+		if (mHealth.IsSome) mHealth.Value.MyDied += Die;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -38,6 +44,16 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 		Velocity = movement * MyMaxMovementSpeed;
 
 		MoveAndSlide();
+	}
+
+	private void Die()
+	{
+
+	}
+
+	private void MyHealthChanged(float pOld, float pNew)
+	{
+		
 	}
 
 	public void SetFaction(Faction pFaction)

@@ -1,23 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bw23mogi1c02k"]
 
-[ext_resource type="Script" path="res://LegacyCore/Presentation/UI/VictoryScreen.cs" id="1_14si2"]
+[ext_resource type="Script" uid="uid://b4vtqp6g6ayxx" path="res://LegacyCore/Presentation/UI/VictoryScreen.cs" id="1_14si2"]
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://LegacyAssets/Resources/theme/ui_default.tres" id="1_f4cjd"]
-
-[sub_resource type="Animation" id="Animation_1uhvu"]
-resource_name = "fade-in"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0.0235294, 0.00392157, 0.0784314, 0), Color(0.0235294, 0.00392157, 0.0784314, 0.313726)]
-}
 
 [sub_resource type="Animation" id="Animation_cuh00"]
 length = 0.001
@@ -56,6 +40,22 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1uhvu"]
+resource_name = "fade-in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.0235294, 0.00392157, 0.0784314, 0), Color(0.0235294, 0.00392157, 0.0784314, 0.313726)]
 }
 
 [sub_resource type="Animation" id="Animation_iamcr"]
@@ -130,11 +130,11 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nx8tk"]
 _data = {
-"RESET": SubResource("Animation_cuh00"),
-"fade-in": SubResource("Animation_1uhvu"),
-"fade-out": SubResource("Animation_iamcr"),
-"fly-in": SubResource("Animation_15dpp"),
-"fly-out": SubResource("Animation_tmokq")
+&"RESET": SubResource("Animation_cuh00"),
+&"fade-in": SubResource("Animation_1uhvu"),
+&"fade-out": SubResource("Animation_iamcr"),
+&"fly-in": SubResource("Animation_15dpp"),
+&"fly-out": SubResource("Animation_tmokq")
 }
 
 [node name="VictoryScreen" type="CanvasLayer" node_paths=PackedStringArray("MyQuitButton", "MyRestartButton", "MyTitle")]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bcnqaxxn2j5dr"]
 
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://LegacyAssets/Resources/theme/ui_default.tres" id="1_nb0r6"]
-[ext_resource type="Script" path="res://LegacyCore/Presentation/HealthBar.cs" id="1_p2wla"]
+[ext_resource type="Script" uid="uid://rmqw1ewnvfp7" path="res://LegacyCore/Presentation/HealthBar.cs" id="1_p2wla"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pxtuo"]
 bg_color = Color(0.294511, 0.176852, 0.159552, 1)

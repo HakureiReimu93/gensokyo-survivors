@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://83vlxjb0xhk5"]
 
 [ext_resource type="Theme" uid="uid://c4sn06yena44e" path="res://LegacyAssets/Resources/theme/ui_default.tres" id="1_rvahg"]
-[ext_resource type="Script" path="res://LegacyCore/Presentation/UI/UpgradeSelectCardUI.cs" id="2_4iu3o"]
+[ext_resource type="Script" uid="uid://roxt63qoj36n" path="res://LegacyCore/Presentation/UI/UpgradeSelectCardUI.cs" id="2_4iu3o"]
 
 [node name="UpgradeSelectCardUI" type="PanelContainer" node_paths=PackedStringArray("MyNameLabel", "MyDescriptionLabel", "MyButton")]
 theme = ExtResource("1_rvahg")

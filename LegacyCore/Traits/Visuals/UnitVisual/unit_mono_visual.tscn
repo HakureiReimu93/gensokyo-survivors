@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bctmqjmdpue8i"]
 
-[ext_resource type="Script" path="res://LegacyCore/Traits/Visuals/UnitVisual/UnitMonoVisual.cs" id="1_b78s7"]
+[ext_resource type="Script" uid="uid://boit43syvoqwl" path="res://LegacyCore/Traits/Visuals/UnitVisual/UnitMonoVisual.cs" id="1_b78s7"]
 
 [node name="UnitMonoVisual" type="Node2D"]
 script = ExtResource("1_b78s7")

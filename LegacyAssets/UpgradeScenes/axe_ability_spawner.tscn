@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://mjpm7pn6vfe3" path="res://LegacyCore/Traits/cooldown_ability_spawner.tscn" id="1_ncakj"]
 [ext_resource type="PackedScene" uid="uid://c6y48akhs2dig" path="res://LegacyCore/Unit/axe_ability_unit.tscn" id="2_rre8h"]
-[ext_resource type="Script" path="res://LegacyCore/Traits/Strategy/SpawnAroundPlayer.cs" id="3_dugn2"]
+[ext_resource type="Script" uid="uid://kirvp4ds5su5" path="res://LegacyCore/Traits/Strategy/SpawnAroundPlayer.cs" id="3_dugn2"]
 
 [node name="AxeAbilitySpawner" instance=ExtResource("1_ncakj")]
 MySkillToSpawn = ExtResource("2_rre8h")
