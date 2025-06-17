@@ -12,7 +12,7 @@ public partial class Player : Node, LInfo2D, IPilot
 {
 	public override void _Ready()
 	{
-		__PerformDependencyInjection();
+		依赖注入();
 
 		SafeGuard.EnsureCorrectType(Owner, out mUnit);
 		mUnit.SetFaction(Faction.Ally);

@@ -19,9 +19,13 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 	[Autowired]
 	IPilot mPilot;
 
+	[Autowired]
+	IValueBuf<Vector2> mMovementMware;
+
+
 	public override void _Ready()
 	{
-		__PerformDependencyInjection();
+		依赖注入();
 
 		SafeGuard.Ensure(MyFaction != Faction.Inherit);
 		SafeGuard.Ensure(MyMaxMovementSpeed != 0);
@@ -30,6 +34,7 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 	public override void _PhysicsProcess(double delta)
 	{
 		var movement = mPilot.CalculateMovement();
+		mMovementMware.CalculateValue(ref movement);
 		Velocity = movement * MyMaxMovementSpeed;
 
 		MoveAndSlide();

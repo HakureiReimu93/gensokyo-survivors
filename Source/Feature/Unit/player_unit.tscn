@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmq1dua8iw8pm"]
+[gd_scene load_steps=6 format=3 uid="uid://bmq1dua8iw8pm"]
 
 [ext_resource type="PackedScene" uid="uid://dikua88kycqcd" path="res://Source/Feature/Unit/entity_unit.tscn" id="1_0uji2"]
 [ext_resource type="Script" path="res://Source/Feature/Player/Player.cs" id="2_nxvrl"]
 [ext_resource type="Texture2D" uid="uid://sn1m8ix277de" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0099.png" id="3_r2wes"]
+[ext_resource type="Script" path="res://Source/CommonAsset/AccelDecelTrait.cs" id="4_8ngnf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nq2jb"]
 radius = 7.07107
@@ -22,3 +23,9 @@ position = Vector2(0, -8)
 texture = ExtResource("3_r2wes")
 
 [node name="MovementStyle" type="Node" parent="." index="3"]
+script = ExtResource("4_8ngnf")
+MyAcceleration = 0.19
+MyDeceleration = 0.144
+cCurveTightness = 1.0
+
+[node name="HealthTrait" type="Node" parent="." index="4"]

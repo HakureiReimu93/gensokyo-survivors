@@ -21,8 +21,7 @@ GensokyoSurvivorsGame="*res://Source/App/AutoloadService/GensokyoSurvivorsGame.c
 
 [display]
 
-window/size/window_width_override=1920
-window/size/window_height_override=1080
+window/size/initial_position_type=0
 window/stretch/scale_mode="integer"
 
 [dotnet]
