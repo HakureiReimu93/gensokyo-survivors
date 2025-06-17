@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.Mathf;
 using static GodotStrict.Helpers.Logging.StrictLog;
 using static GodotStrict.Helpers.Dependency.DependencyHelper;
 using static GodotStrict.Types.Coroutine.AdventureExtensions;
@@ -14,7 +13,7 @@ using GodotStrict.Helpers.Guard;
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://GodotEditor/Icons/script.png")]
-public partial class Rat : Node, IPilot
+public partial class Fairy : Node, IPilot
 {
 	[Autowired("id-player")]
 	Scanner<LInfo2D> mPlayerRef;
@@ -48,7 +47,7 @@ public partial class Rat : Node, IPilot
 		}
 	}
 
-	private void ConsiderHealthChange(float pPrevHp, float pCurrentHp, float pMaxHealth)
+	public void ConsiderHealthChange(float pPrevHp, float pCurrentHp, float pMaxHealth)
 	{
 		if (pCurrentHp / pMaxHealth < MyEnrageHpPercentThreshold)
 		{

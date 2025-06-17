@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://cp47k8w3bmmgb"]
-
-[ext_resource type="PackedScene" uid="uid://dikua88kycqcd" path="res://Source/Feature/Unit/entity_unit.tscn" id="1_kuv76"]
-[ext_resource type="PackedScene" uid="uid://dwhakn44fn28m" path="res://LegacyCore/Traits/health_trait.tscn" id="2_144jt"]
-
-[node name="RatUnit" groups=["id-enemy"] instance=ExtResource("1_kuv76")]
-
-[node name="HealthTrait" parent="." index="1" instance=ExtResource("2_144jt")]

@@ -33,7 +33,7 @@ public partial class Player : Node, LInfo2D, IPilot
 							   "move_down");
 	}
 
-	private void ConsiderHealthChange(float pPrev, float pCurrent, float pMax)
+	public void ConsiderHealthChange(float pPrev, float pCurrent, float pMax)
 	{
 
 	}

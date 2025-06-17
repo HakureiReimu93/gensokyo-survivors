@@ -48,12 +48,7 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 
 	private void Die()
 	{
-
-	}
-
-	private void MyHealthChanged(float pOld, float pNew)
-	{
-		
+		QueueFree();
 	}
 
 	public void SetFaction(Faction pFaction)

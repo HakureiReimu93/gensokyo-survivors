@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7nc4ig3mahju"]
-
-[ext_resource type="Script" uid="uid://coysvqsoa7yfr" path="res://LegacyCore/Traits/HitBox.cs" id="1_xlrrg"]
-
-[node name="HitBox" type="Area2D"]
-collision_layer = 0
-collision_mask = 0
-script = ExtResource("1_xlrrg")

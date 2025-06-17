@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dhtlty206eehm"]
-
-[ext_resource type="Script" uid="uid://byqqugfdxcygk" path="res://LegacyCore/Traits/Buf/UnitBuf.cs" id="1_4gtey"]
-
-[node name="UnitBuf" type="Node"]
-script = ExtResource("1_4gtey")

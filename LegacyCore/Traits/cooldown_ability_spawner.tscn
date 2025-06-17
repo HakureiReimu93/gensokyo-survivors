@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://mjpm7pn6vfe3"]
-
-[ext_resource type="Script" uid="uid://2j7xaf63o4jt" path="res://LegacyCore/Traits/CooldownAbilitySpawner.cs" id="1_8kx36"]
-
-[node name="CooldownAbilitySpawner" type="Node"]
-script = ExtResource("1_8kx36")

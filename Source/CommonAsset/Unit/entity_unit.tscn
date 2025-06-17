@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dikua88kycqcd"]
 
-[ext_resource type="Script" uid="uid://k11bii8i6tmh" path="res://Source/Feature/Unit/EntityUnit.cs" id="1_t30ku"]
+[ext_resource type="Script" uid="uid://k11bii8i6tmh" path="res://Source/CommonAsset/Unit/EntityUnit.cs" id="1_t30ku"]
 
 [node name="EntityUnit" type="CharacterBody2D"]
 script = ExtResource("1_t30ku")

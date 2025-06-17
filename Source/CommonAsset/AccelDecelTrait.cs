@@ -42,7 +42,4 @@ public partial class AccelDecelTrait : Node, IValueBuf<Vector2>
 
 	[Export(PropertyHint.Range, "0,1")]
 	public float MyDeceleration { get; set; }
-
-	[Export]
-	private float cCurveTightness = 8;
 }
