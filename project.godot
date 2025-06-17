@@ -11,14 +11,13 @@ config_version=5
 [application]
 
 config/name="Gensokyo Survivors"
-run/main_scene="res://LegacyCore/Scenarios/world.tscn"
+run/main_scene="res://Source/App/new_test_world.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GensokyoSurvivorsSession="*res://LegacyCore/GensokyoSurvivorsSession.cs"
-SessionSignalBus="*res://LegacyCore/Services/SessionSignalBus.cs"
+GensokyoSurvivorsGame="*res://Source/App/AutoloadService/GensokyoSurvivorsGame.cs"
 
 [display]
 
@@ -74,10 +73,10 @@ move_down={
 2d_physics/layer_1="world"
 2d_physics/layer_2="hard-player"
 2d_physics/layer_3="hard-enemy"
-2d_physics/layer_4="id-player"
-2d_physics/layer_5="id-enemy"
-2d_physics/layer_6="id-pickup-player"
-2d_physics/layer_7="id-pickup-enemy"
+2d_physics/layer_4="grudge-player"
+2d_physics/layer_5="grudge-enemy"
+2d_physics/layer_6="item-for-player"
+2d_physics/layer_7="item-for-enemy"
 
 [rendering]
 

@@ -13,9 +13,7 @@
   </ItemGroup>
   <ItemGroup>
    <Compile Remove="Gensokyo Survivors.Tests/**/*.cs" /> <!-- All .cs files in a directory subtree -->
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Library\Common\" />
+   <Compile Remove="LegacyCore/**/*.cs" />
   </ItemGroup>
   <!-- <AssemblyAttribute Include="NullGuard.NullGuardAttribute">
     <_Parameter1>NullGuard.ValidationFlags.All</_Parameter1>

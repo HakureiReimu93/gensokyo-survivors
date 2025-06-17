@@ -1,5 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://bmq1dua8iw8pm"]
+[gd_scene load_steps=5 format=3 uid="uid://bmq1dua8iw8pm"]
 
 [ext_resource type="PackedScene" uid="uid://dikua88kycqcd" path="res://Source/Feature/Unit/entity_unit.tscn" id="1_0uji2"]
+[ext_resource type="Script" path="res://Source/Feature/Player/Player.cs" id="2_nxvrl"]
+[ext_resource type="Texture2D" uid="uid://sn1m8ix277de" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0099.png" id="3_r2wes"]
 
-[node name="PlayerUnit" instance=ExtResource("1_0uji2")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_nq2jb"]
+radius = 7.07107
+
+[node name="EntityUnit" instance=ExtResource("1_0uji2")]
+MyMaxMovementSpeed = 253.369
+
+[node name="Player" type="Node" parent="." index="0"]
+script = ExtResource("2_nxvrl")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_nq2jb")
+
+[node name="Visual" type="Sprite2D" parent="." index="2"]
+position = Vector2(0, -8)
+texture = ExtResource("3_r2wes")
+
+[node name="MovementStyle" type="Node" parent="." index="3"]
