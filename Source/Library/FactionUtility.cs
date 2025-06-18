@@ -37,23 +37,29 @@ public static class FactionUtility
     /// </summary>
     /// <param name="pMember"></param>
     /// <param name="pNode"></param>
-    public static void ResolveFaction(IFactionMember pMember, in Node pNode)
+    public static void ResolveFaction(in Node pNode, ref Faction current)
     {
         SafeGuard.Ensure(mConfigured);
-        if (pMember.MyFaction is Faction.Inherit)
+
+        if (current is Faction.Inherit)
         {
             Node parent = pNode.GetParent();
-            SafeGuard.EnsureNotNull(parent);
+            if (parent == null)
+            {
+                SafeGuard.Fail($"parent of node {pNode.Name} is null");
+                return;
+            }
 
-            while (parent is not IFactionMember fm || fm.MyFaction == Faction.Inherit)
+            while (parent is not IFactionUnit fm || fm.MyFaction == Faction.Inherit)
             {
                 parent = parent.GetParent();
                 if (parent is null)
                 {
                     SafeGuard.Fail($"No parents of {pNode.Name} have a set faction (all are inherit)");
+                    return;
                 }
             }
-            pMember.MyFaction = (pNode.Owner as IFactionMember).MyFaction;
+            current = (pNode.Owner as IFactionUnit).MyFaction;
         }
     }
 
@@ -68,7 +74,7 @@ public static class FactionUtility
         }
         else
         {
-            pObject.CollisionMask = factionHardCollisionBits[Opposing(pFaction)];
+            pObject.CollisionMask = factionHardCollisionBits[pFaction];
         }
     }
 
@@ -100,6 +106,12 @@ public static class FactionUtility
         {
             pObject.CollisionMask = factionGrudgeBits[pFaction];
         }
+    }
+
+    public static void ClearIdentityAndListener(CollisionObject2D pObject)
+    {
+        pObject.CollisionLayer = 0;
+        pObject.CollisionMask = 0;
     }
 
     public static void SetGrudgeIdentityFor(CollisionObject2D pObject, Faction pFaction)

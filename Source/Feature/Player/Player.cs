@@ -9,7 +9,7 @@ using GodotStrict.Types;
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://GodotEditor/Icons/brain.png")]
-public partial class Player : Node, LInfo2D, IPilot
+public partial class Player : Node, IPilot
 {
 	[Autowired("@")]
 	Option<HealthTrait> mHealth;
@@ -19,13 +19,9 @@ public partial class Player : Node, LInfo2D, IPilot
 		依赖注入();
 
 		SafeGuard.EnsureCorrectType(Owner, out mUnit);
-		mUnit.SetFaction(Faction.Ally);
-
-		if (mHealth.IsSome)
-			mHealth.Value.MyHealthChanged += ConsiderHealthChange;
 	}
 
-	public Vector2 CalculateMovement()
+	public Vector2 CalculateMoveDecision(double delta)
 	{
 		return Input.GetVector("move_left",
 							   "move_right",
@@ -33,16 +29,7 @@ public partial class Player : Node, LInfo2D, IPilot
 							   "move_down");
 	}
 
-	public void ConsiderHealthChange(float pPrev, float pCurrent, float pMax)
-	{
-
-	}
-
-	public EntityUnit GetUnit()
-	{
-		return Owner as EntityUnit;
-	}
-
+	public Faction MyFaction { get; set; } = Faction.Ally;
+	public EntityUnit Entity => mUnit;
 	EntityUnit mUnit;
-	public Node2D Entity => GetParent<Node2D>()!;
 }

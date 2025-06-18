@@ -1,13 +1,11 @@
 using Godot;
-using static GodotStrict.Helpers.Logging.StrictLog;
-using static GodotStrict.Helpers.Dependency.DependencyHelper;
-using static GodotStrict.Types.Coroutine.AdventureExtensions;
-using Adventure = System.Collections.Generic.IEnumerator<GodotStrict.Types.Coroutine.BaseSoon>;
 using GodotStrict.Traits;
 using GodotUtilities;
 using GodotStrict.Types;
 using GensokyoSurvivors.Source.Library.Common;
 using GodotStrict.Helpers.Guard;
+using GensokyoSurvivors.Source.Library;
+using GodotStrict.Helpers;
 
 
 [GlobalClass]
@@ -28,14 +26,15 @@ public partial class Fairy : Node, IPilot
 		if (mHealth.IsSome) mHealth.Value.MyHealthChanged += ConsiderHealthChange;
 	}
 
-	public Vector2 CalculateMovement()
+	public Vector2 CalculateMoveDecision(double delta)
 	{
 		if (mPlayerRef.Available(out var player))
 		{
-			var proximityPenalty = Mathf.Remap(
-				Mathf.Clamp(mUnit.GlobalPosition.DistanceTo(player.GlobalPosition), 0, 200),
+			var proximityPenalty = Calculate.RemapBounded(
+				mUnit.GlobalPosition.DistanceTo(player.GlobalPosition),
 				200,
 				0,
+				
 				1,
 				0.5f
 			);
@@ -58,7 +57,9 @@ public partial class Fairy : Node, IPilot
 	[Export]
 	public float MyEnrageHpPercentThreshold { get; set; } = 0.5f;
 
-	public EntityUnit GetUnit() => mUnit;
+	public Faction MyFaction => Faction.Enemy;
+
+	public EntityUnit Entity => mUnit;
 	private EntityUnit mUnit;
 
 }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=4 uid="uid://broe3f4dr7dye"]
 
+[ext_resource type="PackedScene" uid="uid://bmq1dua8iw8pm" path="res://Source/Feature/Player/player_unit.tscn" id="1_c2u8o"]
 [ext_resource type="TileSet" uid="uid://cc8avii81c2ml" path="res://Source/Feature/Level0/stage-0-tiles.tres" id="1_us5it"]
-[ext_resource type="PackedScene" uid="uid://cp5n01r4txacw" path="res://LegacyCore/Unit/player.tscn" id="2_mduq4"]
 [ext_resource type="PackedScene" uid="uid://cp47k8w3bmmgb" path="res://Source/Feature/Rat/fairy_unit.tscn" id="3_0uuv3"]
 
 [node name="NewTestWorld" type="Node2D"]
@@ -11,12 +11,12 @@ tile_map_data = PackedByteArray("AAANAAcAAAAAAAQAAAANAAYAAAAAAAQAAAANAAUAAAAAAAQ
 tile_set = ExtResource("1_us5it")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2.565, 2.565)
-
-[node name="PlayerUnit" parent="." instance=ExtResource("2_mduq4")]
+zoom = Vector2(2.135, 2.135)
 
 [node name="FairyUnit" parent="." instance=ExtResource("3_0uuv3")]
 position = Vector2(198, -51)
 
 [node name="FairyUnit2" parent="." instance=ExtResource("3_0uuv3")]
 position = Vector2(58, -117)
+
+[node name="PlayerUnit" parent="." instance=ExtResource("1_c2u8o")]

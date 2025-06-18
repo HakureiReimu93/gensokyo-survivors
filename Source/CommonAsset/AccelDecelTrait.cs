@@ -7,27 +7,23 @@ using GodotStrict.AliasTypes;
 
 [GlobalClass]
 [Icon("res://GodotEditor/Icons/output.png")]
-public partial class AccelDecelTrait : Node, IValueBuf<Vector2>
+public partial class AccelDecelTrait : Node, IValueMidWare<Vector2>
 {
 
-	public void CalculateValue(ref Vector2 input)
+	public void CalculateValue(ref Vector2 input, double delta)
 	{
 
 		// curve that becomes infinity at 1.
 		float accelMultiplier = Calculate.PhiEasing(0.5f, new normal(MyAcceleration)) * 30;
 		float decelMultiplier = Calculate.PhiEasing(0.5f, new normal(MyDeceleration)) * 30;
 
-		this.LogAny(decelMultiplier);
-
-		double deltaTime = GetProcessDeltaTime();
-
 		if (input.IsZeroApprox())
 		{
-			mCurrent = mCurrent.MoveToward(Vector2.Zero, (float)deltaTime * MyDeceleration * decelMultiplier);
+			mCurrent = mCurrent.MoveToward(Vector2.Zero, (float)delta * MyDeceleration * decelMultiplier);
 		}
 		else
 		{
-			mCurrent = mCurrent.MoveToward(input, (float)deltaTime * MyAcceleration * accelMultiplier);
+			mCurrent = mCurrent.MoveToward(input, (float)delta * MyAcceleration * accelMultiplier);
 		}
 
 		input = mCurrent;

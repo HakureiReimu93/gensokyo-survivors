@@ -12,7 +12,7 @@ namespace GensokyoSurvivors.Source.Library.Common;
 /// </summary>
 public interface IPilot
 {
-    public EntityUnit GetUnit();
-    public Vector2 CalculateMovement();
-    public void ConsiderHealthChange(float pPrev, float pCurrent, float pMax);
+    public EntityUnit Entity { get; }
+    public Vector2 CalculateMoveDecision(double delta);
+    public Faction MyFaction { get; }
 }

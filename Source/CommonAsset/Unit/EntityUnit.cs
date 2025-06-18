@@ -15,33 +15,50 @@ using GodotStrict.Types;
 [GlobalClass]
 [UseAutowiring]
 [Icon("res://GodotEditor/Icons/unit.png")]
-public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
+public partial class EntityUnit : CharacterBody2D, LInfo2D
 {
 	[Autowired]
 	IPilot mPilot;
 
 	[Autowired]
-	IValueBuf<Vector2> mMovementMware;
+	IValueMidWare<Vector2> mMovementMware;
 
 	[Autowired]
 	Option<HealthTrait> mHealth;
+
+	[Autowired]
+	OptionCollection<IVisualMidWare> mVisualMidWares;
+
+	[Autowired("OnHurtMidWare")]
+	Option<IVisualMidWare> mHurtMidWare;
 
 
 	public override void _Ready()
 	{
 		依赖注入();
 
+		MyFaction = mPilot.MyFaction;
+
 		SafeGuard.Ensure(MyFaction != Faction.Inherit);
 		SafeGuard.Ensure(MyMaxMovementSpeed != 0);
 
 		if (mHealth.IsSome) mHealth.Value.MyDied += Die;
+		if (mHealth.IsSome) mHealth.Value.MyHealthChanged += ConsiderDamageTaken;
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		var movement = mPilot.CalculateMovement();
-		mMovementMware.CalculateValue(ref movement);
+		var movement = mPilot.CalculateMoveDecision(delta);
+		mMovementMware.CalculateValue(ref movement, delta);
 		Velocity = movement * MyMaxMovementSpeed;
+
+		if (mVisualMidWares.AnyAvailable(out var vMidWares))
+		{
+			foreach (var vMidWare in vMidWares)
+			{
+				vMidWare.NextEffect(this, delta);
+			}
+		}
 
 		MoveAndSlide();
 	}
@@ -51,25 +68,42 @@ public partial class EntityUnit : CharacterBody2D, LInfo2D, IFactionUnit
 		QueueFree();
 	}
 
-	public void SetFaction(Faction pFaction)
+	private void ConsiderDamageTaken(float pOld, float pNew, float pMax)
 	{
-		MyFaction = pFaction;
-
-		FactionUtility.SetHardIdentityFor(this, pFaction);
-		FactionUtility.SetHardListenerFor(this, pFaction);
-
-		foreach (var child in GetChildren())
+		if (mHurtMidWare.IsSome)
 		{
-			if (child is IFactionMember fm)
+			mHurtMidWare.Value.ActivateForSeconds(2f);
+		}
+	}
+
+	public Faction MyFaction
+	{
+		get
+		{
+			return mFaction;
+		}
+		set
+		{
+			mFaction = value;
+
+			FactionUtility.SetHardIdentityFor(this, value);
+			FactionUtility.SetHardListenerFor(this, value);
+
+			foreach (var child in GetChildren())
 			{
-				fm.MyFaction = pFaction;
+				if (child is IFactionMember fm)
+				{
+					fm.MyFaction = value;
+				}
 			}
 		}
 	}
-	public Faction MyFaction { get; private set; }
+
+	private Faction mFaction;
 
 	[Export(PropertyHint.Range, "0,500")]
 	public float MyMaxMovementSpeed { get; set; }
+
 	public Node2D Entity => this;
 
 }

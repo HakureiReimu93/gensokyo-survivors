@@ -3,8 +3,8 @@ using Godot;
 
 namespace GensokyoSurvivors.Source.Library.Common;
 
-public interface IValueBuf<T>
+public interface IValueMidWare<T>
 where T: struct
 {
-    public void CalculateValue(ref Vector2 input);
+    public void CalculateValue(ref T input, double delta);
 }

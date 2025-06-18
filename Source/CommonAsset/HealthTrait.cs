@@ -1,29 +1,36 @@
 using Godot;
-using static GodotStrict.Helpers.Logging.StrictLog;
-using static GodotStrict.Helpers.Dependency.DependencyHelper;
-using static GodotStrict.Types.Coroutine.AdventureExtensions;
-using Adventure = System.Collections.Generic.IEnumerator<GodotStrict.Types.Coroutine.BaseSoon>;
-using GodotStrict.Traits;
 using GodotUtilities;
 using GodotStrict.Helpers.Guard;
+using GodotStrict.Types;
 
 [GlobalClass]
-// [UseAutowiring]
-[Icon("res://GodotEditor/Icons/output.png")]
+[UseAutowiring]
+[Icon("res://GodotEditor/Icons/input.png")]
 public partial class HealthTrait : Node
 {
+	[Autowired("@")]
+	Option<HurtBox> mFriendHurtBox;
+
+	public override void _Ready()
+	{
+		依赖注入();
+		SafeGuard.Ensure(mMaximum > 0);
+		mHealth = mMaximum;
+
+		mFriendHurtBox.IfSome(then: (val) => val.MyHurt += HandleTakeDamage);
+	}
+
+	private void HandleTakeDamage(float pDamage)
+	{
+		SafeGuard.Ensure(mHealth > 0);
+		MyHealth -= pDamage;
+	}
+
 	[Signal]
 	public delegate void MyHealthChangedEventHandler(float old, float newValue, float maxHealth);
 
 	[Signal]
 	public delegate void MyDiedEventHandler();
-
-	public override void _Ready()
-	{
-		SafeGuard.Ensure(mMaximum > 0);
-		mHealth = mMaximum;
-		// 依赖注入();
-	}
 
 	[Export]
 	public int MyMaximumHealth
@@ -32,10 +39,8 @@ public partial class HealthTrait : Node
 		{
 			return mMaximum;
 		}
-
 		set
 		{
-			SafeGuard.Ensure(mHealth != 0, "This health trait is dead");
 			SafeGuard.Ensure(value >= 0);
 
 			if (value < mHealth)

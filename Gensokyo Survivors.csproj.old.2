@@ -1,0 +1,21 @@
+﻿<Project Sdk="Godot.NET.Sdk/4.4.0">
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net8.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>GensokyoSurvivors</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\godot-strict\GodotStrict.csproj" />
+    <ProjectReference Include="..\Libraries\GodotUtilities\SourceGenerators\SourceGenerators.csproj" OutputItemType="Analyzer" />
+  </ItemGroup>
+  <ItemGroup>
+   <Compile Remove="Gensokyo Survivors.Tests/**/*.cs" /> <!-- All .cs files in a directory subtree -->
+   <Compile Remove="LegacyCore/**/*.cs" />
+  </ItemGroup>
+  <!-- <AssemblyAttribute Include="NullGuard.NullGuardAttribute">
+    <_Parameter1>NullGuard.ValidationFlags.All</_Parameter1>
+  </AssemblyAttribute> -->
+</Project>

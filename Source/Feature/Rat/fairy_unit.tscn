@@ -1,24 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://cp47k8w3bmmgb"]
+[gd_scene load_steps=11 format=3 uid="uid://cp47k8w3bmmgb"]
 
 [ext_resource type="PackedScene" uid="uid://dikua88kycqcd" path="res://Source/CommonAsset/Unit/entity_unit.tscn" id="1_48lxm"]
 [ext_resource type="Script" uid="uid://begarridriik1" path="res://Source/Feature/Rat/Fairy.cs" id="2_duuw0"]
 [ext_resource type="Texture2D" uid="uid://dhdfraxfan6av" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0108.png" id="3_uvcmb"]
 [ext_resource type="Script" uid="uid://fmdojd0sr3sh" path="res://Source/CommonAsset/AccelDecelTrait.cs" id="4_duuw0"]
+[ext_resource type="Script" uid="uid://d1rsbhatjf1ho" path="res://Source/CommonAsset/HitBox.cs" id="5_f4t2n"]
+[ext_resource type="Script" uid="uid://b1vqbuto1apaw" path="res://Source/CommonAsset/HealthTrait.cs" id="5_uvcmb"]
+[ext_resource type="Script" uid="uid://n3vosum7bi4s" path="res://Source/CommonAsset/HurtBox.cs" id="6_6ldqs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_duuw0"]
 radius = 6.08276
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uvcmb"]
-radius = 5.09902
+radius = 7.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_eykvn"]
 radius = 8.0
 
 [node name="FairyUnit" groups=["id-enemy"] instance=ExtResource("1_48lxm")]
+MyMaxMovementSpeed = 76.606
 
 [node name="Fairy" type="Node" parent="." index="0"]
 script = ExtResource("2_duuw0")
-MyEnrageHpPercentThreshold = null
 
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2(0, -7)
@@ -35,7 +38,8 @@ MyAcceleration = 0.478
 MyDeceleration = 0.289
 
 [node name="HitBox" type="Area2D" parent="." index="4"]
-visible = false
+script = ExtResource("5_f4t2n")
+MyDamage = 20.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" index="0"]
 position = Vector2(0, -7)
@@ -44,8 +48,14 @@ debug_color = Color(0.82514, 0.370407, 0.394466, 0.42)
 
 [node name="HurtBox" type="Area2D" parent="." index="5"]
 visible = false
+script = ExtResource("6_6ldqs")
+MyCooldown = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_eykvn")
 debug_color = Color(0.228388, 0.626078, 0.359974, 0.42)
+
+[node name="HealthTrait" type="Node" parent="." index="6"]
+script = ExtResource("5_uvcmb")
+MyMaximumHealth = 25
