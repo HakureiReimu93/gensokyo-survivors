@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://cb2qieblyxnot"]
+
+[ext_resource type="PackedScene" uid="uid://babbtj34m3imy" path="res://Src/Feature/Unit/unit.tscn" id="1_nd2xn"]
+[ext_resource type="Script" uid="uid://bygc3byi1c1g7" path="res://Src/Library/Midware/AccelDecel.cs" id="2_rsfdr"]
+[ext_resource type="Script" uid="uid://dcbwnmuxjd0kp" path="res://Src/Feature/Player/Player.cs" id="2_xlmdb"]
+[ext_resource type="Texture2D" uid="uid://sn1m8ix277de" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0099.png" id="5_c26aw"]
+
+[sub_resource type="Resource" id="Resource_ceeqg"]
+script = ExtResource("2_rsfdr")
+MyAcceleration = 0.276
+MyDeceleration = 0.267
+metadata/_custom_type_script = "uid://bygc3byi1c1g7"
+
+[node name="PlayerUnit" instance=ExtResource("1_nd2xn")]
+MyMovementSpeed = 248.077
+MyBufs = Array[Object]([])
+MyMiddleware = Array[Object]([SubResource("Resource_ceeqg")])
+
+[node name="Player" type="Node" parent="." index="1"]
+process_priority = -1
+script = ExtResource("2_xlmdb")
+
+[node name="Visual" type="Node2D" parent="." index="2"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Visual" index="0"]
+position = Vector2(0, -8)
+texture = ExtResource("5_c26aw")

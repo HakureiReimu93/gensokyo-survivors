@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Gensokyo Survivors"
-run/main_scene="res://Source/App/new_test_world.tscn"
+run/main_scene="res://Src/App/new_test_world.tscn"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GensokyoSurvivorsGame="*res://Source/App/AutoloadService/GensokyoSurvivorsGame.cs"
+GensokyoSurvivorsApp="*res://Src/App/GensokyoSurvivorsApp.cs"
 
 [display]
 

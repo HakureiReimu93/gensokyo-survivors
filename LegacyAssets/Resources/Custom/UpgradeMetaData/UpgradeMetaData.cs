@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-[Icon("res://Assets/GodotEditor/Icons/bundle.png")]
+[Icon("res://GodotEditor/Icons/bundle.png")]
 public partial class UpgradeMetaData : Resource
 {
     [Export]
