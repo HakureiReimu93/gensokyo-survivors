@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://babbtj34m3imy"]
+[gd_scene load_steps=4 format=3 uid="uid://babbtj34m3imy"]
 
 [ext_resource type="Script" uid="uid://7ake0uhpmnuo" path="res://Src/Feature/Unit/UnitModel.cs" id="1_wpn5t"]
 [ext_resource type="Script" uid="uid://cn8utx5vqtlpd" path="res://Src/Library/Buf/TakeDamageBuf.cs" id="2_0ti55"]
@@ -8,15 +8,12 @@ script = ExtResource("2_0ti55")
 MyCrippleAmount = 0.0
 MyCrippleTime = 0.0
 MyCrippleColor = Color(0.545098, 0, 0, 1)
+MyCripplePadOutAmount = 0.0
 metadata/_custom_type_script = "uid://cn8utx5vqtlpd"
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e4atw"]
-radius = 8.06226
-
-[node name="Unit" type="CharacterBody2D"]
+[node name="UnitModel" type="CharacterBody2D"]
+collision_layer = 0
 script = ExtResource("1_wpn5t")
 MyBufs = Array[Object]([SubResource("Resource_lq0pg")])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -8)
-shape = SubResource("CircleShape2D_e4atw")

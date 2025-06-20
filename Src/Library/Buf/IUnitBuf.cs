@@ -21,9 +21,11 @@ public interface IUnitBuf
     /// </summary>
     /// <param name="unit"></param>
     /// <param name="pInvalidateAction"></param>
-    public void ParamInit(UnitModel unit, Godot.Collections.Array<UnitBuf> parent);
+    public void ParamInit(UnitModel unit);
     public float MovementScale();
     public float DamageScale();
     public void OnRequestedDestroy();
     public void Process(double delta);
+
+    public bool IsValid { get; set; }
 }

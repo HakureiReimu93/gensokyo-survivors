@@ -1,23 +1,16 @@
-[gd_scene load_steps=7 format=4 uid="uid://dfewhh2xd4qwe"]
+[gd_scene load_steps=6 format=4 uid="uid://dfewhh2xd4qwe"]
 
 [ext_resource type="TileSet" uid="uid://c8ovitg52x8ry" path="res://kenney-dungeon.tres" id="1_us5it"]
 [ext_resource type="PackedScene" uid="uid://cb2qieblyxnot" path="res://Src/Feature/Player/player_unit.tscn" id="2_qjkji"]
-[ext_resource type="Script" uid="uid://cn8utx5vqtlpd" path="res://Src/Library/Buf/TakeDamageBuf.cs" id="3_cxwsv"]
-[ext_resource type="Resource" uid="uid://2dunubof8erk" path="res://Src/Assets/Resource/take-damage.tres" id="4_uc3hc"]
+[ext_resource type="PackedScene" uid="uid://wbb2rfts1oit" path="res://Src/Feature/Fairy/fairy_unit.tscn" id="3_cxwsv"]
+[ext_resource type="Script" uid="uid://bygc3byi1c1g7" path="res://Src/Library/Midware/AccelDecel.cs" id="3_uc3hc"]
 
 [sub_resource type="Resource" id="Resource_uc3hc"]
-script = ExtResource("3_cxwsv")
-MyCrippleAmount = 0.71
-MyCrippleTime = 0.695
-MyCrippleColor = Color(0.846222, 0.0414652, 0.0112869, 1)
-metadata/_custom_type_script = "uid://cn8utx5vqtlpd"
-
-[sub_resource type="Resource" id="Resource_4xp5o"]
-script = ExtResource("3_cxwsv")
-MyCrippleAmount = 0.478
-MyCrippleTime = 0.626
-MyCrippleColor = Color(0.812278, 0, 0.286677, 1)
-metadata/_custom_type_script = "uid://cn8utx5vqtlpd"
+resource_local_to_scene = true
+script = ExtResource("3_uc3hc")
+MyAcceleration = 0.25
+MyDeceleration = 0.155
+metadata/_custom_type_script = "uid://bygc3byi1c1g7"
 
 [node name="NewTestWorld" type="Node2D"]
 
@@ -28,17 +21,18 @@ tile_set = ExtResource("1_us5it")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2.135, 2.135)
 
+[node name="FairyUnit3" parent="." instance=ExtResource("3_cxwsv")]
+position = Vector2(-188, 69)
+MyMiddleware = Array[Object]([SubResource("Resource_uc3hc")])
+
+[node name="FairyUnit4" parent="." instance=ExtResource("3_cxwsv")]
+position = Vector2(-198, -78)
+MyMiddleware = Array[Object]([SubResource("Resource_uc3hc")])
+
 [node name="PlayerUnit" parent="." instance=ExtResource("2_qjkji")]
-position = Vector2(-221, -96)
+position = Vector2(168, 52)
+collision_layer = 1
+MyMovementSpeed = 109.615
 
-[node name="PlayerUnit2" parent="." instance=ExtResource("2_qjkji")]
-position = Vector2(-104, -97)
-MyBufs = Array[Object]([SubResource("Resource_uc3hc")])
-
-[node name="PlayerUnit3" parent="." instance=ExtResource("2_qjkji")]
-position = Vector2(30, -98)
-MyBufs = Array[Object]([ExtResource("4_uc3hc")])
-
-[node name="PlayerUnit4" parent="." instance=ExtResource("2_qjkji")]
-position = Vector2(183, -100)
-MyBufs = Array[Object]([SubResource("Resource_4xp5o")])
+[node name="FairyUnit" parent="." instance=ExtResource("3_cxwsv")]
+MyMiddleware = Array[Object]([SubResource("Resource_uc3hc")])

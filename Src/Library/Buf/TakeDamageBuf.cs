@@ -11,7 +11,7 @@ namespace GensokyoSurvivors.Src.Library.Buf;
 [Icon("res://GodotEditor/Icons/buf.png")]
 public partial class TakeDamageBuf : UnitBuf
 {
-    public override BufStackType StackType => BufStackType.OnlyOne;
+    public override BufStackType StackType => BufStackType.ReplaceExisting;
 
     public override StringName Identifier => cId;
 
@@ -20,10 +20,16 @@ public partial class TakeDamageBuf : UnitBuf
         mUnit.MyTempMovementSpeed *= Mathf.Lerp(
             1 - MyCrippleAmount,
             1f,
-            Calculate.PhiEasing(0.35f, (mTimer.TimeLeft / mTimer.WaitTime).Norm10Invert())
+            Calculate.PhiEasing(
+                1f - MyCripplePadOutAmount,
+                (mTimer.TimeLeft / mTimer.WaitTime).Norm10Invert()
+            )
         );
 
-        if (mTimer.Tick(delta)) Invalidate();
+        if (mTimer.Tick(delta))
+        {
+            IsValid = false;
+        }
     }
 
     protected override void _VisualProcess(double delta)
@@ -34,13 +40,17 @@ public partial class TakeDamageBuf : UnitBuf
         );
     }
 
-    public override void ParamInit(UnitModel unit, Godot.Collections.Array<UnitBuf> pParent)
+    public override void ParamInit(UnitModel unit)
     {
-        base.ParamInit(unit, pParent);
+        base.ParamInit(unit);
         SafeGuard.Ensure(MyCrippleAmount > 0);
         SafeGuard.Ensure(MyCrippleTime > 0);
+
+        SafeGuard.Ensure(MyCripplePadOutAmount != 0);
+        SafeGuard.Ensure(MyCripplePadOutAmount != 1);
+
         mTimer.AutoRestart = false;
-        mTimer.IsRunning = false;
+        mTimer.IsRunning = true;
 
         mTimer.WaitTime = MyCrippleTime;
         mTimer.TimeLeft = MyCrippleTime;
@@ -69,6 +79,9 @@ public partial class TakeDamageBuf : UnitBuf
 
     [Export]
     public Color MyCrippleColor { get; set; } = Colors.DarkRed;
+
+    [Export(PropertyHint.Range,"0,1")]
+    public float MyCripplePadOutAmount { get; set; }
 
     private LiteTimer mTimer;
     private float myCrippleTime;

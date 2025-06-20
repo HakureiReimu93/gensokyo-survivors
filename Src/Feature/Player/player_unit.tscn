@@ -1,20 +1,34 @@
-[gd_scene load_steps=6 format=3 uid="uid://cb2qieblyxnot"]
+[gd_scene load_steps=10 format=3 uid="uid://cb2qieblyxnot"]
 
 [ext_resource type="PackedScene" uid="uid://babbtj34m3imy" path="res://Src/Feature/Unit/unit.tscn" id="1_nd2xn"]
 [ext_resource type="Script" uid="uid://bygc3byi1c1g7" path="res://Src/Library/Midware/AccelDecel.cs" id="2_rsfdr"]
 [ext_resource type="Script" uid="uid://dcbwnmuxjd0kp" path="res://Src/Feature/Player/Player.cs" id="2_xlmdb"]
+[ext_resource type="PackedScene" uid="uid://cwqgt4ihjwp5a" path="res://Src/Trait/hurt_box.tscn" id="5_apwgl"]
 [ext_resource type="Texture2D" uid="uid://sn1m8ix277de" path="res://LegacyAssets/kenney_tiny-dungeon/Individual Tiles/tile_0099.png" id="5_c26aw"]
+[ext_resource type="Script" uid="uid://b2cfviy31sgxx" path="res://Src/Feature/Unit/Health.cs" id="6_apwgl"]
 
 [sub_resource type="Resource" id="Resource_ceeqg"]
 script = ExtResource("2_rsfdr")
-MyAcceleration = 0.276
-MyDeceleration = 0.267
+MyAcceleration = 0.451
+MyDeceleration = 0.534
 metadata/_custom_type_script = "uid://bygc3byi1c1g7"
 
-[node name="PlayerUnit" instance=ExtResource("1_nd2xn")]
-MyMovementSpeed = 248.077
+[sub_resource type="CircleShape2D" id="CircleShape2D_apwgl"]
+radius = 5.09902
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t7ter"]
+radius = 7.0
+
+[node name="PlayerUnit" groups=["id-player"] instance=ExtResource("1_nd2xn")]
+collision_mask = 2
+MyMovementSpeed = 334.616
 MyBufs = Array[Object]([])
 MyMiddleware = Array[Object]([SubResource("Resource_ceeqg")])
+
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_apwgl")
+debug_color = Color(0.0112165, 0.0112165, 0.0112165, 0.42)
 
 [node name="Player" type="Node" parent="." index="1"]
 process_priority = -1
@@ -25,3 +39,16 @@ script = ExtResource("2_xlmdb")
 [node name="Sprite2D" type="Sprite2D" parent="Visual" index="0"]
 position = Vector2(0, -8)
 texture = ExtResource("5_c26aw")
+
+[node name="HurtBox" parent="." index="3" instance=ExtResource("5_apwgl")]
+position = Vector2(0, -8)
+MyGracePeriod = 1.432
+MyFaction = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0"]
+shape = SubResource("CircleShape2D_t7ter")
+debug_color = Color(0.207467, 0.791912, 0, 0.42)
+
+[node name="Health" type="Node" parent="." index="4"]
+script = ExtResource("6_apwgl")
+MyMaxHealth = 100

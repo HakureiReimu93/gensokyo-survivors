@@ -8,12 +8,14 @@ public abstract partial class UnitBuf : Resource, IUnitBuf
 {
     public abstract BufStackType StackType { get; }
     public abstract StringName Identifier { get; }
+    public bool IsValid { get ; set; }
+
     protected abstract void _Process(double delta);
     protected abstract void _VisualProcess(double delta);
 
     public void VisualProcess(double delta)
     {
-        if (valid)
+        if (IsValid)
         {
             _VisualProcess(delta);
         }
@@ -21,7 +23,7 @@ public abstract partial class UnitBuf : Resource, IUnitBuf
 
     public void Process(double delta)
     {
-        if (valid)
+        if (IsValid)
         {
             _Process(delta);
         }
@@ -37,10 +39,10 @@ public abstract partial class UnitBuf : Resource, IUnitBuf
         return 1f;
     }
 
-    public virtual void ParamInit(UnitModel unit, Godot.Collections.Array<UnitBuf> parent)
+    public virtual void ParamInit(UnitModel unit)
     {
-        mParent = parent;
         SafeGuard.EnsureNotNull(unit);
+        IsValid = true;
         mUnit = unit;
     }
 
@@ -48,13 +50,5 @@ public abstract partial class UnitBuf : Resource, IUnitBuf
     {
     }
 
-    protected void Invalidate()
-    {
-        valid = false;
-        mParent.Remove(this);
-    }
-
     protected UnitModel mUnit;
-    private bool valid = true;
-    protected Godot.Collections.Array<UnitBuf> mParent;
 }

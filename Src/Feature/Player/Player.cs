@@ -7,25 +7,33 @@ using Adventure = System.Collections.Generic.IEnumerator<GodotStrict.Types.Corou
 using GodotStrict.Traits;
 using GodotUtilities;
 using GodotStrict.Helpers.Guard;
-
+using GensokyoSurvivors.Src.Library;
+using GodotStrict.Types;
 
 [GlobalClass]
-// [UseAutowiring]
+[UseAutowiring]
 [Icon("res://GodotEditor/Icons/brain.png")]
-public partial class Player : Node
+public partial class Player : Node, IUnitModelController
 {
-
 	public override void _Ready()
 	{
-		// 依赖注入();
-		SafeGuard.EnsureCanCast(Owner, out mUnitModel);
+		依赖注入();
+		SafeGuard.EnsureCanCastTo(Owner, out mUnitModel);
+	}
+
+	// Called by UnitModel
+	// Health has
+	public void ConsiderDamageInfo(ref float pDamageRaw, UnitBuf[] bufs)
+	{
 	}
 
 	public override void _Process(double delta)
 	{
-		mUnitModel.MyPlannedMoveDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+		mPlannedMovement = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 	}
 
 	UnitModel mUnitModel;
+	public Vector2 MyPlannedMovement => mPlannedMovement;
+	private Vector2 mPlannedMovement;
 }
 

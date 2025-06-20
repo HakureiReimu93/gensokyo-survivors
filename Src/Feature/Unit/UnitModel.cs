@@ -2,10 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using GensokyoSurvivors.Source.Library.Common;
 using GensokyoSurvivors.Src.Library;
+using GensokyoSurvivors.Src.Library.Buf;
 using GensokyoSurvivors.Src.Library.Midware;
 using Godot;
 using GodotStrict.Helpers.Guard;
+using GodotStrict.Helpers.Logging;
 using GodotStrict.Traits;
+using GodotStrict.Types;
 using GodotUtilities;
 
 [GlobalClass]
@@ -13,6 +16,14 @@ using GodotUtilities;
 [Icon("res://GodotEditor/Icons/unit.png")]
 public partial class UnitModel : CharacterBody2D, LInfo2D
 {
+	[Autowired]
+	Option<HurtBox> mHurtBox;
+
+	[Autowired]
+	Option<Health> mHealth;
+
+	[Autowired]
+	Option<IUnitModelController> mController;
 
 	public override void _Ready()
 	{
@@ -24,19 +35,71 @@ public partial class UnitModel : CharacterBody2D, LInfo2D
 
 		foreach (var buf in MyBufs)
 		{
-			buf.ParamInit(this, MyBufs);
+			buf.ParamInit(this);
+		}
+
+		if (mHurtBox) mHurtBox.Value.MyWasHurt += HandleDamageTaken;
+	}
+
+	public void Die()
+	{
+		SafeGuard.Ensure(mDied.Never());
+
+		QueueFree();
+	}
+
+	private void HandleDamageTaken(float pRawDamage, UnitBuf[] unitBufsToAdd)
+	{
+		if (mController) mController.Value.ConsiderDamageInfo(ref pRawDamage, unitBufsToAdd);
+
+		if (mHealth.Available(out var hp))
+		{
+			hp.MyHealth -= pRawDamage;
+			this.LogAny($"Hp lost {pRawDamage} hp. now health is at: {hp.MyHealth}");
+		}
+		else
+		{
+			Die();
+		}
+
+		foreach (var buf in unitBufsToAdd)
+		{
+			TryAddUnitBuf(buf);
 		}
 	}
 
 	public override void _Process(double delta)
 	{
+		if (mController.IsSome)
+		{
+			MyPlannedMoveDirection = mController.Value.MyPlannedMovement;
+		}
+		else
+		{
+			MyPlannedMoveDirection = Vector2.Zero;
+		}
+
 		MyModulateTemp = Colors.White;
 		MyTempMovementSpeed = MyMovementSpeed;
+
+		HashSet<UnitBuf> toRemove = new();
 		foreach (var buf in MyBufs)
 		{
-			buf.Process(delta);
-			buf.VisualProcess(delta);
+			if (buf.IsValid is false)
+			{
+				toRemove.Add(buf);
+			}
+			else
+			{
+				buf.Process(delta);
+				buf.VisualProcess(delta);
+			}
 		}
+		foreach (var buf in toRemove)
+		{
+			MyBufs.Remove(buf);
+		}
+
 		foreach (var mware in MyMiddleware)
 		{
 			mware.Process(this, delta);
@@ -46,14 +109,39 @@ public partial class UnitModel : CharacterBody2D, LInfo2D
 		MoveAndSlide();
 	}
 
-	public StringName TryAddUnitBuf(UnitBuf buf)
+	/// <summary>
+	/// Returns whether 
+	/// </summary>
+	/// <param name="pBuf"></param>
+	/// <returns>CommonResult.OK if succeeded, CommonResult.Duplicate if attempted to add a 'OnlyOne' buf for which there is already one running.</returns>
+	public StringName TryAddUnitBuf(UnitBuf pBuf)
 	{
-		if (buf.StackType == BufStackType.OnlyOne &&
-			MyBufs.Any((x) => x.Identifier == buf.Identifier))
+		if (pBuf.StackType == BufStackType.OnlyOne &&
+			MyBufs.Any((x) => x.Identifier == pBuf.Identifier))
 		{
 			return CommonResult.Duplicate;
 		}
-		MyBufs.Add(buf);
+
+		pBuf.ParamInit(this);
+
+		if (pBuf.StackType == BufStackType.ReplaceExisting &&
+			MyBufs.Any((x) => x.Identifier == pBuf.Identifier))
+		{
+			HashSet<UnitBuf> unitBufsToRemove = new();
+			foreach (var activeBuf in MyBufs)
+			{
+				if (activeBuf.Identifier == pBuf.Identifier)
+				{
+					unitBufsToRemove.Add(activeBuf);
+				}
+			}
+			foreach (var bufToRemove in unitBufsToRemove)
+			{
+				MyBufs.Remove(bufToRemove);
+			}
+		}
+
+		MyBufs.Add(pBuf);
 
 		return CommonResult.Ok;
 	}
@@ -70,6 +158,8 @@ public partial class UnitModel : CharacterBody2D, LInfo2D
 
 	public Vector2 MyPlannedMoveDirection { get; set; }
 	public Color MyModulateTemp { get; set; }
+
+	TriggerFlag mDied;
 
 	public Node2D Entity => this;
 }
