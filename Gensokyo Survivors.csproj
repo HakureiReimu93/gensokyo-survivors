@@ -12,14 +12,15 @@
     <ProjectReference Include="..\Libraries\GodotUtilities\SourceGenerators\SourceGenerators.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
   <ItemGroup>
-   <Compile Remove="Gensokyo Survivors.Tests/**/*.cs" /> <!-- All .cs files in a directory subtree -->
-   <Compile Remove="LegacyCore/**/*.cs" />
+    <Using Include="System.Collections.Generic.IEnumerator<GodotStrict.Types.Coroutine.BaseSoon>" Alias="Adventure"/>
+    <Using Include="GodotStrict.Helpers.Logging.StrictLog" Static="True" />
+    <Using Include="GodotStrict.Helpers.Dependency.DependencyHelper" Static="True" />
+    <Using Include="GodotStrict.Types.Coroutine.AdventureExtensions" Static="True" />
+    <Using Include="GodotStrict.Helpers.Guard" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Source\Feature\Player\" />
-    <Folder Include="Source\Feature\Unit\" />
-    <Folder Include="Source\Trait\" />
-    <Folder Include="Source\Feature\" />
+   <Compile Remove="Gensokyo Survivors.Tests/**/*.cs" /> <!-- All .cs files in a directory subtree -->
+   <Compile Remove="LegacyCore/**/*.cs" />
   </ItemGroup>
   <!-- <AssemblyAttribute Include="NullGuard.NullGuardAttribute">
     <_Parameter1>NullGuard.ValidationFlags.All</_Parameter1>

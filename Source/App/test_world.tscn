@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ctrkobaebhcxp"]
+
+[node name="TestWorld" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 82.0
+offset_top = 61.0
+offset_right = 379.0
+offset_bottom = 359.0
+color = Color(0.282763, 0.202748, 0.202748, 1)

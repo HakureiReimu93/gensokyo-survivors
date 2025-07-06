@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bnweem2d5ebyk"]
-
-[ext_resource type="Script" uid="uid://cil6kfxcpxsuf" path="res://Src/Feature/Unit/HitBox.cs" id="1_cfwav"]
-
-[node name="HitBox" type="Area2D"]
-script = ExtResource("1_cfwav")

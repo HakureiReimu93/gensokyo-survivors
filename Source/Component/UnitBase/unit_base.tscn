@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b71du2twrw0hf"]
+
+[ext_resource type="Script" uid="uid://chprfa80371sw" path="res://UnitBase.cs" id="1_phmih"]
+
+[node name="UnitBase" type="CharacterBody2D"]
+script = ExtResource("1_phmih")
+
+[node name="Bufs" type="Node" parent="."]
+
+[node name="CollisionShape2D_Hard" type="CollisionShape2D" parent="."]
